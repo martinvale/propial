@@ -1,0 +1,125 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI",Frutiger,"Frutiger Linotype","dejavu sans","helvetica neue",arial,sans-serif
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  color: #2E92CF;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+header {
+  background-color: #EFEFEF;
+  height: 50px;
+}
+
+footer {
+  background-color: #EFEFEF;
+  height: 50px;
+}
+
+.body {
+}
+
+.body .container {
+  margin: 0 auto;
+  width: 940px;
+}
+
+.clear {
+  clear: both;
+}
+
+.grid {
+  width: 720px;
+}
+
+.item {
+  float: left;
+  height: 240px;
+  margin: 10px 0 0 10px;
+  overflow: hidden;
+  position: relative;
+  width: 348px;
+}
+
+.item.large {
+  height: 174px;
+  width: 707px;
+}
+
+.item.large img {
+  width: 226px;
+}
+
+.item.large .description {
+  width: 686px;
+}
+
+.item.half {
+  margin: 10px 0 0 10px;
+}
+
+.item.half img {
+  width: 328px;
+}
+
+.item.half .description {
+  width: 330px;
+}
+
+.item .photos {
+  margin: 10px;
+  text-align: center;
+}
+
+.item .description {
+  background: none repeat scroll 0 0 rgba(87, 186, 232, 0.87);
+  bottom: -70px;
+  color: #FFFFFF;
+  font-size: 17px;
+  font-weight: 400;
+  height: 100px;
+  position: absolute;
+  transition: all 0.7s ease 0s;
+  margin: 0 10px;
+}
+
+.item:hover .description {
+  bottom: 0px
+}
+
+.item .title {
+  padding-left: 5px;
+}
+.item .price {
+  float: right;
+  font-weight: bold;
+  padding-right: 5px;
+}
+
+.item .details ul {
+  margin-left: 5px;
+  font-size: 15px;
+}
+
+.box {
+  border: 1px solid #CECECE
+}

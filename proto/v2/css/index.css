@@ -1,0 +1,25 @@
+.search {
+  height: 50px;
+  margin: 5px 0;
+}
+
+.search .field {
+  border: 1px solid #CCCCCC;
+  width: 500px;
+}
+
+.search input {
+  border: 0 none;
+  font-size: 16px;
+  padding: 2px 6px;
+  width: 455px;
+}
+
+.search button {
+  background: url("../img/search.png") no-repeat scroll 5px 0 rgba(0, 0, 0, 0);
+  border: 1px solid rgba(0, 0, 0, 0);
+  cursor: pointer;
+  display: inline-block;
+  text-indent: -10000px;
+  width: 30px;
+}
