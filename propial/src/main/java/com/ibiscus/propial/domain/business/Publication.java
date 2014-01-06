@@ -7,6 +7,9 @@ public class Publication {
   /** Fecha de creación del aviso. */
   private Date creation;
 
+  /** El inmueble que se esta publicando. */
+  private Inmueble inmueble;
+
   public Publication() {
     creation = new Date();
   }
@@ -15,7 +18,11 @@ public class Publication {
     return creation;
   }
 
+  public Inmueble getInmueble() {
+    return inmueble;
+  }
+
   public String getTitle() {
-    return "Departamento - Caballito";
+    return inmueble.getTipo();
   }
 }

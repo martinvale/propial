@@ -23,4 +23,8 @@ public class PublicationRepository {
     advertises.add(new Publication());
     return advertises;
   }
+
+  public void save(final Publication publication) {
+
+  }
 }
