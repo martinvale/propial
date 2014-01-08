@@ -36,4 +36,11 @@
 
   <bean id="publicationRepository" class="com.ibiscus.propial.domain.business.PublicationRepository">
   </bean>
+
+  <bean id="userRepository" class="com.ibiscus.propial.domain.security.UserRepository">
+    <constructor-arg index="0" ref="datastoreService"></constructor-arg>
+  </bean>
+
+  <!-- Datastore -->
+  <bean id="datastoreService" class="com.google.appengine.api.datastore.DatastoreServiceFactory" factory-method="getDatastoreService" />
 </beans>

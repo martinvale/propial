@@ -23,6 +23,6 @@ public class Publication {
   }
 
   public String getTitle() {
-    return inmueble.getTipo();
+    return "Titulo";
   }
 }

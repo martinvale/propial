@@ -10,7 +10,16 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/index.css">
 
+    <script type="text/javascript" src="script/jquery.js"></script>
+
     <title>Propial</title>
+
+  <script type="text/javascript">
+        $.getJSON('/users/10', function(data){
+        });
+  </script>
+
+
 </head>
 <body>
   <header>
