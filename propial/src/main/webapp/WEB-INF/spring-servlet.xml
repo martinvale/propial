@@ -13,14 +13,17 @@
 
   <mvc:resources mapping="/css/**" location="/css/" />
   <mvc:resources mapping="/img/**" location="/img/" />
+  <mvc:resources mapping="/script/**" location="/script/" />
+  <mvc:resources mapping="/extjs/**" location="/extjs/" />
 
   <mvc:annotation-driven />
 
   <context:component-scan base-package="com.ibiscus.propial.web.controller" />
 
   <!-- freemarker config -->
-  <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
-    <property name="templateLoaderPath" value="/WEB-INF/ftl/"/>
+  <bean id="freemarkerConfig" class="com.ibiscus.propial.infraestructure.freemarker.FreeMarkerConfigurer">
+    <property name="templateLoaderPath" value="src/main/webapp/WEB-INF/ftl/"/>
+    <property name="debug" value="true" />
   </bean>
 
   <bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
@@ -38,6 +41,9 @@
   </bean>
 
   <bean id="userRepository" class="com.ibiscus.propial.domain.security.UserRepository">
+    <constructor-arg index="0" ref="datastoreService"></constructor-arg>
+  </bean>
+  <bean id="contractRepository" class="com.ibiscus.propial.domain.security.ContractRepository">
     <constructor-arg index="0" ref="datastoreService"></constructor-arg>
   </bean>
 
