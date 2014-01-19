@@ -10,6 +10,12 @@
     <script type="text/javascript" src="extjs/ext-all.js"></script>
     <script type="text/javascript" src="app/contracts.js"></script>
 
+    <script type="text/javascript">
+      Ext.Ajax.useDefaultXhrHeader = false;
+
+      // Can also be specified in the request options
+      Ext.Ajax.cors = true;    
+    </script>
 </head>
 <body>
 

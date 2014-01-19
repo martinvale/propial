@@ -11,6 +11,10 @@ public class Contract {
   private String email;
   private String logo;
 
+  /** Default constructor. */
+  Contract() {
+  }
+
   public Contract(final long theId, final String theName) {
     Validate.isTrue(theId > 0, "The id must be greater than 0");
     Validate.notNull(theName, "The name cannot be null");
@@ -37,6 +41,10 @@ public class Contract {
 
   public String getName() {
     return name;
+  }
+
+  public void setName(final String theName) {
+    name = theName;
   }
 
   public String getAddress() {

@@ -8,4 +8,9 @@ public class ContractMother {
     return contract;
   }
 
+  public static Contract getGalatea() {
+    Contract contract = new Contract(15l, "Galatea");
+    contract.update("Acoyte 85", "4901-4514", "galatea@gmail.com", null);
+    return contract;
+  }
 }

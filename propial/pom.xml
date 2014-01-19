@@ -9,10 +9,11 @@
     <artifactId>propial</artifactId>
 
     <properties>
-        <appengine.app.version>1</appengine.app.version>
-        <appengine.target.version>1.7.5</appengine.target.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-     		<spring.version>3.2.2.RELEASE</spring.version>
+      <appengine.app.version>1</appengine.app.version>
+      <appengine.target.version>1.7.5</appengine.target.version>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      <spring.version>3.2.2.RELEASE</spring.version>
+      <slf4j.version>1.7.5</slf4j.version>
     </properties>
 
     <dependencies>
@@ -72,6 +73,16 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
             <version>2.1.1</version>
+        </dependency>
+        <dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-api</artifactId>
+          <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-simple</artifactId>
+          <version>${slf4j.version}</version>
         </dependency>
 
         <!-- Test Dependencies -->
