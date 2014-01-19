@@ -14,4 +14,9 @@ public class AdminController {
     return new ModelAndView("contracts");
   }
 
+  @RequestMapping(value = "users", method = RequestMethod.GET)
+  public ModelAndView users() {
+    return new ModelAndView("users");
+  }
+
 }

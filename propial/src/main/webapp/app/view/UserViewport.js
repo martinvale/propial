@@ -1,9 +1,9 @@
-Ext.define('Propial.view.Viewport', {
+Ext.define('Propial.view.UserViewport', {
   extend: 'Ext.container.Viewport',
   layout: 'fit',
   
   requires: [
-    'Propial.view.ContractsList'
+    'Propial.view.grid.UsersList'
   ],
   
   initComponent: function() {
@@ -24,7 +24,7 @@ Ext.define('Propial.view.Viewport', {
         align: 'stretch'
       },
       items: [{
-        xtype: 'contractslist',
+        xtype: 'userslist',
         flex: 1
       }]
     };

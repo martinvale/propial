@@ -12,6 +12,9 @@ public class User {
   private String picture;
   private String role;
 
+  /** Default constructor. */
+  User() {}
+
   public User(final long theId, final String theUsername,
       final String thePassword, final String theDisplayName,
       final String theEmail, final String theRole) {

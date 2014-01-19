@@ -29,7 +29,7 @@
             });
           }
         });*/        
-        Ext.create('Propial.view.ContractViewport', {});
+        Ext.create('Propial.view.UserViewport', {});
       })
     </script>
 

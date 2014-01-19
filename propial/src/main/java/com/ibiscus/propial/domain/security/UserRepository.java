@@ -1,13 +1,21 @@
 package com.ibiscus.propial.domain.security;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang.Validate;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Transaction;
+import com.google.appengine.api.datastore.Query.SortDirection;
+import com.ibiscus.propial.web.utils.ResultSet;
 
 public class UserRepository {
 
@@ -28,7 +36,7 @@ public class UserRepository {
         userEntity.getProperty("email").toString(),
         userEntity.getProperty("role").toString());
     String picture = null;
-    if (userEntity.hasProperty("picture")) {
+    if (userEntity.getProperty("picture") != null) {
       picture = userEntity.getProperty("picture").toString();
     }
     user.update(picture);
@@ -83,4 +91,24 @@ public class UserRepository {
     Key userKey = KeyFactory.createKey("User", userId);
     datastore.delete(userKey);
   }
+
+  public ResultSet<User> find(final int start, final int limit) {
+    Query query = new Query("User");
+    query.addSort("displayName", SortDirection.ASCENDING);
+
+    PreparedQuery preparedQuery = datastore.prepare(query);
+    FetchOptions fetch = FetchOptions.Builder.withDefaults();
+    int size = preparedQuery.countEntities(fetch);
+
+    fetch = FetchOptions.Builder.withOffset(start);
+    fetch.limit(limit);
+    List<Entity> entities = preparedQuery.asList(fetch);
+
+    List<User> users = new ArrayList<User>(entities.size());
+    for (Entity entity : entities) {
+      users.add(entityToUser(entity));
+    }
+    return new ResultSet<User>(users, size);
+  }
+
 }

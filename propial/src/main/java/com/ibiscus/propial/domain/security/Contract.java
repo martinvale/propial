@@ -43,10 +43,6 @@ public class Contract {
     return name;
   }
 
-  public void setName(final String theName) {
-    name = theName;
-  }
-
   public String getAddress() {
     return address;
   }
