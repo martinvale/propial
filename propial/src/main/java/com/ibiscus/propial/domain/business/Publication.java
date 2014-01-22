@@ -4,6 +4,9 @@ import java.util.Date;
 
 public class Publication {
 
+  /** The id of the publication. */
+  private long id;
+
   /** Fecha de creación del aviso. */
   private Date creation;
 
@@ -12,6 +15,14 @@ public class Publication {
 
   public Publication() {
     creation = new Date();
+  }
+
+  /** Gets the id of the publication.
+   *
+   * @return The id of the publication
+   */
+  public long getId() {
+    return id;
   }
 
   public Date getCreation() {

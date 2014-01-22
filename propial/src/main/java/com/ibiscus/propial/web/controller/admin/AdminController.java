@@ -19,4 +19,8 @@ public class AdminController {
     return new ModelAndView("users");
   }
 
+  @RequestMapping(value = "publications", method = RequestMethod.GET)
+  public ModelAndView publications() {
+    return new ModelAndView("publications");
+  }
 }
