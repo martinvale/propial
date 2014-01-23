@@ -38,6 +38,7 @@
   </bean-->
 
   <bean id="publicationRepository" class="com.ibiscus.propial.domain.business.PublicationRepository">
+    <constructor-arg index="0" ref="datastoreService"></constructor-arg>
   </bean>
 
   <bean id="userRepository" class="com.ibiscus.propial.domain.security.UserRepository">

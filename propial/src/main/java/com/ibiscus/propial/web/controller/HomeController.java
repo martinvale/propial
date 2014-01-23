@@ -1,7 +1,5 @@
 package com.ibiscus.propial.web.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -10,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.ibiscus.propial.domain.business.Publication;
 import com.ibiscus.propial.domain.business.PublicationRepository;
+import com.ibiscus.propial.web.utils.ResultSet;
 
 @Controller
 public class HomeController {
@@ -23,9 +22,8 @@ public class HomeController {
 
   @RequestMapping(value = "/")
   public String home(@ModelAttribute("model") ModelMap model) {
-    List<Publication> publications = publicationRepository.getPublications(0,
-        PAGE_SIZE, "creation", false, null);
-    model.addAttribute("publications", publications);
+    ResultSet<Publication> publications = publicationRepository.find(0, PAGE_SIZE, "creation", false, null);
+    model.addAttribute("publications", publications.getItems());
     return "home";
   }
 }
