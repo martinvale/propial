@@ -1,9 +1,12 @@
 Ext.define('Propial.view.window.PublicationWindow', {
   extend: 'Ext.window.Window',
-  requires: ['Propial.view.form.PublicationForm'],
-  alias: 'widget.Publicationwindow',
+  requires: [
+    'Propial.model.Publication',
+    'Propial.view.form.PublicationForm'
+  ],
+  alias: 'widget.publicationwindow',
   title: 'Editar la publicacion',
-  height: 300,
+  height: 500,
   width: 500, 
   layout: 'fit',
   initComponent: function() {
@@ -28,11 +31,12 @@ Ext.define('Propial.view.window.PublicationWindow', {
     var form = this.editor.getForm();
 		form.reset();
 		if (id) {
-			form.load({
-        url: '/services/publications/' + id,
-        method: 'GET',
-        waitMsg: 'Loading'
-      });
+      var model = Ext.ModelMgr.getModel('Propial.model.Publication');
+      model.load(id, {
+        success: function(publication) {
+          form.loadRecord(publication);
+        }
+      });    
 		}
 		this.show();
   }

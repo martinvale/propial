@@ -11,10 +11,16 @@ Ext.define('Propial.view.grid.PublicationsList', {
   
   initComponent: function() {
     var me = this;
-    this.columns = [{
-      dataIndex: 'displayName',
-      flex: 1
-    }];
+    this.columns = [
+      {
+        dataIndex: 'title',
+        flex: 1
+      }, {
+        dataIndex: 'type'
+      }, {
+        dataIndex: 'address'
+      }
+    ];
     
     this.dockedItems = [{
       dock: 'bottom',

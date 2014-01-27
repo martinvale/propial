@@ -1,4 +1,4 @@
-Ext.define('Propial.view.form.PublicationForm', {
+Ext.define('Propial.view.form.PublicationForm2', {
   extend: 'Ext.form.Panel',
   alias: 'widget.publicationform',
   defaultType: 'textfield',
@@ -6,11 +6,11 @@ Ext.define('Propial.view.form.PublicationForm', {
   bodyPadding: 5,
   items: [
     {
-      name: 'direccion',
+      name: 'address',
       fieldLabel: 'Direccion',
       allowBlank: false
     }, {
-      name: 'tipo',
+      name: 'type',
       fieldLabel: 'Tipo',
       xtype: 'combobox',
       allowBlank: false,
@@ -31,22 +31,35 @@ Ext.define('Propial.view.form.PublicationForm', {
         handler: function (button, event) {
           var form = me.form;
           if (form.isValid()) {
-            var user = form.getValues();
             var methodType = 'PUT';
-            if (me.userId) {
-              user.id = me.userId;
+            if (me.objectId) {
+              publication.id = me.objectId;
+              methodType = 'POST';
+            }
+            form.submit({
+              method: methodType,
+              standardSubmit: true,
+              url: '/services/publications/',
+              success: function(response) {
+                me.fireEvent ('onSaved', me);
+              }
+            });
+            /*var publication = form.getValues();
+            var methodType = 'PUT';
+            if (me.objectId) {
+              publication.id = me.objectId;
               methodType = 'POST';
             }
             Ext.Ajax.request({
               headers: { 'Content-Type': 'application/json' },
               method: methodType,
               url: '/services/publications/',
-              params: Ext.encode(user),
+              params: Ext.encode(publication),
               success: function(response) {
                 me.fireEvent ('onSaved', me);
               },
               failure: function(response){}
-            });
+            });*/
           }
         }
       }, {
