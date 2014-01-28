@@ -10,6 +10,19 @@
     <script type="text/javascript" src="/extjs/ext-all.js"></script>
 
     <script type="text/javascript">
+
+Ext.define('Propial.model.Publication', {
+  extend: 'Ext.data.Model',
+  fields: ['id', 'title', 'type', 'address', 'age', 'description', 'price', 'currencyType', 'expenses', 'surface', 'forProfessional'],
+  proxy: {
+    type: 'rest',
+    url: '/services/publications/',
+    reader: {
+      root: 'data'
+    }
+  }
+});
+
 Ext.define('Propial.view.form.PublicationForm', {
   extend: 'Ext.form.Panel',
   alias: 'widget.publicationform',
@@ -73,17 +86,18 @@ Ext.define('Propial.view.form.PublicationForm', {
         handler: function (button, event) {
           var form = me.form;
           if (form.isValid()) {
-            var methodType = 'PUT';
+            var values = form.getValues();
             if (me.objectId) {
-              publication.id = me.objectId;
-              methodType = 'POST';
+              values.id = me.objectId;
             }
-            form.submit({
+            Ext.Ajax.request({
               method: 'GET',
+              params: values,
               url: '/services/publications/save',
               success: function(response) {
                 me.fireEvent ('onSaved', me);
-              }
+              },
+              failure: function(response){}
             });
           }
         }

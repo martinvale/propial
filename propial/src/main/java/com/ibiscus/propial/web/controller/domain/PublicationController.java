@@ -25,26 +25,19 @@ public class PublicationController {
   private PublicationRepository publicationRepository;
 
   @RequestMapping(value = "/save", method = RequestMethod.GET)
-  public @ResponseBody Packet<Publication> create(String type, String address,
+  public @ResponseBody Packet<Publication> save(Long id, String type, String address,
       Integer age, Double expenses, String description, Double price,
       Integer surface, String currencyType, boolean forProfessional) {
-    Publication publication = new Publication();
+	Publication publication;
+	if (id != null) {
+		publication = publicationRepository.get(id);		
+	} else {
+		publication = new Publication();
+	}
     publication.update(type, address, age, expenses, description, price,
         surface, currencyType, forProfessional, new ArrayList<Ambient>());
     publicationRepository.save(publication);
     return new Packet<Publication>(publication);
-  }
-
-  @RequestMapping(value = "/", method = RequestMethod.POST)
-  public @ResponseBody Publication update(long id, String type,
-      String address, Integer age, Double expenses,
-      String description, Double price, Integer surface, String currencyType,
-      boolean forProfessional) {
-    Publication publication = publicationRepository.get(id);
-    publication.update(type, address, age, expenses, description, price,
-        surface, currencyType, forProfessional, new ArrayList<Ambient>());
-    publicationRepository.save(publication);
-    return publication;
   }
 
   @RequestMapping(value = "/{publicationId}", method = RequestMethod.GET)
