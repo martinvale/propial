@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.ibiscus.propial.domain.business.Ambient;
 import com.ibiscus.propial.domain.business.Publication;
 import com.ibiscus.propial.domain.business.PublicationRepository;
+import com.ibiscus.propial.domain.security.User;
+import com.ibiscus.propial.domain.security.UserRepository;
 import com.ibiscus.propial.web.utils.Packet;
 import com.ibiscus.propial.web.utils.ResultSet;
 
@@ -24,6 +26,10 @@ public class PublicationController {
   @Autowired
   private PublicationRepository publicationRepository;
 
+  /** Repository of users. */
+  @Autowired
+  private UserRepository usersRepository;
+
   @RequestMapping(value = "/save", method = RequestMethod.GET)
   public @ResponseBody Packet<Publication> save(Long id, String type, String address,
       Integer age, Double expenses, String description, Double price,
@@ -32,7 +38,8 @@ public class PublicationController {
 	if (id != null) {
 		publication = publicationRepository.get(id);		
 	} else {
-		publication = new Publication();
+		User user = usersRepository.get(1l);
+		publication = new Publication(user);
 	}
     publication.update(type, address, age, expenses, description, price,
         surface, currencyType, forProfessional, new ArrayList<Ambient>());

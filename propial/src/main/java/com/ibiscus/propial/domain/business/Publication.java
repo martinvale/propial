@@ -6,13 +6,16 @@ import java.util.List;
 
 import org.apache.commons.lang.Validate;
 
+import com.ibiscus.propial.domain.security.User;
+
 public class Publication {
 
   /** The id of the publication. */
   private long id;
 
-  /** Fecha de creación del aviso. */
+  /** Fecha de creacion del aviso. */
   private Date creation;
+  private User author;
 
   private String type;
   private String address;
@@ -28,13 +31,17 @@ public class Publication {
   private boolean forProfessional = false;
   private List<Ambient> ambients = new ArrayList<Ambient>();
 
-  public Publication() {
+  public Publication(final User theAuthor) {
+    Validate.notNull(theAuthor, "The author cannot be null");
     creation = new Date();
+    author = theAuthor;
   }
 
-  public Publication(final long theId) {
+  public Publication(final long theId, final User theAuthor) {
     Validate.isTrue(theId > 0, "The id must be greater than 0");
+    Validate.notNull(theAuthor, "The author cannot be null");
     id = theId;
+    author = theAuthor;
   }
 
   /** Gets the id of the publication.
@@ -43,6 +50,10 @@ public class Publication {
    */
   public long getId() {
     return id;
+  }
+
+  public User getAuthor() {
+	return author;
   }
 
   public Date getCreation() {

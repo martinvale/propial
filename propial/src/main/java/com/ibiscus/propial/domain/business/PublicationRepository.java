@@ -14,7 +14,6 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Transaction;
 import com.ibiscus.propial.web.utils.ResultSet;
 
 public class PublicationRepository {
@@ -30,6 +29,7 @@ public class PublicationRepository {
     Validate.notNull(publicationEntity, "The publication entity cannot be "
         + "null");
 
+    Key userKey = (Key) publicationEntity.getProperty("author");
     Publication publication = new Publication(
         publicationEntity.getKey().getId());
     String type = null;
@@ -100,6 +100,8 @@ public class PublicationRepository {
         publication.getSurface());
     publicationEntity.setProperty("forProfessional",
         publication.isForProfessional());
+    Key userKey = KeyFactory.createKey("User", publication.getAuthor().getId());
+    publicationEntity.setProperty("author", userKey);
 
     return publicationEntity;
   }
@@ -136,15 +138,12 @@ public class PublicationRepository {
     return new ResultSet<Publication>(publications, size);
   }
 
-  public void save(final Publication publication) {
-    Transaction transaction = datastore.beginTransaction();
+  public Key save(final Publication publication) {
     try {
       Entity publicationEntity = publicationToEntity(publication);
-      datastore.put(publicationEntity);
-      transaction.commit();
+      return datastore.put(publicationEntity);
     } catch (Exception e) {
-      transaction.rollback();
-      throw new RuntimeException("Cannot save the publication", e);
+      return null;
     }
   }
 
