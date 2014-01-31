@@ -2,11 +2,19 @@ package com.ibiscus.propial.domain.security;
 
 import org.apache.commons.lang.Validate;
 
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
+
+@Entity
 public class User {
 
-  private long id;
+  @Id
+  private Long id;
   private String username;
   private String password;
+
+  @Index
   private String displayName;
   private String email;
   private String picture;

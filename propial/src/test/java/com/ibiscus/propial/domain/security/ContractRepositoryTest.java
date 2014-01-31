@@ -1,6 +1,5 @@
 package com.ibiscus.propial.domain.security;
 
-import static org.easymock.EasyMock.createMock;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -9,10 +8,7 @@ import static org.junit.Assert.assertThat;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.test.util.ReflectionTestUtils;
 
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.ibiscus.propial.web.utils.ResultSet;
@@ -33,18 +29,8 @@ public class ContractRepositoryTest {
   }
 
   @Test
-  public void constructor() {
-    DatastoreService datastore = createMock(DatastoreService.class);
-    ContractRepository repository = new ContractRepository(datastore);
-    DatastoreService datastoreField = (DatastoreService) ReflectionTestUtils
-        .getField(repository, "datastore");
-    assertThat(datastoreField, is(datastore));
-  }
-
-  @Test
   public void save_and_retrieve() {
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    ContractRepository repository = new ContractRepository(datastore);
+    ContractRepository repository = new ContractRepository();
 
     Contract contract = repository.get(10l);
     assertNull(contract);
@@ -58,22 +44,20 @@ public class ContractRepositoryTest {
 
   @Test
   public void delete() {
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    ContractRepository repository = new ContractRepository(datastore);
+    ContractRepository repository = new ContractRepository();
 
     Contract contract = ContractMother.getPropial();
-    repository.save(contract);
+    long id = repository.save(contract);
 
-    repository.delete(10l);
+    repository.delete(id);
 
-    contract = repository.get(10l);
+    contract = repository.get(id);
     assertNull(contract);
   }
 
   @Test
   public void find() {
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    ContractRepository repository = new ContractRepository(datastore);
+    ContractRepository repository = new ContractRepository();
 
     Contract contract1 = ContractMother.getPropial();
     repository.save(contract1);

@@ -1,21 +1,26 @@
 package com.ibiscus.propial.domain.business;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.Validate;
 
+import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Ref;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
 import com.ibiscus.propial.domain.security.User;
 
+@Entity
 public class Publication {
 
   /** The id of the publication. */
-  private long id;
+  @Id
+  private Long id;
 
   /** Fecha de creacion del aviso. */
   private Date creation;
-  private User author;
+  private Ref<User> author;
 
   private String type;
   private String address;
@@ -29,19 +34,21 @@ public class Publication {
   private Integer surface;
   private String currencyType;
   private boolean forProfessional = false;
-  private List<Ambient> ambients = new ArrayList<Ambient>();
+  private Ref<List<Ambient>> ambients;
+
+  Publication() {}
 
   public Publication(final User theAuthor) {
     Validate.notNull(theAuthor, "The author cannot be null");
     creation = new Date();
-    author = theAuthor;
+    author = Ref.create(Key.create(User.class, theAuthor.getId()));
   }
 
   public Publication(final long theId, final User theAuthor) {
     Validate.isTrue(theId > 0, "The id must be greater than 0");
     Validate.notNull(theAuthor, "The author cannot be null");
     id = theId;
-    author = theAuthor;
+    author = Ref.create(Key.create(User.class, theAuthor.getId()));
   }
 
   /** Gets the id of the publication.
@@ -53,7 +60,7 @@ public class Publication {
   }
 
   public User getAuthor() {
-	return author;
+    return author.get();
   }
 
   public Date getCreation() {
@@ -117,7 +124,7 @@ public class Publication {
   }
 
   public List<Ambient> getAmbients() {
-    return ambients;
+    return ambients.get();
   }
 
   public void update(final String theType, final String theAddress,
@@ -134,7 +141,7 @@ public class Publication {
     surface = theSurface;
     currencyType = theCurrencyType;
     forProfessional = isForProfessional;
-    ambients.addAll(theAmbients);
+    //ambients;
   }
 
 }

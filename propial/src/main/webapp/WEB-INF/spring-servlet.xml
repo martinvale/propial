@@ -38,16 +38,12 @@
   </bean-->
 
   <bean id="publicationRepository" class="com.ibiscus.propial.domain.business.PublicationRepository">
-    <constructor-arg index="0" ref="datastoreService"></constructor-arg>
   </bean>
 
   <bean id="userRepository" class="com.ibiscus.propial.domain.security.UserRepository">
-    <constructor-arg index="0" ref="datastoreService"></constructor-arg>
-  </bean>
-  <bean id="contractRepository" class="com.ibiscus.propial.domain.security.ContractRepository">
-    <constructor-arg index="0" ref="datastoreService"></constructor-arg>
   </bean>
 
-  <!-- Datastore -->
-  <bean id="datastoreService" class="com.google.appengine.api.datastore.DatastoreServiceFactory" factory-method="getDatastoreService" />
+  <bean id="contractRepository" class="com.ibiscus.propial.domain.security.ContractRepository">
+  </bean>
+
 </beans>
