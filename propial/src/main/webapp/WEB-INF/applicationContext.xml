@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:security="http://www.springframework.org/schema/security"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/security
+    http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+
+  <security:http use-expressions="true" entry-point-ref="gaeEntryPoint">
+    <security:intercept-url pattern="/" access="permitAll" />
+    <security:intercept-url pattern="/admin/**" access="hasRole('ADMIN')" />
+    <security:custom-filter position="PRE_AUTH_FILTER" ref="gaeFilter" />
+  </security:http>
+
+  <bean id="gaeEntryPoint" class="com.ibiscus.propial.web.security.GoogleAccountsAuthenticationEntryPoint" />
+
+  <bean id="gaeFilter" class="com.ibiscus.propial.web.security.GaeAuthenticationFilter">
+    <property name="authenticationManager" ref="authenticationManager"/>
+  </bean>
+
+  <security:authentication-manager alias="authenticationManager">
+    <security:authentication-provider ref="gaeAuthenticationProvider"/>
+  </security:authentication-manager>
+
+  <bean id="gaeAuthenticationProvider" class="com.ibiscus.propial.web.security.GoogleAccountsAuthenticationProvider">
+    <property name="userRepository" ref="userRepository" />
+  </bean>
+
+  <bean id="publicationRepository" class="com.ibiscus.propial.domain.business.PublicationRepository">
+  </bean>
+
+  <bean id="userRepository" class="com.ibiscus.propial.domain.security.UserRepository">
+  </bean>
+
+  <bean id="contractRepository" class="com.ibiscus.propial.domain.security.ContractRepository">
+  </bean>
+
+</beans>

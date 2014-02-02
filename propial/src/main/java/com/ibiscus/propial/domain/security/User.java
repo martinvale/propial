@@ -9,16 +9,29 @@ import com.googlecode.objectify.annotation.Index;
 @Entity
 public class User {
 
+  public enum ROLES {
+    ADMIN,
+    CUSTOMER_ADMIN
+  }
+
   @Id
   private Long id;
+
+  @Index
+  private String googleId;
+
+  @Index
   private String username;
   private String password;
 
   @Index
   private String displayName;
+  @Index
   private String email;
   private String picture;
   private String role;
+
+  private boolean enabled;
 
   /** Default constructor. */
   User() {}
@@ -39,6 +52,26 @@ public class User {
     displayName = theDisplayName;
     email = theEmail;
     role = theRole;
+  }
+
+  /** This constructor is used whenever the login comes from Google.
+   *
+   * @param theId
+   * @param theUsername
+   * @param thePassword
+   * @param theDisplayName
+   * @param theEmail
+   * @param theRole
+   */
+  public User(final String theGoogleId, final String theUsername,
+      final String theEmail) {
+    Validate.notNull(theGoogleId, "The Google id cannot be null");
+    Validate.notNull(theUsername, "The username cannot be null");
+    Validate.notNull(theEmail, "The email cannot be null");
+
+    googleId = theGoogleId;
+    username = theUsername;
+    email = theEmail;
   }
 
   public void update(final String thePicture) {
@@ -88,5 +121,13 @@ public class User {
    */
   public String getRole() {
     return role;
+  }
+
+  /** Indicates if the user can use the application or not.
+   *
+   * @return True if the user can access the application, false otherwise.
+   */
+  public boolean isEnabled() {
+    return enabled;
   }
 }
