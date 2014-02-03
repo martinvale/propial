@@ -1,18 +1,17 @@
 Ext.define('Propial.view.PublicationViewport', {
   extend: 'Ext.container.Viewport',
   layout: 'fit',
-  
+
   requires: [
-    'Propial.view.grid.PublicationsList'
+    'Propial.view.grid.PublicationsList',
+    'Propial.view.panel.Menu'
   ],
-  
+
   initComponent: function() {
     this.items = {
       dockedItems: [{
         dock: 'top',
-        xtype: 'toolbar',
-        height: 50,
-        items: []
+        xtype: 'menu'
       }, {
         dock: 'bottom',
         xtype: 'toolbar',

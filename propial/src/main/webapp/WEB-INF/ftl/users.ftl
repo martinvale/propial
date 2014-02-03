@@ -7,7 +7,7 @@
 
     <link rel="stylesheet" href="/extjs/resources/css/ext-all.css">
 
-    <script type="text/javascript" src="/extjs/ext-all.js"></script>
+    <script type="text/javascript" src="/extjs/ext-all-debug.js"></script>
     <!--script type="text/javascript" src="/app/contracts.js"></script-->
 
     <script type="text/javascript">
@@ -29,6 +29,7 @@
             });
           }
         });*/        
+
         Ext.create('Propial.view.UserViewport', {});
       })
     </script>
