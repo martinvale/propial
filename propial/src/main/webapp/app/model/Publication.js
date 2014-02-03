@@ -1,9 +1,9 @@
-Ext.define('Propial.model.Publication2', {
+Ext.define('Propial.model.Publication', {
   extend: 'Ext.data.Model',
-  fields: ['id', 'title', 'type', 'address', 'age', 'description', 'price'],
+  fields: ['id', 'title', 'type', 'address', 'age', 'description', 'price', 'currencyType', 'expenses', 'surface', 'forProfessional'],
   proxy: {
     type: 'rest',
-    url: '/services/publications/'
+    url: '/services/publications/',
     reader: {
       root: 'data'
     }

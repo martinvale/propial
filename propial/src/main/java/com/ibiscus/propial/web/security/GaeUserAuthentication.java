@@ -28,7 +28,7 @@ public class GaeUserAuthentication implements Authentication {
 
   public Collection<? extends GrantedAuthority> getAuthorities() {
     List<GrantedAuthority> roles = new ArrayList<GrantedAuthority>();
-    roles.add(new SimpleGrantedAuthority(user.getRole()));
+    roles.add(new SimpleGrantedAuthority(user.getRole().toString()));
     return roles;
   }
 

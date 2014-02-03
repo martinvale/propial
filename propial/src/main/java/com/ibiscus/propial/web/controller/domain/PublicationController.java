@@ -3,6 +3,7 @@ package com.ibiscus.propial.web.controller.domain;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,13 +35,14 @@ public class PublicationController {
   public @ResponseBody Packet<Publication> save(Long id, String type, String address,
       Integer age, Double expenses, String description, Double price,
       Integer surface, String currencyType, boolean forProfessional) {
-	Publication publication;
-	if (id != null) {
-		publication = publicationRepository.get(id);		
-	} else {
-		User user = usersRepository.get(1l);
-		publication = new Publication(user);
-	}
+    Publication publication;
+    if (id != null) {
+      publication = publicationRepository.get(id);
+    } else {
+      User user = (User) SecurityContextHolder.getContext().getAuthentication()
+          .getPrincipal();
+      publication = new Publication(user.getContract(), user);
+    }
     publication.update(type, address, age, expenses, description, price,
         surface, currencyType, forProfessional, new ArrayList<Ambient>());
     publicationRepository.save(publication);

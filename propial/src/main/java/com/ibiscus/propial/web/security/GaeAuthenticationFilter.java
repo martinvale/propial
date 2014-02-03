@@ -47,7 +47,7 @@ public class GaeAuthenticationFilter extends GenericFilterBean {
           // Setup the security context
           SecurityContextHolder.getContext().setAuthentication(authentication);
           // Send new users to the registration page.
-          if (authentication.getAuthorities().contains(com.ibiscus.propial.domain.security.User.ROLES.ADMIN)) {
+          if (authentication.getAuthorities().contains(com.ibiscus.propial.domain.security.User.ROLE.ADMIN)) {
             ((HttpServletResponse) response).sendRedirect(REGISTRATION_URL);
               return;
           }

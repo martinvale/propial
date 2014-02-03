@@ -1,14 +1,16 @@
 package com.ibiscus.propial.web.controller.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ibiscus.propial.domain.security.Contract;
+import com.ibiscus.propial.domain.security.ContractRepository;
 import com.ibiscus.propial.domain.security.User;
 import com.ibiscus.propial.domain.security.UserRepository;
 import com.ibiscus.propial.web.utils.Packet;
@@ -22,14 +24,35 @@ public class UserController {
   @Autowired
   private UserRepository userRepository;
 
-  @RequestMapping(value = "/", method = RequestMethod.PUT)
-  public @ResponseBody User create(@RequestBody User user) {
-    userRepository.save(user);
-    return user;
-  }
+  /** Repository of contracts. */
+  @Autowired
+  private ContractRepository contractsRepository;
 
-  @RequestMapping(value = "/", method = RequestMethod.POST)
-  public @ResponseBody User update(@RequestBody User user) {
+  @RequestMapping(value = "/save", method = RequestMethod.GET)
+  public @ResponseBody User save(Long id, String username, String password,
+      String displayName, String email, String role, Long contractId,
+      boolean enabled) {
+    User user;
+    if (id != null) {
+      user = userRepository.get(id);
+    } else {
+      Contract contract;
+      if (contractId != null) {
+        contract = contractsRepository.get(contractId);
+      } else {
+        User currentUser = (User) SecurityContextHolder.getContext()
+            .getAuthentication().getPrincipal();
+        contract = currentUser.getContract();
+      }
+      user = new User(contract);
+    }
+    User.ROLE userRole = User.ROLE.valueOf(role);
+    user.update(username, password, displayName, email, userRole);
+    if (enabled) {
+      user.enable();
+    } else {
+      user.disable();
+    }
     userRepository.save(user);
     return user;
   }

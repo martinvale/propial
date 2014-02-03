@@ -1,11 +1,12 @@
 package com.ibiscus.propial.domain.security;
 
-public class UserMother {
+public final class UserMother {
 
   public static User getJuanPerez() {
-    User user = new User(10l, "juanperez", "pass1234", "Juan Perez",
-        "juan@gmail.com", "customer");
-    user.update("http://picture.com/pic");
+    User user = new User(ContractMother.getPropial());
+    user.update("juanperez", "pass1234", "Juan Perez",
+        "juan@gmail.com", User.ROLE.CUSTOMER_ADMIN);
+    user.updatePicture("http://picture.com/pic");
     return user;
   }
 

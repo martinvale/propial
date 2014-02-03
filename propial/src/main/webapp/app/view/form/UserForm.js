@@ -16,7 +16,13 @@ Ext.define('Propial.view.form.UserForm', {
     }, {
       name: 'password',
       fieldLabel: 'Password',
+      inputType: 'password',
       allowBlank: false
+    }, {
+      name: 'enabled',
+      fieldLabel: 'Habilitado',
+      xtype: 'checkbox',
+      inputValue: 'true'
     }, {
       name: 'email',
       fieldLabel: 'Email',
@@ -31,8 +37,15 @@ Ext.define('Propial.view.form.UserForm', {
       displayField: 'role',
       store: Ext.create('Ext.data.ArrayStore', {
         fields: ['role'],
-        data: [['admin'], ['normal']]
+        data: [['ADMIN'], ['CUSTOMER_ADMIN']]
       })
+    }, {
+      name: 'contractId',
+      fieldLabel: 'Contrato',
+      xtype: 'combobox',
+      valueField: 'id',
+      displayField: 'name',
+      store: Ext.create('Propial.store.Contracts')
     }
   ],
   initComponent: function() {
@@ -43,17 +56,14 @@ Ext.define('Propial.view.form.UserForm', {
         handler: function (button, event) {
           var form = me.form;
           if (form.isValid()) {
-            var user = form.getValues();
-            var methodType = 'PUT';
+            var values = form.getValues();
             if (me.userId) {
-              user.id = me.userId;
-              methodType = 'POST';
+              values.id = me.userId;
             }
             Ext.Ajax.request({
-              headers: { 'Content-Type': 'application/json' },
-              method: methodType,
-              url: '/services/users/',
-              params: Ext.encode(user),
+              method: 'GET',
+              params: values,
+              url: '/services/users/save',
               success: function(response) {
                 me.fireEvent ('onSaved', me);
               },

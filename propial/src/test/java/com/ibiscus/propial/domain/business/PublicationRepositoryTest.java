@@ -14,6 +14,9 @@ import org.junit.Test;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
+import com.ibiscus.propial.domain.security.Contract;
+import com.ibiscus.propial.domain.security.ContractMother;
+import com.ibiscus.propial.domain.security.ContractRepository;
 import com.ibiscus.propial.domain.security.User;
 import com.ibiscus.propial.domain.security.UserMother;
 import com.ibiscus.propial.domain.security.UserRepository;
@@ -23,7 +26,9 @@ public class PublicationRepositoryTest {
   private final LocalServiceTestHelper helper = new LocalServiceTestHelper(
       new LocalDatastoreServiceTestConfig());
   private UserRepository userRepository;
+  private ContractRepository contractRepository;
   private User author;
+  private Contract contract;
 
   @Before
   public void setUp() {
@@ -31,6 +36,9 @@ public class PublicationRepositoryTest {
     userRepository = new UserRepository();
     long id = userRepository.save(UserMother.getJuanPerez());
     author = userRepository.get(id);
+    contractRepository = new ContractRepository();
+    id = contractRepository.save(ContractMother.getGalatea());
+    contract = contractRepository.get(id);
   }
 
   @After
@@ -42,7 +50,7 @@ public class PublicationRepositoryTest {
   public void save_and_retrieve() {
     PublicationRepository repository = new PublicationRepository();
 
-    Publication publication = new Publication(author);
+    Publication publication = new Publication(contract, author);
     List<Ambient> ambients = new ArrayList<Ambient>();
     ambients.add(new Ambient());
     publication.update("type", "address", 80, 1300d, "description", 82000d, 42,
@@ -58,7 +66,7 @@ public class PublicationRepositoryTest {
   public void delete() {
     PublicationRepository repository = new PublicationRepository();
 
-    Publication publication = new Publication(author);
+    Publication publication = new Publication(contract, author);
     long id = repository.save(publication);
 
     repository.delete(id);

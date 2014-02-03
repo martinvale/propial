@@ -1,17 +1,29 @@
 package com.ibiscus.propial.domain.security;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang.Validate;
 
+import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 
 @Entity
-public class User {
+public class User implements Serializable {
 
-  public enum ROLES {
+  private static final long serialVersionUID = -8525317709258541855L;
+
+  public enum ROLE {
     ADMIN,
     CUSTOMER_ADMIN
+  }
+
+  public enum STATUS {
+    NEW,
+    ACTIVE,
+    INACTIVE
   }
 
   @Id
@@ -29,29 +41,20 @@ public class User {
   @Index
   private String email;
   private String picture;
-  private String role;
+  private ROLE role;
+  private STATUS status;
 
-  private boolean enabled;
+  @Index
+  private Ref<Contract> contract;
 
   /** Default constructor. */
   User() {}
 
-  public User(final long theId, final String theUsername,
-      final String thePassword, final String theDisplayName,
-      final String theEmail, final String theRole) {
-    Validate.isTrue(theId > 0, "The id must be greater than 0");
-    Validate.notNull(theUsername, "The username cannot be null");
-    Validate.notNull(thePassword, "The password cannot be null");
-    Validate.notNull(theDisplayName, "The display name cannot be null");
-    Validate.notNull(theEmail, "The email cannot be null");
-    Validate.notNull(theRole, "role");
+  public User(final Contract theContract) {
+    Validate.notNull(theContract, "The contract cannot be null");
 
-    id = theId;
-    username = theUsername;
-    password = thePassword;
-    displayName = theDisplayName;
-    email = theEmail;
-    role = theRole;
+    status = STATUS.NEW;
+    contract = Ref.create(Key.create(Contract.class, theContract.getId()));
   }
 
   /** This constructor is used whenever the login comes from Google.
@@ -74,12 +77,36 @@ public class User {
     email = theEmail;
   }
 
-  public void update(final String thePicture) {
+  public void update(final String theUsername, final String thePassword,
+      final String theDisplayName, final String theEmail,
+      final ROLE theRole) {
+    Validate.notNull(theUsername, "The username cannot be null");
+    Validate.notNull(thePassword, "The password cannot be null");
+    Validate.notNull(theDisplayName, "The display name cannot be null");
+    Validate.notNull(theEmail, "The email cannot be null");
+    Validate.notNull(theRole, "role");
+
+    username = theUsername;
+    password = thePassword;
+    displayName = theDisplayName;
+    email = theEmail;
+    role = theRole;
+  }
+
+  public void updatePicture(final String thePicture) {
     picture = thePicture;
   }
 
   public long getId() {
     return id;
+  }
+
+  public Contract getContract() {
+    if (contract != null) {
+      return contract.get();
+    } else {
+      return null;
+    }
   }
 
   public String getDisplayName() {
@@ -119,7 +146,7 @@ public class User {
   /**
    * @return the role
    */
-  public String getRole() {
+  public ROLE getRole() {
     return role;
   }
 
@@ -128,6 +155,16 @@ public class User {
    * @return True if the user can access the application, false otherwise.
    */
   public boolean isEnabled() {
-    return enabled;
+    return status == STATUS.ACTIVE;
+  }
+
+  /** Enable the user to use the application. */
+  public void enable() {
+    status = STATUS.ACTIVE;
+  }
+
+  /** Disable the user to use the application. */
+  public void disable() {
+    status = STATUS.INACTIVE;
   }
 }

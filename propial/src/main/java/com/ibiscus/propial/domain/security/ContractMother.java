@@ -1,6 +1,6 @@
 package com.ibiscus.propial.domain.security;
 
-public class ContractMother {
+public final class ContractMother {
 
   public static Contract getPropial() {
     Contract contract = new Contract(10l, "Propial");

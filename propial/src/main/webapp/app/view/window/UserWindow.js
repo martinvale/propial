@@ -28,11 +28,18 @@ Ext.define('Propial.view.window.UserWindow', {
     var form = this.editor.getForm();
 		form.reset();
 		if (id) {
-			form.load({
+      var model = Ext.ModelMgr.getModel('Propial.model.User');
+      model.load(id, {
+        success: function(user) {
+          form.loadRecord(user);
+        }
+      });    
+
+			/*form.load({
         url: '/services/users/' + id,
         method: 'GET',
         waitMsg: 'Loading'
-      });
+      });*/
 		}
 		this.show();
   }

@@ -1,4 +1,4 @@
-Ext.define('Propial.view.form.PublicationForm2', {
+Ext.define('Propial.view.form.PublicationForm', {
   extend: 'Ext.form.Panel',
   alias: 'widget.publicationform',
   defaultType: 'textfield',
@@ -8,6 +8,7 @@ Ext.define('Propial.view.form.PublicationForm2', {
     {
       name: 'address',
       fieldLabel: 'Direccion',
+      width: 400,
       allowBlank: false
     }, {
       name: 'type',
@@ -21,6 +22,35 @@ Ext.define('Propial.view.form.PublicationForm2', {
         fields: ['tipo'],
         data: [['casa'], ['departamento']]
       })
+    }, {
+      name: 'currencyType',
+      value: '$',
+      xtype: 'hidden'
+    }, {
+      name: 'price',
+      fieldLabel: 'Precio',
+      xtype: 'numberfield'
+    }, {
+      name: 'age',
+      fieldLabel: 'Antiguedad',
+      xtype: 'numberfield'
+    }, {
+      name: 'expenses',
+      fieldLabel: 'Expensas',
+      xtype: 'numberfield'
+    }, {
+      name: 'surface',
+      fieldLabel: 'Superficie',
+      xtype: 'numberfield'
+    }, {
+      name: 'forProfessional',
+      fieldLabel: 'Apto profesional',
+      xtype: 'checkbox'
+    }, {
+      name: 'description',
+      fieldLabel: 'Descripcion',
+      xtype: 'textarea',
+      width: 400
     }
   ],
   initComponent: function() {
@@ -31,35 +61,19 @@ Ext.define('Propial.view.form.PublicationForm2', {
         handler: function (button, event) {
           var form = me.form;
           if (form.isValid()) {
-            var methodType = 'PUT';
+            var values = form.getValues();
             if (me.objectId) {
-              publication.id = me.objectId;
-              methodType = 'POST';
-            }
-            form.submit({
-              method: methodType,
-              standardSubmit: true,
-              url: '/services/publications/',
-              success: function(response) {
-                me.fireEvent ('onSaved', me);
-              }
-            });
-            /*var publication = form.getValues();
-            var methodType = 'PUT';
-            if (me.objectId) {
-              publication.id = me.objectId;
-              methodType = 'POST';
+              values.id = me.objectId;
             }
             Ext.Ajax.request({
-              headers: { 'Content-Type': 'application/json' },
-              method: methodType,
-              url: '/services/publications/',
-              params: Ext.encode(publication),
+              method: 'GET',
+              params: values,
+              url: '/services/publications/save',
               success: function(response) {
                 me.fireEvent ('onSaved', me);
               },
               failure: function(response){}
-            });*/
+            });
           }
         }
       }, {

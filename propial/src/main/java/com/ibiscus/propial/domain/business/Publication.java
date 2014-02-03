@@ -9,6 +9,7 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.ibiscus.propial.domain.security.Contract;
 import com.ibiscus.propial.domain.security.User;
 
 @Entity
@@ -21,6 +22,7 @@ public class Publication {
   /** Fecha de creacion del aviso. */
   private Date creation;
   private Ref<User> author;
+  private Ref<Contract> contract;
 
   private String type;
   private String address;
@@ -38,9 +40,11 @@ public class Publication {
 
   Publication() {}
 
-  public Publication(final User theAuthor) {
+  public Publication(final Contract theContract, final User theAuthor) {
+    Validate.notNull(theContract, "The contract cannot be null");
     Validate.notNull(theAuthor, "The author cannot be null");
     creation = new Date();
+    contract = Ref.create(Key.create(Contract.class, theContract.getId()));
     author = Ref.create(Key.create(User.class, theAuthor.getId()));
   }
 
@@ -61,6 +65,10 @@ public class Publication {
 
   public User getAuthor() {
     return author.get();
+  }
+
+  public Contract getContract() {
+    return contract.get();
   }
 
   public Date getCreation() {
