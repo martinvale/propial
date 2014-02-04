@@ -4,6 +4,9 @@ Ext.define('Propial.view.panel.Menu', {
     'Propial.store.Menues',
     'Ext.view.View'
   ],
+  cls: 'header',
+  border: false,
+  height: 30,
   alias: 'widget.menu',
 	items: [Ext.create('Ext.view.View', {
 		store: Ext.create('Propial.store.Menues'),

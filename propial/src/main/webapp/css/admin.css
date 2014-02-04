@@ -1,0 +1,15 @@
+.header .x-panel-body-default {
+  background-color: #404040;
+  padding-top: 5px;
+}
+
+.header a {
+  color: #AAAAAA;
+  font-weight: bold;
+  margin: 0 15px;
+  text-decoration: none;
+}
+
+.header a:hover {
+  color: #FFFFFF;
+}
