@@ -1,5 +1,6 @@
 package com.ibiscus.propial.domain.business;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +14,12 @@ import com.ibiscus.propial.domain.security.Contract;
 import com.ibiscus.propial.domain.security.User;
 
 @Entity
-public class Publication {
+public class Publication implements Serializable {
+
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
   /** The id of the publication. */
   @Id
@@ -36,7 +42,7 @@ public class Publication {
   private Integer surface;
   private String currencyType;
   private boolean forProfessional = false;
-  private Ref<List<Ambient>> ambients;
+  //private Ref<List<Ambient>> ambients;
 
   Publication() {}
 
@@ -131,9 +137,9 @@ public class Publication {
     return forProfessional;
   }
 
-  public List<Ambient> getAmbients() {
+  /*public List<Ambient> getAmbients() {
     return ambients.get();
-  }
+  }*/
 
   public void update(final String theType, final String theAddress,
       final Integer theAge, final Double theExpenses,

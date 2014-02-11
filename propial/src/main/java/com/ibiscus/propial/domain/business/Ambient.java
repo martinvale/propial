@@ -1,5 +1,8 @@
 package com.ibiscus.propial.domain.business;
 
+import com.googlecode.objectify.annotation.Entity;
+
+@Entity
 public class Ambient {
 
   private String type;

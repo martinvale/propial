@@ -1,5 +1,8 @@
 package com.ibiscus.propial.web.controller.domain;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ibiscus.propial.domain.business.Ambient;
 import com.ibiscus.propial.domain.business.Publication;
@@ -68,9 +72,29 @@ public class PublicationController {
     return publicationRepository.find(start, limit, null, true, null);
   }
 
-  @RequestMapping(value = "/{userId}", method = RequestMethod.DELETE)
-  public @ResponseBody boolean delete(@PathVariable long userId) {
-    publicationRepository.delete(userId);
+  @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+  public @ResponseBody boolean delete(@PathVariable long id) {
+    publicationRepository.delete(id);
     return true;
+  }
+
+  @RequestMapping(value = "/upload", method = RequestMethod.POST)
+  public @ResponseBody boolean upload(@RequestParam("name") String name,
+      @RequestParam("file") MultipartFile file) {
+    if (!file.isEmpty()) {
+      try {
+          byte[] bytes = file.getBytes();
+          BufferedOutputStream stream =
+                  new BufferedOutputStream(new FileOutputStream(new File(name + "-uploaded")));
+          stream.write(bytes);
+          stream.close();
+          return true;
+      } catch (Exception e) {
+        throw new RuntimeException("You failed to upload " + name, e);
+      }
+    } else {
+        throw new RuntimeException("You failed to upload " + name
+            + " because the file was empty.");
+    }
   }
 }

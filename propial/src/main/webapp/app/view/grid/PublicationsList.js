@@ -2,7 +2,8 @@ Ext.define('Propial.view.grid.PublicationsList', {
   extend: 'Ext.grid.Panel',
   requires: [
     'Propial.store.Publications',
-    'Propial.view.window.PublicationWindow'
+    'Propial.view.window.PublicationWindow',
+    'Propial.view.window.ResourcesWindow'
   ],
   alias: 'widget.publicationslist',
   store: Ext.create('Propial.store.Publications'),
@@ -52,6 +53,22 @@ Ext.define('Propial.view.grid.PublicationsList', {
               }
             });
             publicationEditionWindow.open(selections[0].get('id'));
+          }
+        }
+      }, {
+        xtype: 'button',
+        text: 'Editar multimedia',
+        handler: function () {
+          var selections = me.getSelectionModel().getSelection();
+          if (selections.length == 1) {
+            var multimediaEditionWindow = Ext.create('widget.resourceswindow', {
+              listeners: {
+                onContentUpdated: function (window) {
+                  me.getStore().reload();
+                }
+              }
+            });
+            multimediaEditionWindow.open(selections[0].get('id'));
           }
         }
       }, {

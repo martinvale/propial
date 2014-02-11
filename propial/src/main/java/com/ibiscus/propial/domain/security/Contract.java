@@ -1,5 +1,7 @@
 package com.ibiscus.propial.domain.security;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang.Validate;
 
 import com.googlecode.objectify.annotation.Entity;
@@ -7,7 +9,12 @@ import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 
 @Entity
-public class Contract {
+public class Contract implements Serializable {
+
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
   @Id
   private Long id;
