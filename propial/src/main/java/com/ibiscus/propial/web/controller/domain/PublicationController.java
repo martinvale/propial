@@ -3,7 +3,12 @@ package com.ibiscus.propial.web.controller.domain;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -79,21 +84,55 @@ public class PublicationController {
   }
 
   @RequestMapping(value = "/upload", method = RequestMethod.POST)
-  public @ResponseBody boolean upload(@RequestParam("name") String name,
-      @RequestParam("file") MultipartFile file) {
+  public @ResponseBody boolean upload(HttpServletRequest req, HttpServletResponse res) {
+    try {
+      ServletFileUpload upload = new ServletFileUpload();
+      res.setContentType("text/plain");
+
+      FileItemIterator iterator = upload.getItemIterator(req);
+      while (iterator.hasNext()) {
+        FileItemStream item = iterator.next();
+        InputStream stream = item.openStream();
+
+        if (item.isFormField()) {
+          log.warning("Got a form field: " + item.getFieldName());
+        } else {
+          log.warning("Got an uploaded file: " + item.getFieldName() +
+                      ", name = " + item.getName());
+
+          // You now have the filename (item.getName() and the
+          // contents (which you can read from stream). Here we just
+          // print them back out to the servlet output stream, but you
+          // will probably want to do something more interesting (for
+          // example, wrap them in a Blob and commit them to the
+          // datastore).
+          int len;
+          byte[] buffer = new byte[8192];
+          while ((len = stream.read(buffer, 0, buffer.length)) != -1) {
+            res.getOutputStream().write(buffer, 0, len);
+          }
+        }
+      }
+    } catch (Exception ex) {
+      throw new ServletException(ex);
+    }
+  }
+
+  @RequestMapping(value = "/upload", method = RequestMethod.POST)
+  public @ResponseBody boolean upload2(@RequestParam("file") MultipartFile file) {
     if (!file.isEmpty()) {
       try {
           byte[] bytes = file.getBytes();
           BufferedOutputStream stream =
-                  new BufferedOutputStream(new FileOutputStream(new File(name + "-uploaded")));
+                  new BufferedOutputStream(new FileOutputStream(new File(file.getName() + "-uploaded")));
           stream.write(bytes);
           stream.close();
           return true;
       } catch (Exception e) {
-        throw new RuntimeException("You failed to upload " + name, e);
+        throw new RuntimeException("You failed to upload " + file.getName(), e);
       }
     } else {
-        throw new RuntimeException("You failed to upload " + name
+        throw new RuntimeException("You failed to upload " + file.getName()
             + " because the file was empty.");
     }
   }
