@@ -1,5 +1,8 @@
 Ext.define('Propial.view.form.PublicationForm', {
   extend: 'Ext.form.Panel',
+  requires: [
+    'Propial.view.form.field.Ambient'
+  ],
   alias: 'widget.publicationform',
   defaultType: 'textfield',
   border: false,
@@ -45,12 +48,60 @@ Ext.define('Propial.view.form.PublicationForm', {
     }, {
       name: 'forProfessional',
       fieldLabel: 'Apto profesional',
-      xtype: 'checkbox'
+      xtype: 'checkbox',
+      inputValue: 'true'
     }, {
       name: 'description',
       fieldLabel: 'Descripcion',
       xtype: 'textarea',
-      width: 400
+      width: 520
+    }, {
+      xtype: 'fieldset',
+      margin: 10,
+      title: 'Ambientes',
+      items: [
+        {
+          xtype: 'fieldcontainer',
+          layout: 'hbox',
+          defaults: {
+            width: 155
+          },
+          items: [
+            {
+              xtype: 'displayfield',
+              value: 'Tipo de ambiente'
+            }, {
+              xtype: 'displayfield',
+              value: 'Dimension'
+            }, {
+              xtype: 'displayfield',
+              value: 'Observacion'
+            }
+          ]
+        }, {
+          id: 'ambientes',
+          xtype: 'panel',
+          layout: 'anchor',
+          border: false,
+          dockedItems: [
+            {
+              xtype: 'toolbar',
+              dock: 'bottom',
+              items: [
+                {
+                  text: 'Agregar un ambiente',
+                  handler: function (b, e) {
+                    var fieldSet = this.up('panel');
+                    fieldSet.insert(0, {
+                      xtype: 'ambientfield'
+                    })
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ],
   initComponent: function() {
@@ -61,14 +112,28 @@ Ext.define('Propial.view.form.PublicationForm', {
         handler: function (button, event) {
           var form = me.form;
           if (form.isValid()) {
-            var values = form.getValues();
+            var publication = form.getValues();
             if (me.objectId) {
-              values.id = me.objectId;
+              publication.id = me.objectId;
             }
+                
+            var panAmbientes = me.down('#ambientes');
+            var fields = panAmbientes.query('fieldcontainer');
+            
+            var ambientes = [];
+            Ext.Array.each(fields, function (field) {
+              ambientes.push(field.getJsonValue());
+            });
+            publication['ambients'] = ambientes;
+            delete publication['dimensionAmbiente'];
+            delete publication['observacionAmbiente'];
+            delete publication['tipoAmbiente'];
+
             Ext.Ajax.request({
-              method: 'GET',
-              params: values,
+              headers: { 'Content-Type': 'application/json' },
+              method: 'POST',
               url: '/services/publications/save',
+              params: Ext.encode(publication),
               success: function(response) {
                 me.fireEvent ('onSaved', me);
               },
@@ -83,7 +148,20 @@ Ext.define('Propial.view.form.PublicationForm', {
         }
       }
     ];
-		this.addEvents ('onSaved', 'onClosed');
+    this.addEvents ('onSaved', 'onClosed');
     this.callParent();
+  },
+  loadPublication: function (publication) {
+    var form = this.getForm();
+    form.reset();
+    form.loadRecord(publication);
+
+    var panAmbientes = this.down('#ambientes');
+    publication.ambients().each(function (ambient) {
+      var newField = Ext.create('Propial.view.form.field.Ambient', {
+        data: ambient
+      });
+      panAmbientes.insert(0, newField);
+    });
   }
 });

@@ -1,7 +1,6 @@
 package com.ibiscus.propial.web.controller.domain;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,7 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
-import com.ibiscus.propial.domain.business.Ambient;
+import com.ibiscus.propial.application.business.PublicationDto;
 import com.ibiscus.propial.domain.business.Publication;
 import com.ibiscus.propial.domain.business.PublicationRepository;
 import com.ibiscus.propial.domain.business.Resource;
@@ -40,20 +41,18 @@ public class PublicationController {
   @Autowired
   private UserRepository usersRepository;
 
-  @RequestMapping(value = "/save", method = RequestMethod.GET)
-  public @ResponseBody Packet<Publication> save(Long id, String type, String address,
-      Integer age, Double expenses, String description, Double price,
-      Integer surface, String currencyType, boolean forProfessional) {
+  @RequestMapping(value = "/save", method = RequestMethod.POST)
+  public @ResponseBody Packet<Publication> save(
+      @RequestBody PublicationDto publicationDto) {
     Publication publication;
-    if (id != null) {
-      publication = publicationRepository.get(id);
+    if (publicationDto.getId() != null) {
+      publication = publicationRepository.get(publicationDto.getId());
     } else {
       User user = (User) SecurityContextHolder.getContext().getAuthentication()
           .getPrincipal();
       publication = new Publication(user.getContract(), user);
     }
-    publication.update(type, address, age, expenses, description, price,
-        surface, currencyType, forProfessional, new ArrayList<Ambient>());
+    publicationDto.update(publication);
     publicationRepository.save(publication);
     return new Packet<Publication>(publication);
   }

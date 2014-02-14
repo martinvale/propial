@@ -1,13 +1,16 @@
 package com.ibiscus.propial.domain.business;
 
-import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Embed;
 
-@Entity
+@Embed
 public class Ambient {
 
   private String type;
   private String observation;
   private String dimension;
+
+  public Ambient() {
+  }
 
   /**
    * @return the type

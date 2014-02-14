@@ -40,7 +40,7 @@ public class Publication implements Serializable {
   private Integer surface;
   private String currencyType;
   private boolean forProfessional = false;
-  //private Ref<List<Ambient>> ambients;
+  private List<Ambient> ambients = new ArrayList<Ambient>();
   private List<Ref<Resource>> resources = new ArrayList<Ref<Resource>>();
 
   Publication() {}
@@ -136,9 +136,9 @@ public class Publication implements Serializable {
     return forProfessional;
   }
 
-  /*public List<Ambient> getAmbients() {
-    return ambients.get();
-  }*/
+  public List<Ambient> getAmbients() {
+    return ambients;
+  }
 
   public List<Resource> getResources() {
     List<Resource> publicationResources = new ArrayList<Resource>();
@@ -162,7 +162,7 @@ public class Publication implements Serializable {
     surface = theSurface;
     currencyType = theCurrencyType;
     forProfessional = isForProfessional;
-    //ambients;
+    ambients = theAmbients;
   }
 
   public void addResource(final Resource resource) {
