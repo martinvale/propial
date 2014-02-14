@@ -24,6 +24,7 @@ Ext.define('Propial.view.PublicationViewport', {
       },
       items: [{
         xtype: 'publicationslist',
+        uploadUrl: this.uploadUrl,
         flex: 1
       }]
     };

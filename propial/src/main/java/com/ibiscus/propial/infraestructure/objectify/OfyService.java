@@ -4,6 +4,7 @@ import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;
 import com.ibiscus.propial.domain.business.Publication;
+import com.ibiscus.propial.domain.business.Resource;
 import com.ibiscus.propial.domain.security.Contract;
 import com.ibiscus.propial.domain.security.User;
 
@@ -14,6 +15,7 @@ public class OfyService {
     factory().register(User.class);
 
     factory().register(Publication.class);
+    factory().register(Resource.class);
   }
 
   public static Objectify ofy() {

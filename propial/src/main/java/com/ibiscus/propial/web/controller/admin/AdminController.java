@@ -1,9 +1,14 @@
 package com.ibiscus.propial.web.controller.admin;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 
 @Controller
 @RequestMapping(value="/admin/")
@@ -20,7 +25,10 @@ public class AdminController {
   }
 
   @RequestMapping(value = "publications", method = RequestMethod.GET)
-  public ModelAndView publications() {
-    return new ModelAndView("publications");
+  public String publications(@ModelAttribute("model") ModelMap model) {
+    BlobstoreService service = BlobstoreServiceFactory.getBlobstoreService();
+    model.put("uploadUrl", service.createUploadUrl(
+        "/services/publications/upload"));
+    return "publications";
   }
 }

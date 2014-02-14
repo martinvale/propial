@@ -62,6 +62,7 @@ Ext.define('Propial.view.grid.PublicationsList', {
           var selections = me.getSelectionModel().getSelection();
           if (selections.length == 1) {
             var multimediaEditionWindow = Ext.create('widget.resourceswindow', {
+              uploadUrl: me.uploadUrl,
               listeners: {
                 onContentUpdated: function (window) {
                   me.getStore().reload();

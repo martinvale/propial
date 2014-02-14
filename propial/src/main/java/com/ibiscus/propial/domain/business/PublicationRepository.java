@@ -44,6 +44,12 @@ public class PublicationRepository {
     return key.getId();
   }
 
+  public String saveResource(final Resource resource) {
+    Validate.notNull(resource, "The resource cannot be null");
+    Key<Resource> key = OfyService.ofy().save().entity(resource).now();
+    return key.getName();
+  }
+
   public Publication get(final long id) {
     return OfyService.ofy().load().type(Publication.class).id(id).now();
   }

@@ -13,3 +13,22 @@
 .header a:hover {
   color: #FFFFFF;
 }
+
+.image-gallery .thumb-wrap {
+  float: left;
+  height: 110px;
+  width: 110px;
+  overflow: hidden;
+}
+
+.image-gallery .thumb {
+  padding: 5px;
+}
+
+.image-gallery .x-item-selected .thumb {
+  background-color: #99BBE8;
+}
+
+.image-gallery .thumb img {
+  width: 100px;
+}

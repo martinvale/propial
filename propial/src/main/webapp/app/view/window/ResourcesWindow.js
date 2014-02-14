@@ -6,38 +6,27 @@ Ext.define('Propial.view.window.ResourcesWindow', {
   ],
   alias: 'widget.resourceswindow',
   title: 'Administrar multimedia',
-  height: 500,
-  width: 500, 
   layout: 'fit',
+  height: 500,
+  width: 500,
   initComponent: function() {
     var me = this;
-    this.editor = Ext.create('Propial.view.form.UploadPhotoForm', {
-      listeners: {
-        onUploaded: function (form) {
-          me.fireEvent ('onResourceUploaded', me);
-          me.close();
-        },
-        onClosed: function (form) {
-          me.close();
-        }
-      }
+    this.viewer = Ext.create('Propial.view.panel.ImageGallery', {
+      uploadUrl: me.uploadUrl
     });
-    this.items = [this.editor];
-    this.addEvents ('onResourceUploaded');
+    this.items = [this.viewer];
     this.callParent();
   },
   open: function(id) {
-		this.editor.objectId = id;
-    var form = this.editor.getForm();
-		form.reset();
-		if (id) {
-      /*var model = Ext.ModelMgr.getModel('Propial.model.Publication');
+    var me = this;
+    if (id) {
+      var model = Ext.ModelMgr.getModel('Propial.model.Publication');
       model.load(id, {
         success: function(publication) {
-          form.loadRecord(publication);
+          me.viewer.loadImages(publication);
         }
-      });*/
-		}
-		this.show();
+      });
+    }
+    this.show();
   }
 });

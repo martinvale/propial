@@ -1,12 +1,9 @@
 package com.ibiscus.propial.web.controller.domain;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,11 +15,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.ibiscus.propial.domain.business.Ambient;
 import com.ibiscus.propial.domain.business.Publication;
 import com.ibiscus.propial.domain.business.PublicationRepository;
+import com.ibiscus.propial.domain.business.Resource;
 import com.ibiscus.propial.domain.security.User;
 import com.ibiscus.propial.domain.security.UserRepository;
 import com.ibiscus.propial.web.utils.Packet;
@@ -83,57 +83,57 @@ public class PublicationController {
     return true;
   }
 
-  @RequestMapping(value = "/upload", method = RequestMethod.POST)
-  public @ResponseBody boolean upload(HttpServletRequest req, HttpServletResponse res) {
-    try {
-      ServletFileUpload upload = new ServletFileUpload();
-      res.setContentType("text/plain");
-
-      FileItemIterator iterator = upload.getItemIterator(req);
-      while (iterator.hasNext()) {
-        FileItemStream item = iterator.next();
-        InputStream stream = item.openStream();
-
-        if (item.isFormField()) {
-          log.warning("Got a form field: " + item.getFieldName());
-        } else {
-          log.warning("Got an uploaded file: " + item.getFieldName() +
-                      ", name = " + item.getName());
-
-          // You now have the filename (item.getName() and the
-          // contents (which you can read from stream). Here we just
-          // print them back out to the servlet output stream, but you
-          // will probably want to do something more interesting (for
-          // example, wrap them in a Blob and commit them to the
-          // datastore).
-          int len;
-          byte[] buffer = new byte[8192];
-          while ((len = stream.read(buffer, 0, buffer.length)) != -1) {
-            res.getOutputStream().write(buffer, 0, len);
-          }
-        }
-      }
-    } catch (Exception ex) {
-      throw new ServletException(ex);
-    }
+  @RequestMapping(value = "/upload")
+  public @ResponseBody Packet<Resource> upload(HttpServletRequest req,
+      HttpServletResponse res) {
+    BlobstoreService blobstoreService = BlobstoreServiceFactory
+        .getBlobstoreService();
+    Map<String, BlobKey> blobs = blobstoreService.getUploadedBlobs(req);
+    BlobKey key = blobs.get("file");
+    String publicationId = (String) req.getParameter("publicationId");
+    Publication publication = publicationRepository.get(
+        Long.valueOf(publicationId));
+    Resource resource = new Resource(key);
+    publicationRepository.saveResource(resource);
+    publication.addResource(resource);
+    publicationRepository.save(publication);
+    return new Packet<Resource>(resource);
   }
 
-  @RequestMapping(value = "/upload", method = RequestMethod.POST)
-  public @ResponseBody boolean upload2(@RequestParam("file") MultipartFile file) {
-    if (!file.isEmpty()) {
-      try {
-          byte[] bytes = file.getBytes();
-          BufferedOutputStream stream =
-                  new BufferedOutputStream(new FileOutputStream(new File(file.getName() + "-uploaded")));
-          stream.write(bytes);
-          stream.close();
-          return true;
-      } catch (Exception e) {
-        throw new RuntimeException("You failed to upload " + file.getName(), e);
-      }
-    } else {
-        throw new RuntimeException("You failed to upload " + file.getName()
-            + " because the file was empty.");
-    }
+  @RequestMapping(value = "/resource/{key}")
+  public void getResource(@PathVariable String key,
+      HttpServletRequest req, HttpServletResponse res) throws IOException {
+    BlobstoreService blobstoreService = BlobstoreServiceFactory
+        .getBlobstoreService();
+    BlobKey blobKey = new BlobKey(key);
+    blobstoreService.serve(blobKey, res);
+  }
+
+  @RequestMapping(value = "/{id}/{resourceId}/move", method = RequestMethod.POST)
+  public @ResponseBody boolean moveResource(@PathVariable long id,
+      @PathVariable String resourceId, @RequestParam int position) {
+    Publication publication = publicationRepository.get(id);
+    publication.moveResource(resourceId, position);
+    publicationRepository.save(publication);
+    return true;
+  }
+
+  @RequestMapping(value = "/{id}/{resourceId}", method = RequestMethod.DELETE)
+  public @ResponseBody boolean deleteResource(@PathVariable long id,
+      @PathVariable String resourceId) {
+    BlobstoreService blobstoreService = BlobstoreServiceFactory
+        .getBlobstoreService();
+    Publication publication = publicationRepository.get(id);
+    publication.removeResource(resourceId);
+    publicationRepository.save(publication);
+    BlobKey blobKey = new BlobKey(resourceId);
+    blobstoreService.delete(blobKey);
+    return true;
+  }
+
+  @RequestMapping(value = "/resources/uploadUrl")
+  public @ResponseBody String generateUploadUrl() {
+    BlobstoreService service = BlobstoreServiceFactory.getBlobstoreService();
+    return service.createUploadUrl("/services/publications/upload");
   }
 }

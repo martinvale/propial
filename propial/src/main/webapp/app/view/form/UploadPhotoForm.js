@@ -1,7 +1,8 @@
-Ext.define('Propial.view.form.UploadPhotoForm2', {
+Ext.define('Propial.view.form.UploadPhotoForm', {
   extend: 'Ext.form.Panel',
   alias: 'widget.uploadphotoform',
   border: false,
+  hidden: true,
   bodyPadding: 5,
   items: [
     {
@@ -10,21 +11,34 @@ Ext.define('Propial.view.form.UploadPhotoForm2', {
       xtype: 'filefield',
       width: 400,
       allowBlank: false
+    }, {
+      name: 'publicationId',
+      xtype: 'hiddenfield'
     }
   ],
   initComponent: function() {
     var me = this;
     me.buttons = [
       {
-        text: 'Guardar',
+        text: 'Subir',
         handler: function (button, event) {
           var form = me.form;
           if (form.isValid()) {
             form.submit({
-              url: '/services/publications/upload',
+              url: me.uploadUrl,
               waitMsg: 'Subiendo la imagen...',
               success: function(fp, o) {
-                msg('Success', 'Processed file "' + o.result.file + '" on the server');
+                var resource = Ext.create('Propial.model.Resource', {
+                  key: o.result.data.key.keyString
+                });
+                Ext.Ajax.request({
+                  url: '/services/publications/resources/uploadUrl',
+                  method: 'GET',
+                  success: function(response){
+                    me.uploadUrl = response.responseText;
+                  }
+                });
+                me.fireEvent ('onUploaded', me, resource);
               }
             });
           }
@@ -36,7 +50,7 @@ Ext.define('Propial.view.form.UploadPhotoForm2', {
         }
       }
     ];
-		this.addEvents ('onUploaded', 'onClosed');
+    this.addEvents ('onUploaded', 'onClosed');
     this.callParent();
   }
 });
