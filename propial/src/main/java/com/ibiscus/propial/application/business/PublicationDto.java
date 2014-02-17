@@ -12,7 +12,7 @@ public class PublicationDto {
   /** The id of the publication. */
   private Long id;
 
-  private Contract contract;
+  private Long contractId;
 
   private String type;
   private String address;
@@ -38,8 +38,8 @@ public class PublicationDto {
     return id;
   }
 
-  public Contract getContract() {
-    return contract;
+  public Long getContractId() {
+    return contractId;
   }
 
   public String getType() {

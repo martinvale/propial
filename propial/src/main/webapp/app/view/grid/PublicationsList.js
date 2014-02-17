@@ -24,6 +24,12 @@ Ext.define('Propial.view.grid.PublicationsList', {
     ];
     
     this.dockedItems = [{
+      dock: 'top',
+      xtype: 'toolbar',
+      items: [{
+        xtype: 'combocontracts'
+      }]
+    }, {
       dock: 'bottom',
       xtype: 'toolbar',
       items: [{

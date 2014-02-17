@@ -20,6 +20,18 @@
           }
         });
 
+Ext.define('Propial.view.form.field.ComboContracts', {
+  extend: 'Ext.form.field.ComboBox',
+  requires: [
+    'Propial.store.Contracts'
+  ],
+  id: 'contract-selector',
+  alias: 'widget.combocontracts', 
+  valueField: 'id',
+  displayField: 'name',
+  store: Ext.create('Propial.store.Contracts')
+});
+
         Ext.create('Propial.view.PublicationViewport', {
           uploadUrl: '${model["uploadUrl"]}'
         });

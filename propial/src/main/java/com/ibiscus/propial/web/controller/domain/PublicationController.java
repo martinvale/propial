@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +23,8 @@ import com.ibiscus.propial.application.business.PublicationDto;
 import com.ibiscus.propial.domain.business.Publication;
 import com.ibiscus.propial.domain.business.PublicationRepository;
 import com.ibiscus.propial.domain.business.Resource;
+import com.ibiscus.propial.domain.security.Contract;
+import com.ibiscus.propial.domain.security.ContractRepository;
 import com.ibiscus.propial.domain.security.User;
 import com.ibiscus.propial.domain.security.UserRepository;
 import com.ibiscus.propial.web.utils.Packet;
@@ -41,6 +42,10 @@ public class PublicationController {
   @Autowired
   private UserRepository usersRepository;
 
+  /** Repository of contracts. */
+  @Autowired
+  private ContractRepository contractRepository;
+
   @RequestMapping(value = "/save", method = RequestMethod.POST)
   public @ResponseBody Packet<Publication> save(
       @RequestBody PublicationDto publicationDto) {
@@ -50,7 +55,13 @@ public class PublicationController {
     } else {
       User user = (User) SecurityContextHolder.getContext().getAuthentication()
           .getPrincipal();
-      publication = new Publication(user.getContract(), user);
+      Contract contract;
+      if (user.getRole().equals(User.ROLE.ADMIN)) {
+        contract = contractRepository.get(publicationDto.getContractId());
+      } else {
+        contract = user.getContract();
+      }
+      publication = new Publication(contract, user);
     }
     publicationDto.update(publication);
     publicationRepository.save(publication);

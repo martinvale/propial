@@ -3,6 +3,7 @@ package com.ibiscus.propial.domain.security;
 import java.util.List;
 
 import org.apache.commons.lang.Validate;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.cmd.Query;
@@ -20,6 +21,11 @@ public class ContractRepository {
         .limit(limit).order("name");
     if (start > 0) {
       query = query.offset(start);
+    }
+    User user = (User) SecurityContextHolder.getContext().getAuthentication()
+        .getPrincipal();
+    if (user.getRole().equals(User.ROLE.CUSTOMER_ADMIN)) {
+      query = query.filter("id", user.getContract().getId());
     }
     List<Contract> contracts = query.list();
     int size = OfyService.ofy().load().type(Contract.class).count();

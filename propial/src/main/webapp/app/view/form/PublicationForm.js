@@ -129,6 +129,9 @@ Ext.define('Propial.view.form.PublicationForm', {
             delete publication['observacionAmbiente'];
             delete publication['tipoAmbiente'];
 
+            var contractSelector = Ext.getCmp('contract-selector');
+            publication['contractId'] = contractSelector.getValue();
+
             Ext.Ajax.request({
               headers: { 'Content-Type': 'application/json' },
               method: 'POST',
