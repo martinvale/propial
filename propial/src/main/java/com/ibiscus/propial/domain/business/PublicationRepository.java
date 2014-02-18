@@ -6,7 +6,9 @@ import java.util.Map;
 import org.apache.commons.lang.Validate;
 
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.cmd.Query;
+import com.ibiscus.propial.domain.security.Contract;
 import com.ibiscus.propial.infraestructure.objectify.OfyService;
 import com.ibiscus.propial.web.utils.ResultSet;
 
@@ -24,7 +26,7 @@ public class PublicationRepository {
    */
   public ResultSet<Publication> find(final int start, final int limit,
       final String order, final boolean asc,
-      final Map<String, String> filters) {
+      final Map<String, Object> filters) {
     Query<Publication> query = OfyService.ofy().load().type(Publication.class)
         .limit(limit);
     if (order != null) {
@@ -32,6 +34,11 @@ public class PublicationRepository {
     }
     if (start > 0) {
       query = query.offset(start);
+    }
+    if (filters != null && !filters.isEmpty()) {
+      Ref<Contract> contractRef = Ref.create((Contract) filters
+          .get("contract"));
+      query = query.filter("contract", filters.get("contract"));
     }
     List<Publication> publications = query.list();
     int size = OfyService.ofy().load().type(Publication.class).count();

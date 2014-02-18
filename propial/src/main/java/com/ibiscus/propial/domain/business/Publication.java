@@ -11,6 +11,7 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 import com.ibiscus.propial.domain.security.Contract;
 import com.ibiscus.propial.domain.security.User;
 
@@ -26,6 +27,7 @@ public class Publication implements Serializable {
   /** Fecha de creacion del aviso. */
   private Date creation;
   private Ref<User> author;
+  @Index
   private Ref<Contract> contract;
 
   private String type;

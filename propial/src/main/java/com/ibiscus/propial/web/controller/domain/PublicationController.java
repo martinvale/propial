@@ -1,6 +1,7 @@
 package com.ibiscus.propial.web.controller.domain;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -83,8 +84,14 @@ public class PublicationController {
 
   @RequestMapping(value = "/", method = RequestMethod.GET)
   public @ResponseBody ResultSet<Publication> get(@RequestParam int start,
-      @RequestParam int limit) {
-    return publicationRepository.find(start, limit, null, true, null);
+      @RequestParam int limit,
+      @RequestParam(required = false) Long contractId) {
+    Map<String, Object> filters = new HashMap<String, Object>();
+    if (contractId != null) {
+      Contract contract = contractRepository.get(contractId);
+      filters.put("contract", contract);
+    }
+    return publicationRepository.find(start, limit, null, true, filters);
   }
 
   @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)

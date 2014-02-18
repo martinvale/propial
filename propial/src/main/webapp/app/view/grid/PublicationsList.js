@@ -3,31 +3,45 @@ Ext.define('Propial.view.grid.PublicationsList', {
   requires: [
     'Propial.store.Publications',
     'Propial.view.window.PublicationWindow',
-    'Propial.view.window.ResourcesWindow'
+    'Propial.view.window.ResourcesWindow',
+    'Propial.view.form.field.ComboContracts'
   ],
   alias: 'widget.publicationslist',
   store: Ext.create('Propial.store.Publications'),
-  title: 'Avisos',
-  hideHeaders: true,
+  title: 'Publicaciones',
   
   initComponent: function() {
     var me = this;
     this.columns = [
       {
         dataIndex: 'title',
+        text: 'Titulo',
         flex: 1
       }, {
-        dataIndex: 'type'
+        dataIndex: 'type',
+        text: 'Tipo'
       }, {
-        dataIndex: 'address'
+        dataIndex: 'address',
+        text: 'Direccion'
       }
     ];
     
     this.dockedItems = [{
       dock: 'top',
       xtype: 'toolbar',
-      items: [{
-        xtype: 'combocontracts'
+      items: ['->', {
+        xtype: 'combocontracts',
+        listeners: {
+          select: function (combo, records, opts) {
+            var contractId = records[0].get('id');
+            if (contractId != -1) {
+              me.getStore().getProxy().setExtraParam('contractId', contractId);
+            } else {
+              me.getStore().getProxy().setExtraParam('contractId', null);
+            }
+            me.getStore().reload();
+          }
+        }
       }]
     }, {
       dock: 'bottom',
