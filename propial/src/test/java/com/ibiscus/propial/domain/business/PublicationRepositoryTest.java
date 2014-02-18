@@ -26,9 +26,11 @@ public class PublicationRepositoryTest {
   private final LocalServiceTestHelper helper = new LocalServiceTestHelper(
       new LocalDatastoreServiceTestConfig());
   private UserRepository userRepository;
+  private LocationRepository locationRepository;
   private ContractRepository contractRepository;
   private User author;
   private Contract contract;
+  private Location ciudad;
 
   @Before
   public void setUp() {
@@ -39,6 +41,9 @@ public class PublicationRepositoryTest {
     contractRepository = new ContractRepository();
     id = contractRepository.save(ContractMother.getGalatea());
     contract = contractRepository.get(id);
+    locationRepository = new LocationRepository();
+    ciudad = new Location(null, "Buenos Aires");
+    locationRepository.save(ciudad);
   }
 
   @After
@@ -53,8 +58,10 @@ public class PublicationRepositoryTest {
     Publication publication = new Publication(contract, author);
     List<Ambient> ambients = new ArrayList<Ambient>();
     ambients.add(new Ambient());
+    List<Location> locations = new ArrayList<Location>();
+    locations.add(ciudad);
     publication.update("type", "address", 80, 1300d, "description", 82000d, 42,
-        "$", true, ambients);
+        "$", true, ambients, locations);
     long id = repository.save(publication);
 
     publication = repository.get(id);

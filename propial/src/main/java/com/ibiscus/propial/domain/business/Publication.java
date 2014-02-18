@@ -36,6 +36,7 @@ public class Publication implements Serializable {
 
   private String code;
 
+  private List<Ref<Location>> locations = new ArrayList<Ref<Location>>();
   private Double expenses;
   private String description;
   private Double price;
@@ -84,6 +85,14 @@ public class Publication implements Serializable {
 
   public String getTitle() {
     return type + " " + address;
+  }
+
+  public List<Location> getLocation() {
+    List<Location> publicationLocations = new ArrayList<Location>();
+    for (Ref<Location> refs : locations) {
+      publicationLocations.add(refs.get());
+    }
+    return publicationLocations;
   }
 
   public String getType() {
@@ -154,7 +163,8 @@ public class Publication implements Serializable {
       final Integer theAge, final Double theExpenses,
       final String theDescription, final Double thePrice,
       final Integer theSurface, final String theCurrencyType,
-      final boolean isForProfessional, final List<Ambient> theAmbients) {
+      final boolean isForProfessional, final List<Ambient> theAmbients,
+      final List<Location> theLocations) {
     type = theType;
     address = theAddress;
     age = theAge;
@@ -165,6 +175,12 @@ public class Publication implements Serializable {
     currencyType = theCurrencyType;
     forProfessional = isForProfessional;
     ambients = theAmbients;
+    locations.clear();
+    for (Location location : theLocations) {
+      Ref<Location> locationRef = Ref.create(Key.create(Location.class,
+          location.getId()));
+      locations.add(locationRef);
+    }
   }
 
   public void addResource(final Resource resource) {
