@@ -17,7 +17,7 @@ public class GaeUserAuthentication implements Authentication {
   private final User user;
   private final Object details;
 
-  GaeUserAuthentication(final User theUser, final Object theDetails) {
+  public GaeUserAuthentication(final User theUser, final Object theDetails) {
     user = theUser;
     details = theDetails;
   }
@@ -41,7 +41,7 @@ public class GaeUserAuthentication implements Authentication {
   }
 
   public Object getPrincipal() {
-    return null;
+    return user;
   }
 
   public boolean isAuthenticated() {

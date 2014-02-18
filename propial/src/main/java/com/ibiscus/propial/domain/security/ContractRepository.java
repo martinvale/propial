@@ -6,6 +6,7 @@ import org.apache.commons.lang.Validate;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.cmd.LoadType;
 import com.googlecode.objectify.cmd.Query;
 import com.ibiscus.propial.infraestructure.objectify.OfyService;
 import com.ibiscus.propial.web.utils.ResultSet;
@@ -28,7 +29,11 @@ public class ContractRepository {
       query = query.filter("id", user.getContract().getId());
     }
     List<Contract> contracts = query.list();
-    int size = OfyService.ofy().load().type(Contract.class).count();
+    Query<Contract> queryCount = OfyService.ofy().load().type(Contract.class);
+    if (user.getRole().equals(User.ROLE.CUSTOMER_ADMIN)) {
+      queryCount = queryCount.filter("id", user.getContract().getId());
+    }
+    int size = queryCount.count();
     return new ResultSet<Contract>(contracts, size);
   }
 

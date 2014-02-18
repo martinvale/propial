@@ -8,9 +8,12 @@ import static org.junit.Assert.assertThat;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
+import com.ibiscus.propial.web.security.GaeUserAuthentication;
 import com.ibiscus.propial.web.utils.ResultSet;
 
 public class ContractRepositoryTest {
@@ -59,14 +62,17 @@ public class ContractRepositoryTest {
   public void find() {
     ContractRepository repository = new ContractRepository();
 
+    User user = UserMother.getJuanPerez();
+    Authentication authentication = new GaeUserAuthentication(user, null);
+    SecurityContextHolder.getContext().setAuthentication(authentication);
     Contract contract1 = ContractMother.getPropial();
     repository.save(contract1);
     Contract contract2 = ContractMother.getGalatea();
     repository.save(contract2);
 
-    ResultSet<Contract> result = repository.find(1, 1);
+    ResultSet<Contract> result = repository.find(0, 1);
     assertThat(result.getItems().size(), is(1));
     assertThat(result.getItems().get(0).getId(), is(contract1.getId()));
-    assertThat(result.getSize(), is(2));
+    assertThat(result.getSize(), is(1));
   }
 }
