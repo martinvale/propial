@@ -36,4 +36,7 @@
   <bean id="contractRepository" class="com.ibiscus.propial.domain.security.ContractRepository">
   </bean>
 
+  <bean id="locationRepository" class="com.ibiscus.propial.domain.business.LocationRepository">
+  </bean>
+
 </beans>
