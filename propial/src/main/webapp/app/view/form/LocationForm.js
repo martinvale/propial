@@ -9,6 +9,11 @@ Ext.define('Propial.view.form.LocationForm', {
       name: 'name',
       fieldLabel: 'Nombre',
       allowBlank: false
+    }, {
+      name: 'priority',
+      fieldLabel: 'Prioridad',
+      value: 0,
+      allowBlank: false
     }
   ],
   initComponent: function() {
@@ -26,8 +31,9 @@ Ext.define('Propial.view.form.LocationForm', {
               methodType = 'POST';
             }
             Ext.Ajax.request({
+              headers: { 'Content-Type': 'application/json' },
               method: methodType,
-              params: Ext.encode(contract),
+              params: Ext.encode(values),
               url: '/services/locations/',
               success: function(response) {
                 me.fireEvent ('onSaved', me);

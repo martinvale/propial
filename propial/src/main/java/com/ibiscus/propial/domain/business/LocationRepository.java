@@ -1,14 +1,30 @@
 package com.ibiscus.propial.domain.business;
 
+import java.util.List;
+
 import org.apache.commons.lang.Validate;
 
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.cmd.Query;
 import com.ibiscus.propial.infraestructure.objectify.OfyService;
+import com.ibiscus.propial.web.utils.ResultSet;
 
 public class LocationRepository {
 
   public Location get(final long id) {
     return OfyService.ofy().load().type(Location.class).id(id).now();
+  }
+
+  public ResultSet<Location> find(final Location parent, final int start,
+      final int limit) {
+    Query<Location> query = OfyService.ofy().load().type(Location.class)
+        .limit(limit);
+    if (start > 0) {
+      query = query.offset(start);
+    }
+    List<Location> locations = query.list();
+    int size = OfyService.ofy().load().type(Location.class).count();
+    return new ResultSet<Location>(locations, size);
   }
 
   public long save(final Location Location) {

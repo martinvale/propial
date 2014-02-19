@@ -1,19 +1,32 @@
 package com.ibiscus.propial.domain.business;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang.Validate;
 
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 
 @Entity
-public class Location {
+public class Location implements Serializable {
+
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
   @Id
   private Long id;
 
+  @Index
   private String name;
+
+  @Index
+  private Integer priority = new Integer(0);
+
   private Ref<Location> parent;
 
   Location() {
@@ -35,7 +48,15 @@ public class Location {
     return name;
   }
 
+  public Integer getPriority() {
+    return priority;
+  }
+
   public Location getParent() {
-    return parent.get();
+    if (parent != null) {
+      return parent.get();
+    } else {
+      return null;
+    }
   }
 }

@@ -31,4 +31,9 @@ public class AdminController {
         "/services/publications/upload"));
     return "publications";
   }
+
+  @RequestMapping(value = "locations", method = RequestMethod.GET)
+  public ModelAndView locations() {
+    return new ModelAndView("locations");
+  }
 }

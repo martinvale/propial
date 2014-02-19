@@ -5,6 +5,7 @@ Ext.define('Propial.store.Menues', {
   data: [
     ['Contratos', 'contracts'],
     ['Usuarios', 'users'],
-    ['Publicaciones', 'publications']
+    ['Publicaciones', 'publications'],
+    ['Ubicaciones', 'locations']
   ]
 });

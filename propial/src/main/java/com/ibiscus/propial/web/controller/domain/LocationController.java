@@ -6,11 +6,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ibiscus.propial.domain.business.Location;
 import com.ibiscus.propial.domain.business.LocationRepository;
 import com.ibiscus.propial.web.utils.Packet;
+import com.ibiscus.propial.web.utils.ResultSet;
 
 @Controller
 @RequestMapping(value="/services/locations")
@@ -26,6 +28,12 @@ public class LocationController {
     return new Packet<Location>(location);
   }
 
+  @RequestMapping(value = "/", method = RequestMethod.PUT)
+  public @ResponseBody Packet<Location> create(@RequestBody Location location) {
+    locationRepository.save(location);
+    return new Packet<Location>(location);
+  }
+
   @RequestMapping(value = "/{id}", method = RequestMethod.GET)
   public @ResponseBody Packet<Location> get(@PathVariable long id) {
     Packet<Location> result;
@@ -36,6 +44,17 @@ public class LocationController {
       result = new Packet<Location>();
     }
     return result;
+  }
+
+  @RequestMapping(value = "/", method = RequestMethod.GET)
+  public @ResponseBody ResultSet<Location> get(
+      @RequestParam(required = false) Long parentId, @RequestParam int start,
+      @RequestParam int limit) {
+    Location parent = null;
+    if (parentId != null) {
+      parent = locationRepository.get(parentId);
+    }
+    return locationRepository.find(parent, start, limit);
   }
 
   @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
