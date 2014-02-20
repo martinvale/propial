@@ -3,7 +3,6 @@ package com.ibiscus.propial.web.controller.domain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,13 +22,22 @@ public class LocationController {
   private LocationRepository locationRepository;
 
   @RequestMapping(value = "/", method = RequestMethod.POST)
-  public @ResponseBody Packet<Location> save(@RequestBody Location location) {
+  public @ResponseBody Packet<Location> save(Long id, String name,
+      Integer priority) {
+    Location location = locationRepository.get(id);
+    location.update(name, priority);
     locationRepository.save(location);
     return new Packet<Location>(location);
   }
 
   @RequestMapping(value = "/", method = RequestMethod.PUT)
-  public @ResponseBody Packet<Location> create(@RequestBody Location location) {
+  public @ResponseBody Packet<Location> create(Long parentId, String name,
+      Integer priority) {
+    Location parent = null;
+    if (parentId != null) {
+      parent = locationRepository.get(parentId);
+    }
+    Location location = new Location(parent, name, priority);
     locationRepository.save(location);
     return new Packet<Location>(location);
   }

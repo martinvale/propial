@@ -1,3 +1,9 @@
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
 .header .x-panel-body-default {
   background-color: #404040;
   padding-top: 5px;
@@ -31,4 +37,40 @@
 
 .image-gallery .thumb img {
   width: 100px;
+}
+
+/* breadcrumb */
+.crumbs, .crumbs .x-panel-body-default {
+  background-color: #D3E1F1;
+}
+
+.crumbs li {
+  float:left;
+  padding-left:10px;
+}
+
+.crumbs li.first {
+  padding-left:0px;
+}
+
+.crumbs li a {
+  border-right: none;
+  background: url(../img/separator-arrow.gif) no-repeat right center;
+  display:block;
+  padding:0 15px 0 0;
+  text-decoration:none;
+  cursor:pointer;
+  color: #3B5998;
+}
+
+.crumbs li a:hover {
+  text-decoration:underline;
+}
+
+.crumbs li.current a {
+  background: none;
+}
+
+.crumbs li a:hover, .crumbs li a:focus {
+  text-decoration:underline;
 }

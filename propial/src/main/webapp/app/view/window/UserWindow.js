@@ -24,10 +24,10 @@ Ext.define('Propial.view.window.UserWindow', {
     this.callParent();
   },
   open: function(id) {
-		this.editor.userId = id;
+    this.editor.userId = id;
     var form = this.editor.getForm();
-		form.reset();
-		if (id) {
+    form.reset();
+    if (id) {
       var model = Ext.ModelMgr.getModel('Propial.model.User');
       model.load(id, {
         success: function(user) {

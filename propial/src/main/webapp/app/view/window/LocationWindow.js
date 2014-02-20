@@ -23,17 +23,19 @@ Ext.define('Propial.view.window.LocationWindow', {
     this.addEvents ('onContentUpdated');
     this.callParent();
   },
-  open: function(id) {
-		this.editor.userId = id;
+  open: function(parentId, id) {
+    this.editor.userId = id;
     var form = this.editor.getForm();
-		form.reset();
-		if (id) {
-			form.load({
+    form.reset();
+    if (id) {
+      form.load({
         url: '/services/locations/' + id,
         method: 'GET',
         waitMsg: 'Loading'
       });
-		}
-		this.show();
+    } else {
+      form.setValues({parentId: parentId});
+    }
+    this.show();
   }
 });

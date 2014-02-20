@@ -11,12 +11,29 @@ Ext.define('Propial.view.grid.LocationsList', {
   
   initComponent: function() {
     var me = this;
-    this.columns = [{
-      dataIndex: 'name',
-      text: 'Nombre',
-      flex: 1
-    }];
-    
+    me.locationSelected = null;
+    this.columns = [
+      {
+        dataIndex: 'name',
+        text: 'Nombre',
+        flex: 1
+      }, {
+        xtype: 'actioncolumn',
+        width: 50,
+        items: [{
+          icon: '/img/flecha-der.png',  // Use a URL in the icon config
+          tooltip: 'Ver el contenido',
+          handler: function(grid, rowIndex, colIndex) {
+            var rec = me.getStore().getAt(rowIndex);
+            me.locationSelected = rec.get('id');
+            var params = {parentId: me.locationSelected};
+            me.getStore().load({'params': params});
+            me.fireEvent ('onSelected', me, rec);
+          }
+        }]
+      }
+    ];
+
     this.dockedItems = [{
       dock: 'bottom',
       xtype: 'toolbar',
@@ -31,7 +48,7 @@ Ext.define('Propial.view.grid.LocationsList', {
               }
             }
           });
-          locationEditionWindow.open();
+          locationEditionWindow.open(me.locationSelected);
         }
       }, {
         xtype: 'button',
@@ -46,7 +63,8 @@ Ext.define('Propial.view.grid.LocationsList', {
                 }
               }
             });
-            locationEditionWindow.open(selections[0].get('id'));
+            locationEditionWindow.open(me.locationSelected,
+                selections[0].get('id'));
           }
         }
       }, {
@@ -75,6 +93,7 @@ Ext.define('Propial.view.grid.LocationsList', {
       }]
     }];
 
+    this.addEvents ('onSelected');
     this.callParent();
   }
 });

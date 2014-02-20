@@ -14,6 +14,12 @@ Ext.define('Propial.view.form.LocationForm', {
       fieldLabel: 'Prioridad',
       value: 0,
       allowBlank: false
+    }, {
+      name: 'id',
+      xtype: 'hidden'
+    }, {
+      name: 'parentId',
+      xtype: 'hidden'
     }
   ],
   initComponent: function() {
@@ -31,9 +37,8 @@ Ext.define('Propial.view.form.LocationForm', {
               methodType = 'POST';
             }
             Ext.Ajax.request({
-              headers: { 'Content-Type': 'application/json' },
               method: methodType,
-              params: Ext.encode(values),
+              params: values,
               url: '/services/locations/',
               success: function(response) {
                 me.fireEvent ('onSaved', me);
@@ -49,7 +54,7 @@ Ext.define('Propial.view.form.LocationForm', {
         }
       }
     ];
-		this.addEvents ('onSaved', 'onClosed');
+    this.addEvents ('onSaved', 'onClosed');
     this.callParent();
   }
 });

@@ -22,6 +22,7 @@ public class LocationRepository {
     if (start > 0) {
       query = query.offset(start);
     }
+    query = query.filter("parent", parent);
     List<Location> locations = query.list();
     int size = OfyService.ofy().load().type(Location.class).count();
     return new ResultSet<Location>(locations, size);

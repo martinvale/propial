@@ -42,7 +42,7 @@ public class PublicationRepositoryTest {
     id = contractRepository.save(ContractMother.getGalatea());
     contract = contractRepository.get(id);
     locationRepository = new LocationRepository();
-    ciudad = new Location(null, "Buenos Aires");
+    ciudad = new Location(null, "Buenos Aires", 0);
     locationRepository.save(ciudad);
   }
 
