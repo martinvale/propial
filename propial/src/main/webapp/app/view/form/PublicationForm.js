@@ -1,4 +1,4 @@
-Ext.define('Propial.view.form.PublicationForm', {
+Ext.define('Propial.view.form.PublicationForm2', {
   extend: 'Ext.form.Panel',
   requires: [
     'Propial.view.form.field.Ambient'
@@ -50,6 +50,10 @@ Ext.define('Propial.view.form.PublicationForm', {
       fieldLabel: 'Apto profesional',
       xtype: 'checkbox',
       inputValue: 'true'
+    }, {
+      name: 'location',
+      fieldLabel: 'Ubicacion',
+      xtype: 'locationfield'
     }, {
       name: 'description',
       fieldLabel: 'Descripcion',
