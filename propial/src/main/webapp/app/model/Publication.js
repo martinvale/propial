@@ -7,7 +7,8 @@ Ext.define('Propial.model.Publication', {
   fields: ['id', 'title', 'type', 'address', 'age', 'description', 'price', 'currencyType', 'expenses', 'surface', 'forProfessional'],
   hasMany: [
     {model: 'Propial.model.Resource', name: 'resources'},
-    {model: 'Propial.model.Ambient', name: 'ambients'}
+    {model: 'Propial.model.Ambient', name: 'ambients'},
+    {model: 'Propial.model.Location', name: 'locations'}
   ],
   proxy: {
     type: 'rest',

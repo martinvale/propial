@@ -17,7 +17,65 @@ Ext.define('Propial.view.LocationViewport', {
         onSelected: function (grd, record) {
           me.breadcrumb.addItem([record.get('id'), record.get('name')]);
         }
-      }
+      },
+      dockedItems: [{
+        dock: 'bottom',
+        xtype: 'toolbar',
+        items: [{
+          xtype: 'button',
+          text: 'Nueva ubicacion',
+          handler: function () {
+            var locationEditionWindow = Ext.create('widget.locationwindow', {
+              listeners: {
+                onContentUpdated: function (window) {
+                  me.grid.getStore().reload();
+                }
+              }
+            });
+            locationEditionWindow.open(me.grid.locationSelected);
+          }
+        }, {
+          xtype: 'button',
+          text: 'Editar ubicacion',
+          handler: function () {
+            var selections = me.grid.getSelectionModel().getSelection();
+            if (selections.length == 1) {
+              var locationEditionWindow = Ext.create('widget.locationwindow', {
+                listeners: {
+                  onContentUpdated: function (window) {
+                    me.grid.getStore().reload();
+                  }
+                }
+              });
+              locationEditionWindow.open(me.grid.locationSelected,
+                  selections[0].get('id'));
+            }
+          }
+        }, {
+          xtype: 'button',
+          text: 'Borrar ubicacion',
+          handler: function () {
+            var selections = me.grid.getSelectionModel().getSelection();
+            if (selections.length > 0) {
+              Ext.MessageBox.confirm('Confirmar', 'Esta seguro que desea borrar la ubicacion seleccionada?', 
+                function () {
+                  for (var i = 0; i < selections.length; i++) {
+                    Ext.Ajax.request({
+                      headers: { 'Content-Type': 'application/json' },
+                      method: 'DELETE',
+                      url: '/services/locations/' + selections[i].get('id'),
+                      success: function(response) {
+                        me.grid.getStore().reload();
+                      },
+                      failure: function(response){}
+                    });
+                  }
+                }
+              );
+            }
+          }
+        }]
+      }]
     });
 
     this.breadcrumb = Ext.create('Propial.view.panel.Breadcrumb', {

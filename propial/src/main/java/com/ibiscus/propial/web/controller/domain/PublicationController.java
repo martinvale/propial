@@ -1,7 +1,9 @@
 package com.ibiscus.propial.web.controller.domain;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +23,8 @@ import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.ibiscus.propial.application.business.PublicationDto;
+import com.ibiscus.propial.domain.business.Location;
+import com.ibiscus.propial.domain.business.LocationRepository;
 import com.ibiscus.propial.domain.business.Publication;
 import com.ibiscus.propial.domain.business.PublicationRepository;
 import com.ibiscus.propial.domain.business.Resource;
@@ -47,6 +51,10 @@ public class PublicationController {
   @Autowired
   private ContractRepository contractRepository;
 
+  /** Repository of locations. */
+  @Autowired
+  private LocationRepository locationRepository;
+
   @RequestMapping(value = "/save", method = RequestMethod.POST)
   public @ResponseBody Packet<Publication> save(
       @RequestBody PublicationDto publicationDto) {
@@ -64,7 +72,19 @@ public class PublicationController {
       }
       publication = new Publication(contract, user);
     }
-    publicationDto.update(publication);
+    List<Location> locations = new ArrayList<Location>();
+    Location location = locationRepository.get(publicationDto.getLocationId());
+    locations.add(location);
+    while (location.getParent() != null) {
+      location = location.getParent();
+      locations.add(location);
+    }
+    publication.update(publicationDto.getType(), publicationDto.getAddress(),
+        publicationDto.getAge(), publicationDto.getExpenses(),
+        publicationDto.getDescription(), publicationDto.getPrice(),
+        publicationDto.getSurface(), publicationDto.getCurrencyType(),
+        publicationDto.isForProfessional(), publicationDto.getAmbients(),
+        locations);
     publicationRepository.save(publication);
     return new Packet<Publication>(publication);
   }

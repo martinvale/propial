@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ibiscus.propial.domain.business.Ambient;
-import com.ibiscus.propial.domain.business.Location;
-import com.ibiscus.propial.domain.business.Publication;
-import com.ibiscus.propial.domain.security.Contract;
 
 public class PublicationDto {
 
@@ -28,7 +25,7 @@ public class PublicationDto {
   private String currencyType;
   private boolean forProfessional = false;
   private List<Ambient> ambients = new ArrayList<Ambient>();
-  private List<Location> locations = new ArrayList<Location>();
+  private Long locationId;
 
   PublicationDto() {}
 
@@ -100,8 +97,7 @@ public class PublicationDto {
     return ambients;
   }
 
-  public void update(final Publication publication) {
-    publication.update(type, address, age, expenses, description, price,
-        surface, currencyType, forProfessional, ambients, locations);
+  public Long getLocationId() {
+    return locationId;
   }
 }

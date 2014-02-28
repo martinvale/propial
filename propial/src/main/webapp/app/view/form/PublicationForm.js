@@ -1,4 +1,4 @@
-Ext.define('Propial.view.form.PublicationForm2', {
+Ext.define('Propial.view.form.PublicationForm', {
   extend: 'Ext.form.Panel',
   requires: [
     'Propial.view.form.field.Ambient'
@@ -120,7 +120,7 @@ Ext.define('Propial.view.form.PublicationForm2', {
             if (me.objectId) {
               publication.id = me.objectId;
             }
-                
+
             var panAmbientes = me.down('#ambientes');
             var fields = panAmbientes.query('fieldcontainer');
             
@@ -162,6 +162,15 @@ Ext.define('Propial.view.form.PublicationForm2', {
     var form = this.getForm();
     form.reset();
     form.loadRecord(publication);
+
+    var locations = publication.locations();
+    if (locations) {
+      var location = locations.first();
+      if (location) {
+        var locationField = this.down('locationfield');
+        locationField.setSelected(location);
+      }
+    }
 
     var panAmbientes = this.down('#ambientes');
     publication.ambients().each(function (ambient) {

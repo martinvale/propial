@@ -87,7 +87,7 @@ public class Publication implements Serializable {
     return type + " " + address;
   }
 
-  public List<Location> getLocation() {
+  public List<Location> getLocations() {
     List<Location> publicationLocations = new ArrayList<Location>();
     for (Ref<Location> refs : locations) {
       publicationLocations.add(refs.get());
