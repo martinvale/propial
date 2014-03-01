@@ -1,7 +1,9 @@
 Ext.define('Propial.view.form.PublicationForm', {
   extend: 'Ext.form.Panel',
   requires: [
-    'Propial.view.form.field.Ambient'
+    'Propial.view.form.field.Ambient',
+    'Propial.view.form.field.Location',
+    'Propial.view.window.LocationSelectorWindow'
   ],
   alias: 'widget.publicationform',
   defaultType: 'textfield',

@@ -22,7 +22,8 @@ public class HomeController {
 
   @RequestMapping(value = "/")
   public String home(@ModelAttribute("model") ModelMap model) {
-    ResultSet<Publication> publications = publicationRepository.find(0, PAGE_SIZE, "creation", false, null);
+    ResultSet<Publication> publications = publicationRepository.find(0,
+        PAGE_SIZE, "creation", false, null);
     model.addAttribute("publications", publications.getItems());
     return "home";
   }

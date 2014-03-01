@@ -1,5 +1,7 @@
 package com.ibiscus.propial.web.controller.domain;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -63,6 +65,11 @@ public class LocationController {
       parent = locationRepository.get(parentId);
     }
     return locationRepository.find(parent, start, limit);
+  }
+
+  @RequestMapping(value = "/suggest", method = RequestMethod.GET)
+  public @ResponseBody List<Location> get(@RequestParam String term) {
+    return locationRepository.suggest(term).getItems();
   }
 
   @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)

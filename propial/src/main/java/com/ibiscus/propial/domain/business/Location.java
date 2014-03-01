@@ -1,6 +1,8 @@
 package com.ibiscus.propial.domain.business;
 
 import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.commons.lang.Validate;
 
@@ -25,6 +27,9 @@ public class Location implements Serializable {
   private String name;
 
   @Index
+  private List<String> tokenizedName = new LinkedList<String>();
+
+  @Index
   private Integer priority = new Integer(0);
 
   @Index
@@ -44,6 +49,7 @@ public class Location implements Serializable {
     if (theParent != null) {
       parent = Ref.create(Key.create(Location.class, theParent.getId()));
     }
+    tokenize(theName);
   }
 
   public void update(final String theName, final Integer thePriority) {
@@ -53,6 +59,15 @@ public class Location implements Serializable {
         + "than zero");
     name = theName;
     priority = thePriority;
+    tokenize(theName);
+  }
+
+  private void tokenize (final String theName) {
+    tokenizedName.clear();
+    String lowerName = theName.toLowerCase();
+    for (int i = 1; i <= lowerName.length(); i++) {
+      tokenizedName.add(lowerName.substring(0, i));
+    }
   }
 
   public Long getId() {

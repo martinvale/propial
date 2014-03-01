@@ -15,6 +15,13 @@ public class LocationRepository {
     return OfyService.ofy().load().type(Location.class).id(id).now();
   }
 
+  public ResultSet<Location> suggest(final String name) {
+    Query<Location> query = OfyService.ofy().load().type(Location.class);
+    query = query.filter("tokenizedName", name);
+    List<Location> locations = query.list();
+    return new ResultSet<Location>(locations, locations.size());
+  }
+
   public ResultSet<Location> find(final Location parent, final int start,
       final int limit) {
     Query<Location> query = OfyService.ofy().load().type(Location.class)

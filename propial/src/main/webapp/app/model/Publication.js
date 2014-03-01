@@ -2,7 +2,8 @@ Ext.define('Propial.model.Publication', {
   extend: 'Ext.data.Model',
   requires: [
     'Propial.model.Resource',
-    'Propial.model.Ambient'
+    'Propial.model.Ambient',
+    'Propial.model.Location'
   ],
   fields: ['id', 'title', 'type', 'address', 'age', 'description', 'price', 'currencyType', 'expenses', 'surface', 'forProfessional'],
   hasMany: [

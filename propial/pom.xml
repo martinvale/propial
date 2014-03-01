@@ -167,14 +167,15 @@
                 <groupId>com.google.appengine</groupId>
                 <artifactId>appengine-maven-plugin</artifactId>
                 <version>${appengine.target.version}</version>
-				        <configuration>
-				          <port>80</port>
-				          <jvmFlags>
-				            <jvmFlag>-Xdebug</jvmFlag>
-				            <jvmFlag>-agentlib:jdwp=transport=dt_socket,address=8001,server=y,suspend=n</jvmFlag>
-				            <jvmFlag>-Ddatastore.backing_store=${project.basedir}\local_db.bin</jvmFlag>
-				          </jvmFlags>
-				        </configuration>
+                <configuration>
+                  <port>80</port>
+                  <jvmFlags>
+                    <jvmFlag>-Xdebug</jvmFlag>
+                    <jvmFlag>-agentlib:jdwp=transport=dt_socket,address=8001,server=y,suspend=n</jvmFlag>
+                    <jvmFlag>-Ddatastore.backing_store=${project.basedir}\work\local_db.bin</jvmFlag>
+                    <jvmFlag>-Dblobstore.backing_store=${project.basedir}\work\</jvmFlag>
+                  </jvmFlags>
+                </configuration>
             </plugin>
         </plugins>
     </build>

@@ -1,3 +1,4 @@
+<#import "publication/publication.ftl" as pub>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,13 +11,101 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/index.css">
 
-    <script type="text/javascript" src="script/jquery.js"></script>
+    <link rel="stylesheet" href="css/jquery-ui/jquery-ui.css">
+
+    <script src="script/jquery.js"></script>
+    <script src="script/jquery-ui.js"></script>
 
     <title>Propial</title>
 
+<style>
+
+.logo {
+  margin: 0 0 0 3px;
+}
+
+</style>
+
   <script type="text/javascript">
-        $.getJSON('/users/10', function(data){
-        });
+
+window.Propial = window.Propial || {};
+
+Propial.view = Propial.view || {};
+
+Propial.view.Publication = function (container, publication) {
+
+  var initEventListeners = function () {
+    container.find("a").click(function () {
+      alert(publication.id);
+    });
+  }
+
+  return {
+    render: function() {
+      initEventListeners();
+    }
+  };
+}
+
+Propial.view.LocationFilter = function (container) {
+
+  var getPath = function (location) {
+    var path = location.name;
+    var parent = location.parent;
+    while (parent) {
+      path = parent.name + ' / ' + path;
+      parent = parent.parent;
+    }
+    return path;
+  };
+
+  var initEventListeners = function () {
+    var filterElement = container.find(".js-location-filter");
+    var filter = filterElement.autocomplete({
+      source: "/services/locations/suggest",
+      minLength: 2,
+      select: function(event, ui) {
+        filterElement.val(getPath(ui.item));
+        return false;
+      }
+    })
+    filter.data( "ui-autocomplete" )._renderItem = function(ul, item) {
+      return $("<li>")
+        .append("<a>" + getPath(item) + "</a>")
+        .appendTo(ul);
+    };
+    /*container.find("a").click(function () {
+      alert(publication.id);
+    });*/
+  }
+
+  return {
+    render: function() {
+      initEventListeners();
+    }
+  };
+}
+
+    jQuery(document).ready(function() {
+
+        var publications = [
+        <#list model["publications"] as publication>
+          {
+            id: ${publication.id?c}
+          }<#if publication_has_next>,</#if>
+        </#list>];
+
+      jQuery.each(publications, function (index, item) {
+        var publicationContainer = jQuery("#" + item.id);
+        var publication = new Propial.view.Publication(publicationContainer,
+            item);
+        publication.render();
+      })
+
+      var locationContainer = jQuery(".js-location-search");
+      var locationFilter = new Propial.view.LocationFilter(locationContainer);
+      locationFilter.render();
+    });
   </script>
 
 
@@ -24,7 +113,7 @@
 <body>
   <header>
     <div class="container">
-      <a href="/">Propial</a>
+      <a href="/"><img src="img/logo.png" alt="Propial" class="logo"></a>
       <div class="actions">
         <a href="login">Identificarse</a>
       </div>
@@ -32,11 +121,11 @@
   </header>
   <div class="body">
     <div class="container clearfix">
-      <div class="search">
+      <div class="search js-location-search">
         <form action="search">
           <label for="search">En donde desea buscar?</label>
           <div class="field">
-            <input id="search" type="text" />
+            <input class="js-location-filter" type="text" />
             <button><span class="button-content">buscar</span></button>
           </div>
         </form>
@@ -47,33 +136,9 @@
 
           <#list model["publications"] as publication>
           <!-- inicio item -->
-          <div class="box item">
-            <div class="photos">
-              <img src="depto.jpg" />
-              <div class="description">
-                <div>
-                  <span class="title">${publication.title}</span>
-                  <span class="price">$5000</span>
-                </div>
-                <div class="details">
-                  <ul>
-                    <li><strong>Ambientes:</strong> 5</li>
-                    <li><strong>Antiguedad:</strong> 15 años</li>
-                    <li><strong>Superficie:</strong> 42 m2</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div class="actions">
-              <a href="#">compartir</a>
-            </div>
-            <div class="comments">
-              <div class="comment">This is a test.</div>
-              <div class="comment">This is a test.</div>
-              <div class="comment">This is a test.</div>
-              <button class="button link">Agregar una pregunta</button>
-            </div>
-          </div>
+            <#if publication_index % 2 == 0>
+              <@pub.renderPublication publication />
+            </#if>
           <!-- fin item -->
           </#list>
         </div>
@@ -81,6 +146,13 @@
 
         <!-- inicio column -->
         <div class="column second">
+          <#list model["publications"] as publication>
+          <!-- inicio item -->
+            <#if publication_index % 2 == 1>
+              <@pub.renderPublication publication />
+            </#if>
+          <!-- fin item -->
+          </#list>
 
         </div>
         <!-- fin column -->

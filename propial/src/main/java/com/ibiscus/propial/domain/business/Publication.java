@@ -25,6 +25,7 @@ public class Publication implements Serializable {
   private Long id;
 
   /** Fecha de creacion del aviso. */
+  @Index
   private Date creation;
   private Ref<User> author;
   @Index
