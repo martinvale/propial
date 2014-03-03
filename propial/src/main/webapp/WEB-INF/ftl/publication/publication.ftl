@@ -1,10 +1,6 @@
 <#macro renderPublication publication>
   <div id="${publication.id}" class="box item">
     <div class="photos">
-      <#assign thumbnail="no_image" />
-      <#if (publication.resources?size > 0)>
-        <#assign thumbnail="/services/publications/resource/${publication.resources[0].key.keyString}" />
-      </#if>
       <#assign price="consultar" />
       <#if publication.price?? && publication.currencyType??>
         <#assign price="${publication.currencyType}${publication.price}" />
@@ -21,10 +17,17 @@
       <#if (publication.ambients?size > 0)>
         <#assign ambients="${publication.ambients?size}" />
       </#if>
-      <img src="${thumbnail}" />
+      <#if (publication.resources?size > 0)>
+        <img src="/services/publications/resource/${publication.resources[0].key.keyString}" />
+      <#else>
+        <img src="/img/no_foto.gif" class="no-photo" />
+      </#if>
       <div class="description">
         <div>
-          <span class="title">${publication.title}</span>
+          <span class="title">
+            <span class="type">${publication.type}</span>
+            <span class="location">${publication.locations[0].name}</span>
+          </span>
           <span class="price">${price}</span>
         </div>
         <div class="details">

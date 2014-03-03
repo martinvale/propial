@@ -43,12 +43,20 @@ footer {
 
 .body .container {
   margin: 0 auto;
-  width: 940px;
+  width: 980px;
 }
 
 header .actions {
   float: right;
-  margin: 3px 5px 0 0;
+  margin: 9px 5px 0 0;
+}
+
+.actions a {
+  margin: 0 0 0 3px;
+}
+
+.logo {
+  margin: 0 0 0 3px;
 }
 
 .box {
@@ -83,7 +91,7 @@ button.link:hover {
 }
 
 .column {
-  width: 460px;
+  width: 380px;
   float: left;
 }
 
@@ -91,16 +99,33 @@ button.link:hover {
   margin-left: 20px;
 }
 
+.menu {
+  float: left;
+  margin-left: 20px;
+  width: 180px;
+}
+
+.menu .ads {
+  background-color: #EFEFEF;
+  height: 180px;
+  margin-bottom: 5px;
+}
+
 .item {
   margin-bottom: 20px;
 }
 
 .item img {
-  width: 447px;
+  left: 0;
+  margin: auto;
+  max-width: 358px;
+  position: absolute;
+  right: 0;
 }
 
 .item .photos {
   margin: 10px;
+  min-height: 293px;
   overflow: hidden;
   position: relative;
 }
@@ -117,7 +142,7 @@ button.link:hover {
   height: 90px;
   position: absolute;
   transition: all 0.7s ease 0s;
-  width: 440px;
+  width: 100%;
 }
 
 .item .photos:hover .description {
@@ -127,6 +152,7 @@ button.link:hover {
 .item .title {
   padding-left: 5px;
 }
+
 .item .price {
   float: right;
   font-weight: bold;
@@ -146,4 +172,16 @@ button.link:hover {
   background-color: #EFEFEF;
   margin-bottom: 7px;
   padding: 5px;
+}
+
+.column .item img.no-photo {
+  margin-top: 60px;
+}
+
+.suggestions .item .photos {
+  min-height: 160px;
+}
+
+.suggestions .item .location, .suggestions .item .price {
+  display: none;
 }
