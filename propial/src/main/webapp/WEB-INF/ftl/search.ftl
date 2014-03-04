@@ -9,7 +9,7 @@
     <meta name="keywords" content="avisos, inmobiliaria, casas, departamentos, locales, alquiler, compra, venta">
 
     <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/search.css">
 
     <link rel="stylesheet" href="/css/jquery-ui/jquery-ui.css">
 
@@ -21,22 +21,49 @@
 
 <style>
 
+.location {
+  height: 50px;
+  margin: 5px 0;
+}
+
 li.dimension {
   margin-top: 5px;
 }
 
 a.dimension {
-  background: url("/img/filter_exp.png") no-repeat scroll 0 0.3em rgba(0, 0, 0, 0);
   font-weight: bold;
+}
+
+.filters a.dimension {
+  background: url("/img/filter_exp.png") no-repeat scroll 0 0.3em rgba(0, 0, 0, 0);
   padding-left: 15px;
 }
 
-a.dimension.collapsed {
+.filters a.dimension.collapsed {
   background: url("/img/filter_cond.png") no-repeat scroll 0 0.3em rgba(0, 0, 0, 0);
+}
+
+.applied-filters a.dimension {
+  background: url("/img/delete_filter.png") no-repeat scroll 0 0.1em rgba(0, 0, 0, 0);
+  padding-left: 20px;
+}
+
+.applied-filters {
+  border-bottom: 1px dotted #999999;
+  padding: 0 0 5px 0;
 }
 
 .member {
   padding-left: 10px;
+}
+
+.selected .crumb {
+  font-size: 18px;
+  margin-right: 5px;
+}
+
+.selected .current {
+  font-weight: bold;
 }
 
 </style>
@@ -46,6 +73,8 @@ a.dimension.collapsed {
     window.Propial = window.Propial || {};
 
     Propial.view = Propial.view || {};
+
+    Propial.widget = Propial.widget || {};
 
 Propial.view.ResultsManager = function (container, templateId) {
 
@@ -136,12 +165,137 @@ Propial.view.ResultsManager = function (container, templateId) {
 
 }
 
-Propial.view.FiltersManager = function (container, filters, templateId,
-    resultsManager, locationId) {
+Propial.widget.AppliedFilters = function (container, templateId,
+    filtersManager) {
+
+  var dimensions = [];
+
+  var html = $p(templateId);
+
+  var directive = {
+    "li.dimension": {
+      "dimension <- filters": {
+        "a.dimension": "dimension.name",
+        "a.dimension@class": function () {
+          return "dimension js-dimension-" + this.id;
+        },
+        ".members li": {
+          "member <- dimension.members": {
+            ".member": "member.name",
+            ".member@class": function () {
+              return "member js-member-" + this.value;
+            }
+          }
+        }
+      }
+    }
+  };
+
+  var template = html.compile(directive);
+
+  var initEventListeners = function () {
+    jQuery.each(dimensions, function (indexDimension, dimension) {
+      var dimensionElement = container.find(".js-dimension-" + dimension.id);
+      dimensionElement.click(function (event) {
+        event.preventDefault();
+        removeDimension(dimension);
+      });
+      jQuery.each(dimension.members, function (indexMember, member) {
+        var memberElement = container.find(".js-member-" + member.value);
+        memberElement.click(function (event) {
+          if (dimension.id != 'location') {
+            event.preventDefault();
+            removeMember(dimension, member);
+          }
+        });
+      });
+    });
+  };
+
+  var getDimension = function (dimensionId) {
+    var appliedDimension = null;
+    var n = 0;
+    while (n < dimensions.length && !appliedDimension) {
+      if (dimensions[n].id === dimensionId) {
+        appliedDimension = dimensions[n];
+      }
+      n++;
+    }
+    return appliedDimension;
+  };
+
+  var removeDimension = function (dimension) {
+    var newDimensions = [];
+    var n = 0;
+    while (n < dimensions.length) {
+      if (dimensions[n].id !== dimension.id) {
+        newDimensions.push(dimensions[n]);
+      }
+      n++;
+    }
+    dimensions = newDimensions;
+    container = container.render({filters: dimensions}, template);
+    filtersManager.updateContext();
+  };
+
+  var removeMember = function (dimension, member) {
+    var appliedDimension = getDimension(dimension.id)
+    if (appliedDimension) {
+      var newMembers = [];
+      jQuery.each(appliedDimension.members, function (index, appliedMember) {
+        if (appliedMember.id !== member.id) {
+          newMembers.push(member);
+        }
+      });
+      if (newMembers.length === 0) {
+        removeDimension(dimension);
+      } else {
+        appliedDimension.members = newMembers;
+      }
+    }
+    container = container.render({filters: dimensions}, template);
+    filtersManager.updateContext();
+  };
+
+  var addMember = function (dimension, member) {
+    var appliedDimension = getDimension(dimension.id)
+    if (!appliedDimension) {
+      appliedDimension = {id: dimension.id, name: dimension.name, members: []};
+      dimensions.push(appliedDimension);
+    }
+    appliedDimension.members.push(member);
+  };
+
+  return {
+    render: function () {
+      initEventListeners();
+    },
+
+    addFilter: function (dimension, member) {
+      addMember(dimension, member);
+      container = container.render({filters: dimensions}, template);
+      initEventListeners();
+    },
+
+    getAppliedFilters: function () {
+      var params = {};
+      for (var i = 0; i < dimensions.length; i++) {
+        var dimension = dimensions[i];
+        for (var j = 0; j < dimension.members.length; j++) {
+          params[dimension.id] = dimension.members[j].value;
+        }
+      }
+      return params;
+    }
+  };
+}
+
+Propial.widget.Filters = function (container, filters, templateId,
+    filtersManager) {
 
   var dimensions = filters;
 
-  var html = $p(templateId);
+  var filtersHtml = $p(templateId);
 
   var directive = {
     "li.dimension": {
@@ -165,7 +319,7 @@ Propial.view.FiltersManager = function (container, filters, templateId,
     }
   };
 
-  var template = html.compile(directive);
+  var template = filtersHtml.compile(directive);
 
   var initEventListeners = function () {
     jQuery.each(dimensions, function (indexDimension, dimension) {
@@ -180,40 +334,115 @@ Propial.view.FiltersManager = function (container, filters, templateId,
         memberElement.click(function (event) {
           if (dimension.id != 'location') {
             event.preventDefault();
-            var params = {
-              type: member.value,
-              locationId: locationId,
-              start: 0,
-              limit: 0
-            };
-            jQuery.ajax({
-              url: "/services/publications/",
-              data: params,
-              dataType: 'json',
-              success: function (data, textStatus, jqXHR) {
-                resultsManager.update(data);
-                update(data);
-              }
-            })
+            filtersManager.addFilter(dimension, member);
           }
         });
       });
     });
   };
 
+  return {
+    render: function () {
+      initEventListeners();
+    },
+    update: function (data) {
+      dimensions = [];
+      jQuery.each(data.filters, function (index, dimension) {
+        if (dimension.id !== 'location') {
+          dimensions.push(dimension);
+        }
+      });
+      container = container.render({'filters': dimensions}, template);
+      initEventListeners();
+    }
+  };
+};
+
+Propial.view.FiltersManager = function (container, filters, templateId,
+    resultsManager, locationStatus, locationId) {
+
+  var filtersApplied;
+
+  var filters;
+
   var update = function (data) {
-    this.dimensions = data.filters;
-    container.find("ul.dimensions").render(data, template);
-    initEventListeners();
+    var params = filtersApplied.getAppliedFilters();
+    params.locationId = locationId;
+    params.start = 0;
+    params.limit = 0;
+    jQuery.ajax({
+      url: "/services/publications/",
+      data: params,
+      dataType: 'json',
+      success: function (data, textStatus, jqXHR) {
+        filters.update(data);
+        resultsManager.update(data);
+        locationStatus.update(data);
+      }
+    })
   };
 
   return {
     render: function () {
-      initEventListeners();
+      var filterAppliedContainer = container.find(".js-applied-filters");
+      filtersApplied = new Propial.widget.AppliedFilters(
+          filterAppliedContainer, templateId + " .js-applied-filters", this);
+      filtersApplied.render();
+
+      var filtersContainer = container.find(".js-dimensions");
+      filters = new Propial.widget.Filters(filtersContainer, filters,
+          templateId + " .js-dimensions", this);
+      filters.render();
+    },
+    addFilter: function (dimension, member) {
+      filtersApplied.addFilter(dimension, member);
+      update();
+    },
+    updateContext: function () {
+      update();
+    }
+  }
+};
+
+Propial.widget.LocationStatus = function (container, templateId) {
+
+  var html = $p(templateId + " .js-location-filters");
+
+  var directive = {
+    ".js-location": {
+      "location <- locations": {
+        ".js-name": "location.name",
+        ".js-count": function () {
+          return "(" + this.count + ")";
+        },
+        "a@href": function () {
+          return "/search/" + this.value;
+        },
+        ".js-sep": function (arg) {
+          if (arg.pos !== arg.items.length - 1) {
+            return ", ";
+          } else {
+            return null;
+          }
+        }
+      }
     }
   };
-}
 
+  var template = html.compile(directive);
+
+  return {
+    update: function (data) {
+      var locations = [];
+      jQuery.each(data.filters, function (index, dimension) {
+        if (dimension.id === 'location') {
+          locations = dimension.members;
+        }
+      });
+      container = container.render({'locations': locations}, template);
+    }
+  };
+};
 
     jQuery(document).ready(function() {
 
@@ -249,9 +478,9 @@ Propial.view.FiltersManager = function (container, filters, templateId,
         publication.render();
       })
 
-      var locationContainer = jQuery(".js-location-search");
-      var locationFilter = new Propial.view.LocationFilter(locationContainer);
-      locationFilter.render();
+      var locationContainer = jQuery(".js-location-filters");
+      var locationStatus = new Propial.widget.LocationStatus(
+          locationContainer, "#locations-template");
 
       var resultsManagerElement = jQuery(".js-results");
       var resultsManager = new Propial.view.ResultsManager(
@@ -260,8 +489,8 @@ Propial.view.FiltersManager = function (container, filters, templateId,
 
       var filtersManagerElement = jQuery(".js-filters");
       var filtersManager = new Propial.view.FiltersManager(
-          filtersManagerElement, dimensions, "#filters-template ul.dimensions",
-          resultsManager, locationId);
+          filtersManagerElement, dimensions, "#filters-template",
+          resultsManager, locationStatus, locationId);
       filtersManager.render();
     });
   </script>
@@ -282,14 +511,38 @@ Propial.view.FiltersManager = function (container, filters, templateId,
   </header>
   <div class="body">
     <div class="container clearfix">
-      <div class="search js-location-search">
-        <form action="search" class="js-search">
+      <div class="location js-location">
+        <div class="selected">
+          <span class="crumb">
+            <span>Estas buscando en:</span>
+            <#list model["parents"] as parent>
+              <a href="/search/${parent.id}">${parent.name}</a> / 
+            </#list>
+            <span class="current">${model["location"].name}</span>
+          </span>
+          <!--a href="#" class="action">buscar otra ubicacion</a-->
+        </div>
+        <div>
+          <#list model["dimensions"] as dimension>
+            <#if dimension.id = "location">
+              Tambien podes seguir refinando en:
+              <span class="js-location-filters">
+              <#list dimension.members as member>
+                <span class="js-location">
+                  <a href="/search/${member.value}"><span class="js-name">${member.name}</span> <span class="js-count">(${member.count})</span></a><span class="js-sep"><#if member_has_next>, </#if></span>
+                </span>
+              </#list>
+              </span>
+            </#if>
+          </#list>
+        </div>
+        <!-- form action="search" class="js-search">
           <label for="search">En donde desea buscar?</label>
           <div class="field">
             <input class="js-location-filter" type="text" />
             <button><span class="button-content">buscar</span></button>
           </div>
-        </form>
+        </form-->
       </div>
       <div class="content js-results">
         <!-- inicio column -->
@@ -321,8 +574,11 @@ Propial.view.FiltersManager = function (container, filters, templateId,
           <div class="ads">
           </div>
           <div class="js-filters">
-            <ul class="dimensions">
+            <ul class="applied-filters js-applied-filters">
+            </ul>
+            <ul class="filters js-dimensions">
             <#list model["dimensions"] as dimension>
+              <#if dimension.id != "location">
               <li class="dimension">
                 <a href="#" class="dimension js-dimension-${dimension.id}">${dimension.name}</a>
                 <ul class="members js-members-${dimension.id}">
@@ -333,6 +589,7 @@ Propial.view.FiltersManager = function (container, filters, templateId,
                   </#list>
                 </ul>
               </li>
+              </#if>
             </#list>
             </ul>
           </div>
@@ -349,7 +606,17 @@ Propial.view.FiltersManager = function (container, filters, templateId,
     </div>
   </div>
   <div id="filters-template" style="display:none">
-    <ul class="dimensions">
+    <ul class="applied-filters js-applied-filters">
+      <li class="dimension">
+        <a href="#" class="dimension"></a>
+        <ul class="members">
+          <li>
+            <a href="#" class="member"></a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <ul class="filters js-dimensions">
       <li class="dimension">
         <a href="#" class="dimension"></a>
         <ul class="members">
@@ -359,5 +626,12 @@ Propial.view.FiltersManager = function (container, filters, templateId,
         </ul>
       </li>
     </ul>
+  </div>
+  <div id="locations-template" style="display:none">
+    <span class="js-location-filters">
+      <span class="js-location">
+        <a href=""><span class="js-name"></span> <span class="js-count"></span></a><span class="js-sep"></span>
+      </span>
+    </span>
   </div>
 </body>

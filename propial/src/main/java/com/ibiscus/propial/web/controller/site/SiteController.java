@@ -1,6 +1,7 @@
 package com.ibiscus.propial.web.controller.site;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -48,6 +49,14 @@ public class SiteController {
       Location location = locationRepository.get(locationId);
       if (location != null) {
         filters.put("location", location);
+        model.addAttribute("location", location);
+        List<Location> parents = new LinkedList<Location>();
+        Location parent = location.getParent();
+        while (parent != null && parent.getParent() != null) {
+          parents.add(parent);
+          parent = parent.getParent();
+        }
+        model.addAttribute("parents", parents);
       }
     }
     model.addAttribute("locationId", locationId);
