@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.ibiscus.propial.domain.business.Location;
 import com.ibiscus.propial.domain.business.LocationRepository;
 import com.ibiscus.propial.web.utils.Packet;
-import com.ibiscus.propial.web.utils.ResultSet;
+import com.ibiscus.propial.web.utils.QueryResults;
 
 @Controller
 @RequestMapping(value="/services/locations")
@@ -57,7 +57,7 @@ public class LocationController {
   }
 
   @RequestMapping(value = "/", method = RequestMethod.GET)
-  public @ResponseBody ResultSet<Location> get(
+  public @ResponseBody QueryResults<Location> get(
       @RequestParam(required = false) Long parentId, @RequestParam int start,
       @RequestParam int limit) {
     Location parent = null;

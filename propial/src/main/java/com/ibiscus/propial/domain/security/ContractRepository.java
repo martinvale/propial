@@ -9,7 +9,7 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.cmd.LoadType;
 import com.googlecode.objectify.cmd.Query;
 import com.ibiscus.propial.infraestructure.objectify.OfyService;
-import com.ibiscus.propial.web.utils.ResultSet;
+import com.ibiscus.propial.web.utils.QueryResults;
 
 public class ContractRepository {
 
@@ -17,7 +17,7 @@ public class ContractRepository {
     return OfyService.ofy().load().type(Contract.class).id(id).now();
   }
 
-  public ResultSet<Contract> find(final int start, final int limit) {
+  public QueryResults<Contract> find(final int start, final int limit) {
     Query<Contract> query = OfyService.ofy().load().type(Contract.class)
         .limit(limit).order("name");
     if (start > 0) {
@@ -34,7 +34,7 @@ public class ContractRepository {
       queryCount = queryCount.filter("id", user.getContract().getId());
     }
     int size = queryCount.count();
-    return new ResultSet<Contract>(contracts, size);
+    return new QueryResults<Contract>(contracts, size);
   }
 
   public long save(final Contract contract) {

@@ -14,7 +14,7 @@ import com.ibiscus.propial.domain.security.ContractRepository;
 import com.ibiscus.propial.domain.security.User;
 import com.ibiscus.propial.domain.security.UserRepository;
 import com.ibiscus.propial.web.utils.Packet;
-import com.ibiscus.propial.web.utils.ResultSet;
+import com.ibiscus.propial.web.utils.QueryResults;
 
 @Controller
 @RequestMapping(value="/services/users")
@@ -70,7 +70,7 @@ public class UserController {
   }
 
   @RequestMapping(value = "/", method = RequestMethod.GET)
-  public @ResponseBody ResultSet<User> get(@RequestParam int start,
+  public @ResponseBody QueryResults<User> get(@RequestParam int start,
       @RequestParam int limit) {
     return userRepository.find(start, limit);
   }

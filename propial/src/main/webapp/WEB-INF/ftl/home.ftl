@@ -8,7 +8,7 @@
     <meta name="description" content="Publicacion de avisos inmobiliarios">
     <meta name="keywords" content="avisos, inmobiliaria, casas, departamentos, locales, alquiler, compra, venta">
 
-    <!--link rel="stylesheet" href="css/main.css"-->
+    <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/index.css">
 
     <link rel="stylesheet" href="css/jquery-ui/jquery-ui.css">
@@ -46,6 +46,8 @@
     });
   </script>
 
+    <script src="script/Publication.js"></script>
+    <script src="script/LocationFilter.js"></script>
 
 </head>
 <body>
@@ -61,11 +63,10 @@
   <div class="body">
     <div class="container clearfix">
       <div class="search js-location-search">
-        <form action="search">
+        <form action="search" class="js-search">
           <label for="search">En donde desea buscar?</label>
           <div class="field">
             <input class="js-location-filter" type="text" />
-            <input class="js-location-field" type="hidden" name="location"/>
             <button><span class="button-content">buscar</span></button>
           </div>
         </form>

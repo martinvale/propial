@@ -20,6 +20,14 @@ public class Publication implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
+  public enum TYPES {
+    CASA,
+    DEPARTAMENTO,
+    QUINTA,
+    LOCAL,
+    OFICINA
+  }
+
   /** The id of the publication. */
   @Id
   private Long id;
@@ -31,12 +39,16 @@ public class Publication implements Serializable {
   @Index
   private Ref<Contract> contract;
 
+  @Index
   private String type;
   private String address;
+
+  @Index
   private Integer age;
 
   private String code;
 
+  @Index
   private List<Ref<Location>> locations = new ArrayList<Ref<Location>>();
   private Double expenses;
   private String description;

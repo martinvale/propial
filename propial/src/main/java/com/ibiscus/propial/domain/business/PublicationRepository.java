@@ -6,11 +6,9 @@ import java.util.Map;
 import org.apache.commons.lang.Validate;
 
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.cmd.Query;
-import com.ibiscus.propial.domain.security.Contract;
 import com.ibiscus.propial.infraestructure.objectify.OfyService;
-import com.ibiscus.propial.web.utils.ResultSet;
+import com.ibiscus.propial.web.utils.QueryResults;
 
 public class PublicationRepository {
 
@@ -24,25 +22,45 @@ public class PublicationRepository {
    *
    * @return The result set of publications.
    */
-  public ResultSet<Publication> find(final int start, final int limit,
+  public List<Publication> find(final int start, final int limit,
       final String order, final boolean asc,
       final Map<String, Object> filters) {
-    Query<Publication> query = OfyService.ofy().load().type(Publication.class)
-        .limit(limit);
+    Query<Publication> query = getQuery(filters);
+    query.limit(limit);
     if (order != null) {
       query = query.order(order);
     }
     if (start > 0) {
       query = query.offset(start);
     }
-    if (filters != null && !filters.isEmpty()) {
-      Ref<Contract> contractRef = Ref.create((Contract) filters
-          .get("contract"));
-      query = query.filter("contract", filters.get("contract"));
+    return query.list();
+  }
+
+  private Query<Publication> getQuery(final Map<String, Object> filters) {
+    Query<Publication> query = OfyService.ofy().load().type(Publication.class);
+    if (filters != null) {
+      if (filters.containsKey("contract")) {
+        query = query.filter("contract", filters.get("contract"));
+      }
+      if (filters.containsKey("location")) {
+        query = query.filter("locations", filters.get("location"));
+      }
+      if (filters.containsKey("type")) {
+        query = query.filter("type", filters.get("type"));
+      }
     }
-    List<Publication> publications = query.list();
-    int size = OfyService.ofy().load().type(Publication.class).count();
-    return new ResultSet<Publication>(publications, size);
+    return query;
+  }
+
+  /** Get the count of hits with this filters applied.
+   *
+   * @param filters The filters to apply to the search.
+   *
+   * @return The count of hits.
+   */
+  public int getCount(final Map<String, Object> filters) {
+    Query<Publication> query = getQuery(filters);
+    return query.count();
   }
 
   public long save(final Publication publication) {

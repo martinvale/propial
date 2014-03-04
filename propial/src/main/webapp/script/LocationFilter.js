@@ -17,7 +17,7 @@ Propial.view.LocationFilter = function (container) {
       minLength: 2,
       select: function(event, ui) {
         filterElement.val(getPath(ui.item));
-        container.find(".js-location-field").val(ui.item.id);
+        container.find(".js-search").attr("action", "/search/" + ui.item.id);
         return false;
       }
     })

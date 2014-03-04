@@ -28,12 +28,14 @@ import com.ibiscus.propial.domain.business.LocationRepository;
 import com.ibiscus.propial.domain.business.Publication;
 import com.ibiscus.propial.domain.business.PublicationRepository;
 import com.ibiscus.propial.domain.business.Resource;
+import com.ibiscus.propial.domain.filters.Dimension;
 import com.ibiscus.propial.domain.security.Contract;
 import com.ibiscus.propial.domain.security.ContractRepository;
 import com.ibiscus.propial.domain.security.User;
 import com.ibiscus.propial.domain.security.UserRepository;
+import com.ibiscus.propial.domain.services.FilterService;
 import com.ibiscus.propial.web.utils.Packet;
-import com.ibiscus.propial.web.utils.ResultSet;
+import com.ibiscus.propial.web.utils.QueryResults;
 
 @Controller
 @RequestMapping(value="/services/publications")
@@ -103,15 +105,31 @@ public class PublicationController {
   }
 
   @RequestMapping(value = "/", method = RequestMethod.GET)
-  public @ResponseBody ResultSet<Publication> get(@RequestParam int start,
+  public @ResponseBody QueryResults<Publication> get(@RequestParam int start,
       @RequestParam int limit,
-      @RequestParam(required = false) Long contractId) {
+      @RequestParam(required = false) Long contractId,
+      @RequestParam(required = false) Long locationId,
+      @RequestParam(required = false) String type) {
     Map<String, Object> filters = new HashMap<String, Object>();
     if (contractId != null) {
       Contract contract = contractRepository.get(contractId);
       filters.put("contract", contract);
     }
-    return publicationRepository.find(start, limit, null, true, filters);
+    if (locationId != null) {
+      Location location = locationRepository.get(locationId);
+      filters.put("location", location);
+    }
+    if (type != null) {
+      filters.put("type", type);
+    }
+    List<Publication> publications = publicationRepository.find(start, limit,
+        null, true, filters);
+    int size = publicationRepository.getCount(filters);
+    FilterService service = new FilterService(publicationRepository,
+        locationRepository);
+    List<Dimension> dimensions = service.getDimensions(filters,
+        size);
+    return new QueryResults<Publication>(publications, size, dimensions);
   }
 
   @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)

@@ -7,7 +7,7 @@ import org.apache.commons.lang.Validate;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.cmd.Query;
 import com.ibiscus.propial.infraestructure.objectify.OfyService;
-import com.ibiscus.propial.web.utils.ResultSet;
+import com.ibiscus.propial.web.utils.QueryResults;
 
 public class UserRepository {
 
@@ -31,7 +31,7 @@ public class UserRepository {
     OfyService.ofy().delete().entity(user).now();
   }
 
-  public ResultSet<User> find(final int start, final int limit) {
+  public QueryResults<User> find(final int start, final int limit) {
     Query<User> query = OfyService.ofy().load().type(User.class)
         .limit(limit).order("displayName");
     if (start > 0) {
@@ -39,7 +39,7 @@ public class UserRepository {
     }
     List<User> users = query.list();
     int size = OfyService.ofy().load().type(User.class).count();
-    return new ResultSet<User>(users, size);
+    return new QueryResults<User>(users, size);
   }
 
   /** Finds a user in the repository that match with the Google id.

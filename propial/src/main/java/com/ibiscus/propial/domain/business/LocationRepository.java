@@ -7,7 +7,7 @@ import org.apache.commons.lang.Validate;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.cmd.Query;
 import com.ibiscus.propial.infraestructure.objectify.OfyService;
-import com.ibiscus.propial.web.utils.ResultSet;
+import com.ibiscus.propial.web.utils.QueryResults;
 
 public class LocationRepository {
 
@@ -15,24 +15,26 @@ public class LocationRepository {
     return OfyService.ofy().load().type(Location.class).id(id).now();
   }
 
-  public ResultSet<Location> suggest(final String name) {
+  public QueryResults<Location> suggest(final String name) {
     Query<Location> query = OfyService.ofy().load().type(Location.class);
     query = query.filter("tokenizedName", name);
     List<Location> locations = query.list();
-    return new ResultSet<Location>(locations, locations.size());
+    return new QueryResults<Location>(locations, locations.size());
   }
 
-  public ResultSet<Location> find(final Location parent, final int start,
+  public QueryResults<Location> find(final Location parent, final int start,
       final int limit) {
-    Query<Location> query = OfyService.ofy().load().type(Location.class)
-        .limit(limit);
+    Query<Location> query = OfyService.ofy().load().type(Location.class);
+    if (limit >= -1) {
+        query.limit(limit);
+    }
     if (start > 0) {
       query = query.offset(start);
     }
     query = query.filter("parent", parent);
     List<Location> locations = query.list();
     int size = OfyService.ofy().load().type(Location.class).count();
-    return new ResultSet<Location>(locations, size);
+    return new QueryResults<Location>(locations, size);
   }
 
   public long save(final Location Location) {

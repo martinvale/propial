@@ -100,8 +100,7 @@ button.link:hover {
 }
 
 .menu {
-  float: left;
-  margin-left: 20px;
+  float: right;
   width: 180px;
 }
 
