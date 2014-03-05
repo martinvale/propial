@@ -1,0 +1,44 @@
+.location {
+  height: 50px;
+  margin: 5px 0;
+}
+
+li.dimension {
+  margin-top: 5px;
+}
+
+a.dimension {
+  font-weight: bold;
+}
+
+.filters a.dimension {
+  background: url("/img/filter_exp.png") no-repeat scroll 0 0.3em rgba(0, 0, 0, 0);
+  padding-left: 15px;
+}
+
+.filters a.dimension.collapsed {
+  background: url("/img/filter_cond.png") no-repeat scroll 0 0.3em rgba(0, 0, 0, 0);
+}
+
+.applied-filters a.dimension {
+  background: url("/img/delete_filter.png") no-repeat scroll 0 0.1em rgba(0, 0, 0, 0);
+  padding-left: 20px;
+}
+
+.applied-filters {
+  border-bottom: 1px dotted #999999;
+  padding: 0 0 5px 0;
+}
+
+.member {
+  padding-left: 10px;
+}
+
+.selected .crumb {
+  font-size: 18px;
+  margin-right: 5px;
+}
+
+.selected .current {
+  font-weight: bold;
+}
