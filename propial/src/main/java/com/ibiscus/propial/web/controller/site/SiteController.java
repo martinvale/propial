@@ -71,4 +71,16 @@ public class SiteController {
     model.addAttribute("dimensions", dimensions);
     return "search";
   }
+
+  @RequestMapping(value = "/detail/{id}")
+  public String detail(@ModelAttribute("model") ModelMap model,
+      @PathVariable Long id) {
+    if (id != null) {
+      Publication publication = publicationRepository.get(id);
+      if (publication != null) {
+        model.addAttribute("publication", publication);
+      }
+    }
+    return "detail";
+  }
 }
