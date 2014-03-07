@@ -21,6 +21,12 @@
 
 <style>
 
+h3 {
+  font-size: 22px;
+  font-weight: 300;
+  margin: 0 0 5px 0;
+}
+
 footer {
   margin-top: 20px;
 }
@@ -35,7 +41,9 @@ p, dl {
 }
 
 .block {
-  margin: 5px 0 0 0;
+  border: 1px solid #EAEAEA;
+  margin: 10px 0 0 0;
+  padding: 10px;
 }
 
 .address {
@@ -48,14 +56,14 @@ p, dl {
 }
 
 .main {
-  min-height: 470px;
+  min-height: 400px;
 }
 
 .details {
   float: left;
   font-size: 14px;
-  margin-left: 10px;
-  width: 290px;
+  margin-bottom: 10px;
+  width: 285px;
 }
 
 .details dt {
@@ -64,29 +72,41 @@ p, dl {
   width: 90px;
 }
 
+.description {
+  font-size: 18px;
+  font-weight: 300;
+}
+
 .resources {
   float: left;
-  width: 500px;
+  margin-right: 10px;
+  width: 480px;
 }
 
 .resources .resource {
   height: 400px;
-  width: 500px;
+  position: relative;
 }
 
 .resources img {
+  bottom: 0;
+  left: 0;
+  margin: auto;
   max-height: 400px;
-  max-width: 500px;
+  max-width: 480px;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 
-.carrousel {
+.gallery {
   min-height: 60px;
 }
 
-.carrousel img {
+.gallery img {
   border: 1px solid #999999;
-  height: 60px;
-  width: 60px;
+  max-height: 60px;
+  max-width: 60px;
 }
 
 </style>
@@ -99,7 +119,43 @@ p, dl {
 
     Propial.widget = Propial.widget || {};
 
+Propial.widget.Gallery = function (container, targetId, resources) {
+
+  var target = jQuery(targetId);
+
+  var replace = function (resource) {
+    target.attr("src", "/services/publications/resource/" + resource.id);
+  }
+
+  var initEventListeners = function () {
+    jQuery.each(resources, function (index, resource) {
+      var resourceElement = container.find(".js-resource-" + resource.id);
+      resourceElement.click(function (event) {
+        event.preventDefault();
+        replace(resource);
+      });
+    });
+  };
+
+  return {
+    render: function() {
+      initEventListeners();
+    }
+  }
+}
+
     jQuery(document).ready(function() {
+
+      var resources = [
+      <#list model["publication"].resources as resource>
+        {
+          id: '${resource.key.keyString}'
+        }<#if resource_has_next>,</#if>
+      </#list>];
+
+      var gallery = Propial.widget.Gallery(jQuery(".js-gallery"),
+        ".js-preview", resources);
+      gallery.render();
 
     });
   </script>
@@ -140,18 +196,10 @@ p, dl {
           <div class="resources">
             <div class="resource">
               <#if (publication.resources?size > 0)>
-                <img src="/services/publications/resource/${publication.resources[0].key.keyString}" />
+                <img src="/services/publications/resource/${publication.resources[0].key.keyString}" class="js-preview" />
               <#else>
                 <img src="/img/no_foto.gif" class="no-photo" />
               </#if>
-            </div>
-            <div class="carrousel">
-              <img src="/img/no_foto.gif" />
-              <img src="/img/no_foto.gif" />
-              <img src="/img/no_foto.gif" />
-              <img src="/img/no_foto.gif" />
-              <img src="/img/no_foto.gif" />
-              <img src="/img/no_foto.gif" />
             </div>
           </div>
           <div class="details">
@@ -175,6 +223,11 @@ p, dl {
               <dt>Superficie</dt>
               <dd>: ${surface}</dd>
             </dl>
+          </div>
+          <div class="gallery js-gallery">
+            <#list publication.resources as resource>
+              <img src="/services/publications/resource/${resource.key.keyString}" class="js-resource-${resource.key.keyString} <#if resource_index == 0>selected</#if>" />
+            </#list>
           </div>
         </div>
         <!-- fin main -->
