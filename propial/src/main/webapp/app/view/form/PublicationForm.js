@@ -28,6 +28,15 @@ Ext.define('Propial.view.form.PublicationForm', {
         data: [['casa'], ['departamento']]
       })
     }, {
+      name: 'operation',
+      fieldLabel: 'Tipo',
+      xtype: 'combobox',
+      allowBlank: false,
+      queryMode: 'local',
+      valueField: 'id',
+      displayField: 'value',
+      store: Ext.create('Propial.store.Operations')
+    }, {
       name: 'currencyType',
       value: '$',
       xtype: 'hidden'
