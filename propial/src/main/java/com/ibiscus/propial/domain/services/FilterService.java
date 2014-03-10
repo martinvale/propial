@@ -61,7 +61,7 @@ public class FilterService {
     if (!filters.containsKey("type")) {
       dimension = new Dimension("type", "Tipo");
       auxFilters = new HashMap<String, Object>(filters);
-      for (Publication.TYPES type : Publication.TYPES.values()) {
+      for (Publication.TYPE type : Publication.TYPE.values()) {
         auxFilters.put("type", type.toString().toLowerCase());
         int count = publicationRepository.getCount(auxFilters);
         if (count > 0 && count < size) {

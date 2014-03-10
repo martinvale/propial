@@ -28,6 +28,7 @@ import com.ibiscus.propial.domain.business.LocationRepository;
 import com.ibiscus.propial.domain.business.Publication;
 import com.ibiscus.propial.domain.business.PublicationRepository;
 import com.ibiscus.propial.domain.business.Resource;
+import com.ibiscus.propial.domain.business.Publication.OPERATION;
 import com.ibiscus.propial.domain.filters.Dimension;
 import com.ibiscus.propial.domain.security.Contract;
 import com.ibiscus.propial.domain.security.ContractRepository;
@@ -81,7 +82,9 @@ public class PublicationController {
       location = location.getParent();
       locations.add(location);
     }
-    publication.update(publicationDto.getType(), publicationDto.getAddress(),
+    publication.update(publicationDto.getType(),
+        OPERATION.valueOf(publicationDto.getOperation()),
+        publicationDto.getAddress(),
         publicationDto.getAge(), publicationDto.getExpenses(),
         publicationDto.getDescription(), publicationDto.getPrice(),
         publicationDto.getSurface(), publicationDto.getCurrencyType(),

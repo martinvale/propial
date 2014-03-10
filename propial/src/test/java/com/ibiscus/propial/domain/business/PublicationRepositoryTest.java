@@ -14,6 +14,7 @@ import org.junit.Test;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
+import com.ibiscus.propial.domain.business.Publication.OPERATION;
 import com.ibiscus.propial.domain.security.Contract;
 import com.ibiscus.propial.domain.security.ContractMother;
 import com.ibiscus.propial.domain.security.ContractRepository;
@@ -60,8 +61,8 @@ public class PublicationRepositoryTest {
     ambients.add(new Ambient());
     List<Location> locations = new ArrayList<Location>();
     locations.add(ciudad);
-    publication.update("type", "address", 80, 1300d, "description", 82000d, 42,
-        "$", true, ambients, locations);
+    publication.update("type", OPERATION.ALQUILER, "address", 80, 1300d,
+        "description", 82000d, 42, "$", true, ambients, locations);
     long id = repository.save(publication);
 
     publication = repository.get(id);

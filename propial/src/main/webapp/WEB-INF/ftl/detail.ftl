@@ -35,6 +35,7 @@ p, dl {
 
 .block {
   border: 1px solid #EAEAEA;
+  font-weight: 300;
   margin: 10px 0 0 0;
 }
 
@@ -46,6 +47,7 @@ p, dl {
 }
 
 .block-content {
+  font-size: 18px;
   padding: 10px;
 }
 
@@ -74,11 +76,6 @@ p, dl {
   width: 90px;
 }
 
-.description {
-  font-size: 18px;
-  font-weight: 300;
-}
-
 .centered {
   bottom: 0;
   left: 0;
@@ -103,6 +100,15 @@ p, dl {
   cursor: pointer;
   max-height: 400px;
   max-width: 480px;
+}
+
+.ambients ul {
+  list-style: circle;
+  margin-left: 20px;
+}
+
+.ambients .type {
+  font-weight: bold;
 }
 
 .gallery {
@@ -325,6 +331,22 @@ Propial.widget.Gallery = function (container, targetId, resources) {
           </div>
         </div>
         <!-- fin main -->
+
+        <!-- inicio ambientes -->
+        <div class="ambients block">
+          <div class="block-header">Ambientes</div>
+          <div class="block-content">
+            <ul>
+            <#list publication.ambients as ambient>
+              <li>
+                <span class="type">${ambient.type}</span> <#if ambient.dimension??>(${ambient.dimension})</#if>
+                <span class="observation">${ambient.observation}</span>
+              </li>
+            </#list>
+            </ul>
+          </div>
+        </div>
+        <!-- fin ambientes -->
 
         <!-- inicio description -->
         <div class="description block">

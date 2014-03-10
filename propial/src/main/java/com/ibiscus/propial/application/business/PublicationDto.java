@@ -13,6 +13,7 @@ public class PublicationDto {
   private Long contractId;
 
   private String type;
+  private String operation;
   private String address;
   private Integer age;
 
@@ -43,6 +44,10 @@ public class PublicationDto {
 
   public String getType() {
     return type;
+  }
+
+  public String getOperation() {
+    return operation;
   }
 
   public String getAddress() {

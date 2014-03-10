@@ -20,12 +20,24 @@ public class Publication implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
-  public enum TYPES {
+  public enum TYPE {
     CASA,
     DEPARTAMENTO,
     QUINTA,
     LOCAL,
     OFICINA
+  }
+
+  public enum OPERATION {
+    ALQUILER,
+    VENTA,
+    ALQUILER_TEMPORAL
+  }
+
+  public enum STATUS {
+    NEW,
+    UNPUBLISHED,
+    PUBLISHED
   }
 
   /** The id of the publication. */
@@ -40,7 +52,11 @@ public class Publication implements Serializable {
   private Ref<Contract> contract;
 
   @Index
+  private STATUS status = STATUS.NEW;
+  @Index
   private String type;
+  @Index
+  private OPERATION operation;
   private String address;
 
   @Index
@@ -112,6 +128,10 @@ public class Publication implements Serializable {
     return type;
   }
 
+  public String getOperation() {
+    return operation.toString();
+  }
+
   public String getAddress() {
     return address;
   }
@@ -172,13 +192,16 @@ public class Publication implements Serializable {
     return publicationResources;
   }
 
-  public void update(final String theType, final String theAddress,
+  public void update(final String theType, OPERATION theOperation,
+      final String theAddress,
       final Integer theAge, final Double theExpenses,
       final String theDescription, final Double thePrice,
       final Integer theSurface, final String theCurrencyType,
       final boolean isForProfessional, final List<Ambient> theAmbients,
       final List<Location> theLocations) {
+    Validate.notNull(theOperation, "The operation cannot be null");
     type = theType;
+    operation = theOperation;
     address = theAddress;
     age = theAge;
     expenses = theExpenses;
@@ -222,5 +245,13 @@ public class Publication implements Serializable {
     }
     Validate.notNull(resourceRef, "A resource reference must be found");
     resources.remove(resourceRef);
+  }
+
+  public void publish() {
+    status = STATUS.PUBLISHED;
+  }
+
+  public void unpublish() {
+    status = STATUS.UNPUBLISHED;
   }
 }
