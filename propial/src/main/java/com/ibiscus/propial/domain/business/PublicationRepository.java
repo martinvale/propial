@@ -48,6 +48,9 @@ public class PublicationRepository {
       if (filters.containsKey("type")) {
         query = query.filter("type", filters.get("type"));
       }
+      if (filters.containsKey("published")) {
+        query = query.filter("status", Publication.STATUS.PUBLISHED);
+      }
     }
     return query;
   }

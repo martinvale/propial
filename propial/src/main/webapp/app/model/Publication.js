@@ -5,7 +5,9 @@ Ext.define('Propial.model.Publication', {
     'Propial.model.Ambient',
     'Propial.model.Location'
   ],
-  fields: ['id', 'title', 'type', 'address', 'age', 'description', 'price', 'currencyType', 'expenses', 'surface', 'forProfessional'],
+  fields: ['id', 'title', 'type', 'address', 'age', 'description', 'price',
+      'currencyType', 'expenses', 'surface', 'forProfessional', 'operation',
+      'status'],
   hasMany: [
     {model: 'Propial.model.Resource', name: 'resources'},
     {model: 'Propial.model.Ambient', name: 'ambients'},

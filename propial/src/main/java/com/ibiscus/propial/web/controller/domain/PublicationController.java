@@ -26,9 +26,9 @@ import com.ibiscus.propial.application.business.PublicationDto;
 import com.ibiscus.propial.domain.business.Location;
 import com.ibiscus.propial.domain.business.LocationRepository;
 import com.ibiscus.propial.domain.business.Publication;
+import com.ibiscus.propial.domain.business.Publication.OPERATION;
 import com.ibiscus.propial.domain.business.PublicationRepository;
 import com.ibiscus.propial.domain.business.Resource;
-import com.ibiscus.propial.domain.business.Publication.OPERATION;
 import com.ibiscus.propial.domain.filters.Dimension;
 import com.ibiscus.propial.domain.security.Contract;
 import com.ibiscus.propial.domain.security.ContractRepository;
@@ -139,6 +139,22 @@ public class PublicationController {
   public @ResponseBody boolean delete(@PathVariable long id) {
     publicationRepository.delete(id);
     return true;
+  }
+
+  @RequestMapping(value = "/publish/{id}", method = RequestMethod.POST)
+  public @ResponseBody Packet<Publication> publish(@PathVariable long id) {
+    Publication publication = publicationRepository.get(id);
+    publication.publish();
+    publicationRepository.save(publication);
+    return new Packet<Publication>(publication);
+  }
+
+  @RequestMapping(value = "/unpublish/{id}", method = RequestMethod.POST)
+  public @ResponseBody Packet<Publication> unpublish(@PathVariable long id) {
+    Publication publication = publicationRepository.get(id);
+    publication.unpublish();
+    publicationRepository.save(publication);
+    return new Packet<Publication>(publication);
   }
 
   @RequestMapping(value = "/upload")

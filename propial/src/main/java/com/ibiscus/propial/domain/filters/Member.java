@@ -1,9 +1,15 @@
 package com.ibiscus.propial.domain.filters;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang.Validate;
 
-public class Member {
+public class Member implements Serializable {
 
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
   private final String name;
   private final String value;
   private final int count;

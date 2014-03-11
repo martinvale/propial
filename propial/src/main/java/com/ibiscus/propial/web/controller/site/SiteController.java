@@ -35,8 +35,10 @@ public class SiteController {
 
   @RequestMapping(value = "/")
   public String home(@ModelAttribute("model") ModelMap model) {
+    Map<String, Object> filters = new HashMap<String, Object>();
+    filters.put("published", Boolean.TRUE);
     List<Publication> publications = publicationRepository.find(0,
-        PAGE_SIZE, "creation", false, null);
+        PAGE_SIZE, "creation", false, filters);
     model.addAttribute("publications", publications);
     return "home";
   }
@@ -45,6 +47,7 @@ public class SiteController {
   public String search(@ModelAttribute("model") ModelMap model,
       @PathVariable Long locationId) {
     Map<String, Object> filters = new HashMap<String, Object>();
+    filters.put("published", Boolean.TRUE);
     if (locationId != null) {
       Location location = locationRepository.get(locationId);
       if (location != null) {

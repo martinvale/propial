@@ -18,6 +18,9 @@ Ext.define('Propial.view.grid.PublicationsList', {
         text: 'Titulo',
         flex: 1
       }, {
+        dataIndex: 'status',
+        text: 'Estado'
+      }, {
         dataIndex: 'type',
         text: 'Tipo'
       }, {
@@ -90,6 +93,44 @@ Ext.define('Propial.view.grid.PublicationsList', {
               }
             });
             multimediaEditionWindow.open(selections[0].get('id'));
+          }
+        }
+      }, {
+        xtype: 'button',
+        text: 'Publicar',
+        handler: function () {
+          var selections = me.getSelectionModel().getSelection();
+          if (selections.length > 0) {
+            for (var i = 0; i < selections.length; i++) {
+              Ext.Ajax.request({
+                headers: { 'Content-Type': 'application/json' },
+                method: 'POST',
+                url: '/services/publications/publish/' + selections[i].get('id'),
+                success: function(response) {
+                  me.getStore().reload();
+                },
+                failure: function(response){}
+              });
+            }
+          }
+        }
+      }, {
+        xtype: 'button',
+        text: 'Despublicar',
+        handler: function () {
+          var selections = me.getSelectionModel().getSelection();
+          if (selections.length == 1) {
+            for (var i = 0; i < selections.length; i++) {
+              Ext.Ajax.request({
+                headers: { 'Content-Type': 'application/json' },
+                method: 'POST',
+                url: '/services/publications/unpublish/' + selections[i].get('id'),
+                success: function(response) {
+                  me.getStore().reload();
+                },
+                failure: function(response){}
+              });
+            }
           }
         }
       }, {

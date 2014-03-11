@@ -129,7 +129,15 @@ public class Publication implements Serializable {
   }
 
   public String getOperation() {
-    return operation.toString();
+    if (operation != null) {
+      return operation.toString();
+    } else {
+      return null;
+    }
+  }
+
+  public String getStatus() {
+    return status.toString();
   }
 
   public String getAddress() {

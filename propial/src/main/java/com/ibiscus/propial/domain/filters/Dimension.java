@@ -1,12 +1,17 @@
 package com.ibiscus.propial.domain.filters;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.Validate;
 
-public class Dimension {
+public class Dimension implements Serializable {
 
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
   private final String id;
   private final String name;
   private final List<Member> members = new ArrayList<Member>();
