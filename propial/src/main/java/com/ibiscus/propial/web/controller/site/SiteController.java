@@ -86,4 +86,19 @@ public class SiteController {
     }
     return "detail";
   }
+
+  @RequestMapping(value = "/forgot")
+  public String forgot(@ModelAttribute("model") ModelMap model) {
+    return "forgot";
+  }
+
+  @RequestMapping(value = "/register")
+  public String register(@ModelAttribute("model") ModelMap model) {
+    return "register";
+  }
+
+  @RequestMapping(value = "/confirm")
+  public String confirm(@ModelAttribute("model") ModelMap model) {
+    return "confirm";
+  }
 }

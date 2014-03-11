@@ -13,143 +13,11 @@
 
     <link rel="stylesheet" href="/css/jquery-ui/jquery-ui.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
-    <!--link rel="stylesheet" href="/css/chico.min.css"-->
 
     <script src="/script/jquery.js"></script>
     <script src="/script/jquery-ui.js"></script>
-    <!--script src="/script/chico.min.js"></script-->
-    <!--script src="/script/pure.min.js"></script-->
 
     <title>Propial</title>
-
-<style>
-
-p, dl {
-  margin: 0;
-}
-
-.publication {
-  float: left;
-  width: 790px;
-}
-
-.block {
-  border: 1px solid #EAEAEA;
-  font-weight: 300;
-  margin: 10px 0 0 0;
-}
-
-.block-header {
-  background-color: #4390DF;
-  color: #FFFFFF;
-  font-size: 22px;
-  padding: 5px 10px;
-}
-
-.block-content {
-  font-size: 18px;
-  padding: 10px;
-}
-
-.address {
-  font-size: 23px;
-}
-
-.price {
-  float: right;
-}
-
-.main {
-  min-height: 460px;
-}
-
-.details {
-  float: left;
-  font-size: 14px;
-  margin-bottom: 10px;
-  width: 275px;
-}
-
-.details dt {
-  float: left;
-  margin-right: 5px;
-  width: 90px;
-}
-
-.centered {
-  bottom: 0;
-  left: 0;
-  margin: auto;
-  position: absolute;
-  right: 0;
-  top: 0;
-}
-
-.resources {
-  float: left;
-  margin-right: 10px;
-  width: 480px;
-}
-
-.resources .resource {
-  height: 400px;
-  position: relative;
-}
-
-.resources img {
-  cursor: pointer;
-  max-height: 400px;
-  max-width: 480px;
-}
-
-.ambients ul {
-  list-style: circle;
-  margin-left: 20px;
-}
-
-.ambients .type {
-  font-weight: bold;
-}
-
-.gallery {
-  min-height: 60px;
-}
-
-.gallery img {
-  border: 1px solid #999999;
-  cursor: pointer;
-  max-height: 60px;
-  max-width: 60px;
-}
-
-.carousel-main img {
-  max-height: 550px;
-  max-width: 1000px;
-}
-
-.carousel-button {
-  cursor: pointer;
-  font-size: 3em;
-  position: absolute;
-  top: 50%;
-  width: 25px;
-}
-
-.carousel-button:hover {
-  opacity: 0.7;
-}
-
-.carousel-prev {
-  left: 0;
-  margin-left: 15px;
-}
-
-.carousel-next {
-  margin-right: 15px;
-  right: 0;
-}
-
-</style>
 
   <script type="text/javascript">
 
@@ -158,88 +26,6 @@ p, dl {
     Propial.view = Propial.view || {};
 
     Propial.widget = Propial.widget || {};
-
-Propial.widget.Carousel = function (containerId, resources) {
-
-  var container = jQuery(containerId);
-
-  var currentIndex = 0;
-
-  var move = function (index) {
-    currentIndex = index;
-    replace(resources[index]);
-  }
-
-  var replace = function (resource) {
-    container.find(".js-resource")
-        .attr("src", "/services/publications/resource/" + resource.id);
-  };
-
-  var initEventListeners = function () {
-    container.find(".js-prev").click(function (event) {
-      if (currentIndex > 0) {
-        move(currentIndex - 1);
-      }
-    });
-
-    container.find(".js-next").click(function (event) {
-      if (currentIndex < resources.length - 1) {
-        move(currentIndex + 1);
-      }
-    });
-  };
-
-  return {
-    render: function() {
-      initEventListeners();
-    },
-    show: function(index) {
-      move(index);
-      container.dialog({
-        height: 600,
-        width: 1000,
-        modal: true
-      });
-    }
-  }
-
-}
-
-Propial.widget.Gallery = function (container, targetId, resources) {
-
-  var target = jQuery(targetId);
-
-  var carousel = null;
-
-  var selectedIndex = 0;
-
-  var select = function (index) {
-    selectedIndex = index;
-    target.attr("src", "/services/publications/resource/" + resources[index].id);
-  }
-
-  var initEventListeners = function () {
-    jQuery.each(resources, function (index, resource) {
-      var resourceElement = container.find(".js-resource-" + resource.id);
-      resourceElement.click(function (event) {
-        event.preventDefault();
-        select(index);
-      });
-    });
-    target.click(function () {
-      carousel.show(selectedIndex);
-    });
-  };
-
-  return {
-    render: function() {
-      carousel = new Propial.widget.Carousel("#carousel-template .js-carousel",
-          resources);
-      carousel.render();
-      initEventListeners();
-    }
-  }
-}
 
     jQuery(document).ready(function() {
 
@@ -257,7 +43,8 @@ Propial.widget.Gallery = function (container, targetId, resources) {
     });
   </script>
 
-    <script src="/script/Publication.js"></script>
+    <script src="/script/Carousel.js"></script>
+    <script src="/script/Gallery.js"></script>
 
 </head>
 <body>

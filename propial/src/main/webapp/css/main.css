@@ -6,6 +6,10 @@ body {
   padding: 0;
 }
 
+p, dl {
+  margin: 0;
+}
+
 ul {
   list-style: none;
   padding: 0;
@@ -184,4 +188,33 @@ button.link:hover {
 
 .suggestions .item .location, .suggestions .item .price {
   display: none;
+}
+
+/** blocks of content with header */
+.block {
+  border: 1px solid #EAEAEA;
+  font-weight: 300;
+  margin: 10px 0 0 0;
+}
+
+.block-header {
+  background-color: #4390DF;
+  color: #FFFFFF;
+  font-size: 22px;
+  padding: 5px 10px;
+}
+
+.block-content {
+  font-size: 18px;
+  padding: 10px;
+}
+
+/** Images centered */
+.centered {
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  top: 0;
 }

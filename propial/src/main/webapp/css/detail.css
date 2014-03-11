@@ -1,0 +1,93 @@
+.publication {
+  float: left;
+  width: 790px;
+}
+
+.address {
+  font-size: 23px;
+}
+
+.price {
+  float: right;
+}
+
+.main {
+  min-height: 460px;
+}
+
+.details {
+  float: left;
+  font-size: 14px;
+  margin-bottom: 10px;
+  width: 275px;
+}
+
+.details dt {
+  float: left;
+  margin-right: 5px;
+  width: 90px;
+}
+
+.resources {
+  float: left;
+  margin-right: 10px;
+  width: 480px;
+}
+
+.resources .resource {
+  height: 400px;
+  position: relative;
+}
+
+.resources img {
+  cursor: pointer;
+  max-height: 400px;
+  max-width: 480px;
+}
+
+.ambients ul {
+  list-style: circle;
+  margin-left: 20px;
+}
+
+.ambients .type {
+  font-weight: bold;
+}
+
+.gallery {
+  min-height: 60px;
+}
+
+.gallery img {
+  border: 1px solid #999999;
+  cursor: pointer;
+  max-height: 60px;
+  max-width: 60px;
+}
+
+.carousel-main img {
+  max-height: 550px;
+  max-width: 1000px;
+}
+
+.carousel-button {
+  cursor: pointer;
+  font-size: 3em;
+  position: absolute;
+  top: 50%;
+  width: 25px;
+}
+
+.carousel-button:hover {
+  opacity: 0.7;
+}
+
+.carousel-prev {
+  left: 0;
+  margin-left: 15px;
+}
+
+.carousel-next {
+  margin-right: 15px;
+  right: 0;
+}
