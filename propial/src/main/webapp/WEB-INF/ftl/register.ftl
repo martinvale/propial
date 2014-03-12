@@ -18,6 +18,16 @@
 
     <title>Propial</title>
 
+<style>
+
+legend {
+  border-style: none none solid;
+  border-width: 0 0 1px;
+  font-size: 22px;
+}
+
+</style>
+
   <script type="text/javascript">
 
     window.Propial = window.Propial || {};
@@ -46,13 +56,11 @@
   <div class="body">
     <div class="container clearfix">
       <form action="registeruser" method="post">
-        <div class="block">
-          <div class="block-header">Datos personales</div>
-          <div class="block-content">
-            <label for="name">Nombre y Apellido</label>
-            <input type="text" name="name" required="required" />
-          </div>
-        </div>
+        <fieldset>
+          <legend>Datos personales</legend>
+          <label for="name">Nombre y Apellido</label>
+          <input type="text" name="name" required="required" />
+        </fieldset>
       </form>
     </div>
   </div>
