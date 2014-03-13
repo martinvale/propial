@@ -11,12 +11,15 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.ibiscus.propial.domain.business.Location;
 import com.ibiscus.propial.domain.business.LocationRepository;
 import com.ibiscus.propial.domain.business.Publication;
 import com.ibiscus.propial.domain.business.PublicationRepository;
 import com.ibiscus.propial.domain.filters.Dimension;
+import com.ibiscus.propial.domain.security.User;
+import com.ibiscus.propial.domain.security.UserRepository;
 import com.ibiscus.propial.domain.services.FilterService;
 
 @Controller
@@ -32,6 +35,10 @@ public class SiteController {
   /** Repository of publications. */
   @Autowired
   private LocationRepository locationRepository;
+
+  /** Repository of users. */
+  @Autowired
+  private UserRepository userRepository;
 
   @RequestMapping(value = "/")
   public String home(@ModelAttribute("model") ModelMap model) {
@@ -97,8 +104,41 @@ public class SiteController {
     return "register";
   }
 
+  @RequestMapping(value = "/register", method = RequestMethod.POST)
+  public String register(@ModelAttribute("model") ModelMap model,
+      String username, String password, String rePassword, String name,
+      String email) {
+    model.put("username", username);
+    model.put("name", name);
+    model.put("email", email);
+    List<String> errors = new LinkedList<String>();
+    if (!password.equals(rePassword)) {
+      errors.add("Los passwords deben coincidir.");
+    }
+    if (userRepository.getUserByEmail(email) != null) {
+      errors.add("Ya existe un usuario con este email.");
+    }
+    if (userRepository.getUserByUsername(username) != null) {
+      errors.add("Ya existe un usuario con este username.");
+    }
+    if (!errors.isEmpty()) {
+      model.put("errors", errors);
+      return "register";
+    }
+    User user = new User(username, password, name, email);
+    userRepository.save(user);
+    return "registered";
+  }
+
+
   @RequestMapping(value = "/confirm")
-  public String confirm(@ModelAttribute("model") ModelMap model) {
-    return "confirm";
+  public String confirm(@ModelAttribute("model") ModelMap model, Long id,
+      String code) {
+    User user = userRepository.get(id);
+    if (!user.isEnabled()) {
+      user.enable();
+      userRepository.save(user);
+    }
+    return "confirmed";
   }
 }

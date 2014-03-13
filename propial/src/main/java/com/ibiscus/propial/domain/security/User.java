@@ -57,6 +57,26 @@ public class User implements Serializable {
     contract = Ref.create(Key.create(Contract.class, theContract.getId()));
   }
 
+  /** This constructor is used whenever a user registers from the public site.
+   *
+   * @param theUsername
+   * @param thePassword
+   * @param theDisplayName
+   * @param theEmail
+   */
+  public User(final String theUsername, final String thePassword,
+      final String theDisplayName, final String theEmail) {
+    Validate.notNull(theUsername, "The username cannot be null");
+    Validate.notNull(thePassword, "The password cannot be null");
+    Validate.notNull(theDisplayName, "The display name cannot be null");
+    Validate.notNull(theEmail, "The email cannot be null");
+
+    username = theUsername;
+    password = thePassword;
+    displayName = theDisplayName;
+    email = theEmail;
+  }
+
   /** This constructor is used whenever the login comes from Google.
    *
    * @param theId

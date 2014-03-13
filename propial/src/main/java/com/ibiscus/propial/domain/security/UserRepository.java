@@ -42,6 +42,20 @@ public class UserRepository {
     return new QueryResults<User>(users, size);
   }
 
+  public User getUserByEmail(final String theEmail) {
+    Validate.notNull(theEmail, "The email cannot be null");
+    Query<User> query = OfyService.ofy().load().type(User.class);
+    query = query.filter("email", theEmail);
+    return query.first().now();
+  }
+
+  public User getUserByUsername(final String theUsername) {
+    Validate.notNull(theUsername, "The username cannot be null");
+    Query<User> query = OfyService.ofy().load().type(User.class);
+    query = query.filter("username", theUsername);
+    return query.first().now();
+  }
+
   /** Finds a user in the repository that match with the Google id.
    *
    * @param googleId The Google id used to find the user, cannot be null.
