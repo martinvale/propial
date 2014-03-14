@@ -17,7 +17,8 @@ public class User implements Serializable {
 
   public enum ROLE {
     ADMIN,
-    CUSTOMER_ADMIN
+    CUSTOMER_ADMIN,
+    PUBLISHER
   }
 
   public enum STATUS {
@@ -75,6 +76,8 @@ public class User implements Serializable {
     password = thePassword;
     displayName = theDisplayName;
     email = theEmail;
+    role = ROLE.PUBLISHER;
+    status = STATUS.NEW;
   }
 
   /** This constructor is used whenever the login comes from Google.

@@ -9,84 +9,8 @@
     <meta name="keywords" content="avisos, inmobiliaria, casas, departamentos, locales, alquiler, compra, venta">
 
     <link rel="stylesheet" href="css/main.css">
-    <!--link rel="stylesheet" href="css/register.css"-->
 
     <title>Propial</title>
-
-<style>
-
-input[type="button"], input[type="submit"], input[type="reset"] {
-  background-color: #D9D9D9;
-  border: 1px solid rgba(0, 0, 0, 0);
-  color: #222222;
-  cursor: pointer;
-  font-size: 14px;
-  margin: auto;
-  padding: 4px 12px;
-}
-
-form {
-  font-size: 120%;
-}
-
-fieldset {
-  border: 0 none;
-  padding: 0;
-}
-
-legend {
-  border-color: #E5E5E5;
-  border-style: none none solid;
-  border-width: 0 0 1px;
-  color: #333333;
-  font-size: 22px;
-  line-height: 40px;
-  margin-bottom: 18px;
-  width: 100%;
-}
-
-label {
-  display: block;
-  margin: 5px 0;
-}
-
-.field input {
-  border: 1px solid #D9D9D9;
-  font-size: 170%;
-  padding: 2px 5px;
-  width: 99%;
-}
-
-.field {
-  margin-bottom: 12px; 
-}
-
-.status {
-  background-color: #FFC0C3;
-  border: 1px solid #FCA8AB;
-  font-size: 110%;
-  font-weight: bold;
-  margin: 10px 0;
-  padding: 5px;
-}
-
-.buttons {
-  margin-top: 15px;
-}
-
-</style>
-
-  <script type="text/javascript">
-
-    window.Propial = window.Propial || {};
-
-    Propial.view = Propial.view || {};
-
-    /*jQuery(document).ready(function() {
-
-    });*/
-  </script>
-
 </head>
 <body>
   <header>
@@ -126,7 +50,7 @@ label {
           <p>Los campos con * son obligatorios</p>
         </fieldset>
         <#if model["errors"]??>
-        <div class="status">
+        <div class="status error">
           <#list model["errors"] as error>
             <p>${error}</p>
           </#list>

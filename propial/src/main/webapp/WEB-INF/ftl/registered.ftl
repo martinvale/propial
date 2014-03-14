@@ -9,38 +9,20 @@
     <meta name="keywords" content="avisos, inmobiliaria, casas, departamentos, locales, alquiler, compra, venta">
 
     <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/register.css">
-
-    <link rel="stylesheet" href="css/jquery-ui/jquery-ui.css">
-
-    <script src="script/jquery.js"></script>
-    <script src="script/jquery-ui.js"></script>
 
     <title>Propial</title>
 
 <style>
 
-legend {
-  border-style: none none solid;
-  border-width: 0 0 1px;
-  font-size: 22px;
+.body {
+  min-height: 300px;
+}
+
+.status {
+  margin-top: 70px;
 }
 
 </style>
-
-  <script type="text/javascript">
-
-    window.Propial = window.Propial || {};
-
-    Propial.view = Propial.view || {};
-
-    jQuery(document).ready(function() {
-
-    });
-  </script>
-
-    <script src="script/Publication.js"></script>
-    <script src="script/LocationFilter.js"></script>
 
 </head>
 <body>
@@ -55,22 +37,9 @@ legend {
   </header>
   <div class="body">
     <div class="container clearfix">
-      <form action="register" method="POST">
-        <fieldset>
-          <legend>Datos personales</legend>
-          <label for="name">Nombre y Apellido</label>
-          <input type="text" name="name" required="required" />
-          <label for="username">Usuario</label>
-          <input type="text" name="username" required="required" />
-          <label for="email">Email</label>
-          <input type="text" name="email" required="required" />
-          <label for="password">Password</label>
-          <input type="text" name="password" required="required" />
-          <label for="repassword">Reingrese la password</label>
-          <input type="text" name="repassword" required="required" />
-        </fieldset>
-        <input type="submit" value="Registrarse" />
-      </form>
+      <div class="status ok">
+        <p>Felicitaciones y gracias por registrarse! Verifique su cuenta de email para activar su usuario.</p>
+      </div>
     </div>
   </div>
   <footer>

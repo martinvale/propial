@@ -37,7 +37,7 @@ Ext.define('Propial.view.form.UserForm', {
       displayField: 'role',
       store: Ext.create('Ext.data.ArrayStore', {
         fields: ['role'],
-        data: [['ADMIN'], ['CUSTOMER_ADMIN']]
+        data: [['ADMIN'], ['CUSTOMER_ADMIN'], ['PUBLISHER']]
       })
     }, {
       name: 'contractId',

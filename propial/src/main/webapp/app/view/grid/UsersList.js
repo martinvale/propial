@@ -7,15 +7,25 @@ Ext.define('Propial.view.grid.UsersList', {
   alias: 'widget.userslist',
   store: Ext.create('Propial.store.Users'),
   title: 'Usuarios',
-  hideHeaders: true,
   
   initComponent: function() {
     var me = this;
-    this.columns = [{
-      dataIndex: 'displayName',
-      flex: 1
-    }];
-    
+    this.columns = [
+      {
+        dataIndex: 'displayName',
+        text: 'Nombre',
+        flex: 1
+      }, {
+        dataIndex: 'username',
+        text: 'Usuario',
+        width: 150
+      }, {
+        dataIndex: 'email',
+        text: 'Email',
+        width: 250
+      }
+    ];
+
     this.dockedItems = [{
       dock: 'bottom',
       xtype: 'toolbar',

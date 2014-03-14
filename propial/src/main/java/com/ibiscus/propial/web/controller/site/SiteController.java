@@ -99,6 +99,12 @@ public class SiteController {
     return "forgot";
   }
 
+  //Remove this entry
+  @RequestMapping(value = "/registered")
+  public String registered(@ModelAttribute("model") ModelMap model) {
+    return "registered";
+  }
+
   @RequestMapping(value = "/register")
   public String register(@ModelAttribute("model") ModelMap model) {
     return "register";
