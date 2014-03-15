@@ -8,7 +8,6 @@ import org.apache.commons.lang.Validate;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.cmd.Query;
 import com.ibiscus.propial.infraestructure.objectify.OfyService;
-import com.ibiscus.propial.web.utils.QueryResults;
 
 public class PublicationRepository {
 

@@ -44,6 +44,7 @@ footer {
 }
 
 .body {
+  min-height: 300px;
 }
 
 .body .container {
@@ -53,7 +54,7 @@ footer {
 
 header .actions {
   float: right;
-  margin: 9px 5px 0 0;
+  margin: 10px 10px 0 0;
 }
 
 .actions a {
@@ -242,13 +243,8 @@ input[type="button"], input[type="submit"], input[type="reset"] {
   border: 1px solid rgba(0, 0, 0, 0);
   color: #222222;
   cursor: pointer;
-  font-size: 14px;
   margin: auto;
   padding: 4px 12px;
-}
-
-form {
-  font-size: 120%;
 }
 
 fieldset {
@@ -261,7 +257,6 @@ legend {
   border-style: none none solid;
   border-width: 0 0 1px;
   color: #333333;
-  font-size: 22px;
   line-height: 40px;
   margin-bottom: 18px;
   width: 100%;
@@ -274,7 +269,6 @@ label {
 
 .field input {
   border: 1px solid #D9D9D9;
-  font-size: 170%;
   padding: 2px 5px;
   width: 99%;
 }
@@ -285,4 +279,23 @@ label {
 
 .buttons {
   margin-top: 15px;
+}
+
+/** Registration form */
+.registration {
+  font-size: 120%;
+}
+
+.registration input[type="button"], .registration input[type="submit"],
+  .registration input[type="reset"] {
+  font-size: 14px;
+}
+
+.registration legend {
+  font-size: 22px;
+  line-height: 40px;
+}
+
+.registration .field input {
+  font-size: 170%;
 }

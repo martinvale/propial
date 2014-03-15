@@ -1,9 +1,13 @@
 package com.ibiscus.propial.web.controller.site;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,7 +16,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.ibiscus.propial.application.business.RegistrationService;
 import com.ibiscus.propial.domain.business.Location;
 import com.ibiscus.propial.domain.business.LocationRepository;
 import com.ibiscus.propial.domain.business.Publication;
@@ -99,12 +105,6 @@ public class SiteController {
     return "forgot";
   }
 
-  //Remove this entry
-  @RequestMapping(value = "/registered")
-  public String registered(@ModelAttribute("model") ModelMap model) {
-    return "registered";
-  }
-
   @RequestMapping(value = "/register")
   public String register(@ModelAttribute("model") ModelMap model) {
     return "register";
@@ -112,6 +112,7 @@ public class SiteController {
 
   @RequestMapping(value = "/register", method = RequestMethod.POST)
   public String register(@ModelAttribute("model") ModelMap model,
+      HttpServletRequest request,
       String username, String password, String rePassword, String name,
       String email) {
     model.put("username", username);
@@ -121,30 +122,59 @@ public class SiteController {
     if (!password.equals(rePassword)) {
       errors.add("Los passwords deben coincidir.");
     }
-    if (userRepository.getUserByEmail(email) != null) {
+    User user = userRepository.getUserByEmail(email);
+    if (user.isEnabled()) {
       errors.add("Ya existe un usuario con este email.");
     }
-    if (userRepository.getUserByUsername(username) != null) {
+    user = userRepository.getUserByUsername(username);
+    if (user.isEnabled()) {
       errors.add("Ya existe un usuario con este username.");
     }
     if (!errors.isEmpty()) {
       model.put("errors", errors);
       return "register";
     }
-    User user = new User(username, password, name, email);
-    userRepository.save(user);
+    RegistrationService service = new RegistrationService(userRepository,
+        getSiteUrl(request));
+    try {
+      service.register(new User(username, password, name, email));
+    } catch (RuntimeException e) {
+      e.printStackTrace();
+      errors.add("Cannot send mail, please try again later");
+      model.put("errors", errors);
+      return "register";
+    }
     return "registered";
   }
 
 
   @RequestMapping(value = "/confirm")
-  public String confirm(@ModelAttribute("model") ModelMap model, Long id,
-      String code) {
-    User user = userRepository.get(id);
+  public String confirm(@ModelAttribute("model") ModelMap model,
+      HttpServletRequest request,
+      @RequestParam String email, @RequestParam String hash) {
+    RegistrationService service = new RegistrationService(userRepository,
+        getSiteUrl(request));
+    User user = userRepository.getUserByEmail(email);
     if (!user.isEnabled()) {
-      user.enable();
-      userRepository.save(user);
+      if (service.confirm(user, hash)) {
+        return "confirmed";
+      }
     }
-    return "confirmed";
+    List<String> errors = new LinkedList<String>();
+    errors.add("Su cuenta no pudo ser verificada, por favor regístrese "
+        + "nuevamente.");
+    model.put("errors", errors);
+    return "register";
+  }
+
+  private String getSiteUrl(final HttpServletRequest request) {
+    String siteUrl = "";
+    try {
+      URL url = new URL(request.getRequestURL().toString());
+      siteUrl = url.getProtocol() + "://" + url.getHost();
+    } catch (MalformedURLException e) {
+      throw new RuntimeException("Cannot extract the site URL", e);
+    }
+    return siteUrl;
   }
 }

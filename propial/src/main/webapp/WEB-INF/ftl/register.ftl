@@ -24,7 +24,7 @@
   </header>
   <div class="body">
     <div class="container clearfix">
-      <form action="register" method="POST">
+      <form action="register" method="POST" class="registration">
         <fieldset>
           <legend>Datos personales</legend>
           <label for="name">Nombre y Apellido (*)</label>

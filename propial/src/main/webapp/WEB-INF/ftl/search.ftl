@@ -91,8 +91,8 @@
     <div class="container">
       <a href="/"><img src="../img/logo.png" alt="Propial" class="logo"></a>
       <div class="actions">
-        <a href="register">Registrarse</a>
-        <a href="login">Identificarse</a>
+        <a href="/register">Registrarse</a>
+        <a href="/login">Identificarse</a>
       </div>
     </div>
   </header>
