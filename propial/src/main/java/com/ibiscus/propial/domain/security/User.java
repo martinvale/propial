@@ -18,11 +18,11 @@ public class User implements Serializable {
   public enum ROLE {
     ADMIN,
     CUSTOMER_ADMIN,
-    PUBLISHER
+    PUBLISHER,
+    REGISTERED
   }
 
   public enum STATUS {
-    NEW,
     ACTIVE,
     INACTIVE
   }
@@ -54,7 +54,7 @@ public class User implements Serializable {
   public User(final Contract theContract) {
     Validate.notNull(theContract, "The contract cannot be null");
 
-    status = STATUS.NEW;
+    status = STATUS.ACTIVE;
     contract = Ref.create(Key.create(Contract.class, theContract.getId()));
   }
 
@@ -76,8 +76,8 @@ public class User implements Serializable {
     password = thePassword;
     displayName = theDisplayName;
     email = theEmail;
-    role = ROLE.PUBLISHER;
-    status = STATUS.NEW;
+    role = ROLE.REGISTERED;
+    status = STATUS.INACTIVE;
   }
 
   /** This constructor is used whenever the login comes from Google.
@@ -179,6 +179,12 @@ public class User implements Serializable {
    */
   public boolean isEnabled() {
     return status == STATUS.ACTIVE;
+  }
+
+  /** The user registration is confirmed. */
+  public void confirm() {
+    status = STATUS.ACTIVE;
+    role = ROLE.PUBLISHER;
   }
 
   /** Enable the user to use the application. */

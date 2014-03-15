@@ -108,7 +108,7 @@ public class RegistrationService {
         bolIsEqual = MessageDigest.isEqual(aNewHash.getBytes(), URLDecoder.decode(hash, "ISO-8859-1").replace(' ', '-').replace('=', '-').getBytes());
       }
       if (bolIsEqual) {
-        user.enable();
+        user.confirm();
         userRepository.save(user);
       }
       return bolIsEqual;

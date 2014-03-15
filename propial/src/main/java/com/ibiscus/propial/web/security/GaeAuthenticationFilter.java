@@ -25,7 +25,7 @@ import com.google.appengine.api.users.UserServiceFactory;
 
 public class GaeAuthenticationFilter extends GenericFilterBean {
 
-  private static final String REGISTRATION_URL = "/register.htm";
+  private static final String REGISTRATION_URL = "/register";
   private AuthenticationDetailsSource ads = new WebAuthenticationDetailsSource();
   private AuthenticationManager authenticationManager;
   private AuthenticationFailureHandler failureHandler = new SimpleUrlAuthenticationFailureHandler();
@@ -47,12 +47,12 @@ public class GaeAuthenticationFilter extends GenericFilterBean {
           // Setup the security context
           SecurityContextHolder.getContext().setAuthentication(authentication);
           // Send new users to the registration page.
-          if (authentication.getAuthorities().contains(com.ibiscus.propial.domain.security.User.ROLE.ADMIN)) {
+          if (authentication.getAuthorities().contains(com.ibiscus.propial.domain.security.User.ROLE.REGISTERED)) {
             ((HttpServletResponse) response).sendRedirect(REGISTRATION_URL);
               return;
           }
         } catch (AuthenticationException e) {
-         // Authentication information was rejected by the authentication manager
+          // Authentication information was rejected by the authentication manager
           failureHandler.onAuthenticationFailure((HttpServletRequest)request, (HttpServletResponse)response, e);
           return;
         }
