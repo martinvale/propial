@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.ibiscus.propial.application.business.RegistrationService;
 import com.ibiscus.propial.domain.business.Location;
 import com.ibiscus.propial.domain.business.LocationRepository;
@@ -53,6 +55,15 @@ public class SiteController {
     List<Publication> publications = publicationRepository.find(0,
         PAGE_SIZE, "creation", false, filters);
     model.addAttribute("publications", publications);
+    UserService userService = UserServiceFactory.getUserService();
+    model.addAttribute("loginurl", userService.createLoginURL("/"));
+    model.addAttribute("logouturl", userService.createLogoutURL("/"));
+    com.google.appengine.api.users.User googleUser = userService
+        .getCurrentUser();
+    if (googleUser != null) {
+      User user = userRepository.findByEmail(googleUser.getEmail());
+      model.addAttribute("user", user);
+    }
     return "home";
   }
 
@@ -122,11 +133,11 @@ public class SiteController {
     if (!password.equals(rePassword)) {
       errors.add("Los passwords deben coincidir.");
     }
-    User user = userRepository.getUserByEmail(email);
+    User user = userRepository.findByEmail(email);
     if (user.isEnabled()) {
       errors.add("Ya existe un usuario con este email.");
     }
-    user = userRepository.getUserByUsername(username);
+    user = userRepository.findByUsername(username);
     if (user.isEnabled()) {
       errors.add("Ya existe un usuario con este username.");
     }
@@ -154,7 +165,7 @@ public class SiteController {
       @RequestParam String email, @RequestParam String hash) {
     RegistrationService service = new RegistrationService(userRepository,
         getSiteUrl(request));
-    User user = userRepository.getUserByEmail(email);
+    User user = userRepository.findByEmail(email);
     if (!user.isEnabled()) {
       if (service.confirm(user, hash)) {
         return "confirmed";

@@ -9,6 +9,7 @@
     <meta name="keywords" content="avisos, inmobiliaria, casas, departamentos, locales, alquiler, compra, venta">
 
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
     <link rel="stylesheet" href="/css/detail.css">
 
     <link rel="stylesheet" href="/css/jquery-ui/jquery-ui.css">

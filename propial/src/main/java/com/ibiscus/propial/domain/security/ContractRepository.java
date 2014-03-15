@@ -6,7 +6,6 @@ import org.apache.commons.lang.Validate;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.cmd.LoadType;
 import com.googlecode.objectify.cmd.Query;
 import com.ibiscus.propial.infraestructure.objectify.OfyService;
 import com.ibiscus.propial.web.utils.QueryResults;

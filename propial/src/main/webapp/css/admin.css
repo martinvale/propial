@@ -4,9 +4,9 @@ ul {
   margin: 0;
 }
 
-.header .x-panel-body-default {
+.header {
   background-color: #404040;
-  padding-top: 5px;
+  padding-top: 7px;
 }
 
 .header a {
@@ -18,6 +18,11 @@ ul {
 
 .header a:hover {
   color: #FFFFFF;
+}
+
+.header .actions {
+  color: #FFFFFF;
+  float: right;
 }
 
 .image-gallery .thumb-wrap {

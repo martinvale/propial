@@ -25,7 +25,7 @@ public class GoogleAccountsAuthenticationProvider implements
     com.google.appengine.api.users.User googleUser
         = (com.google.appengine.api.users.User) authentication.getPrincipal();
 
-    User user = userRepository.findByUsername(googleUser.getEmail());
+    User user = userRepository.findByEmail(googleUser.getEmail());
 
     if (user == null) {
         // User not in registry. Needs to register

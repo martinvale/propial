@@ -57,6 +57,10 @@ header .actions {
   margin: 10px 10px 0 0;
 }
 
+.logged {
+  margin-right: 10px;
+}
+
 .actions a {
   margin: 0 0 0 3px;
 }

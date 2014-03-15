@@ -9,6 +9,7 @@
     <meta name="keywords" content="avisos, inmobiliaria, casas, departamentos, locales, alquiler, compra, venta">
 
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="css/index.css">
 
     <link rel="stylesheet" href="css/jquery-ui/jquery-ui.css">
@@ -51,15 +52,7 @@
 
 </head>
 <body>
-  <header>
-    <div class="container">
-      <a href="/"><img src="img/logo.png" alt="Propial" class="logo"></a>
-      <div class="actions">
-        <a href="register">Registrarse</a>
-        <a href="login">Identificarse</a>
-      </div>
-    </div>
-  </header>
+  <#include "header.ftl" />
   <div class="body">
     <div class="container clearfix">
       <div class="search js-location-search">
@@ -113,7 +106,5 @@
       </div>
     </div>
   </div>
-  <footer>
-    <div class="copy">Copyright © 2014</div>
-  </footer>
+  <#include "footer.ftl" />
 </body>

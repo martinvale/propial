@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.ibiscus.propial.application.business.PublicationDto;
 import com.ibiscus.propial.domain.business.Location;
 import com.ibiscus.propial.domain.business.LocationRepository;
@@ -35,6 +37,7 @@ import com.ibiscus.propial.domain.security.ContractRepository;
 import com.ibiscus.propial.domain.security.User;
 import com.ibiscus.propial.domain.security.UserRepository;
 import com.ibiscus.propial.domain.services.FilterService;
+import com.ibiscus.propial.infraestructure.objectify.OfyService;
 import com.ibiscus.propial.web.utils.Packet;
 import com.ibiscus.propial.web.utils.QueryResults;
 
@@ -117,6 +120,16 @@ public class PublicationController {
     if (contractId != null) {
       Contract contract = contractRepository.get(contractId);
       filters.put("contract", contract);
+    } else {
+      UserService userService = UserServiceFactory.getUserService();
+      com.google.appengine.api.users.User googleUser = userService
+          .getCurrentUser();
+      if (googleUser != null) {
+        User user = usersRepository.findByEmail(googleUser.getEmail());
+        if (!user.getRole().equals(User.ROLE.ADMIN)) {
+          filters.put("contract", user.getContract());
+        }
+      }
     }
     if (locationId != null) {
       Location location = locationRepository.get(locationId);

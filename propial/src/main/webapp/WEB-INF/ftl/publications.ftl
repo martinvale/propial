@@ -1,33 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
+  <#include "admin/commons.ftl" />
 
-    <title>Propial Admin</title>
+  <script type="text/javascript">
 
-    <link rel="stylesheet" href="/extjs/resources/css/ext-all.css">
-    <link rel="stylesheet" href="/css/admin.css">
+    Ext.onReady(function() {
+      Ext.Loader.setConfig({
+        enabled: true,
+        paths: {
+          'Propial': '../app'
+        }
+      });
 
-    <script type="text/javascript" src="/extjs/ext-all-debug.js"></script>
-
-    <script type="text/javascript">
-
-      Ext.onReady(function() {
-        Ext.Loader.setConfig({
-          enabled: true,
-          paths: {
-            'Propial': '../app'
-          }
-        });
-
-        Ext.create('Propial.view.PublicationViewport', {
-          uploadUrl: '${model["uploadUrl"]}'
-        });
-      })
-    </script>
+      Ext.create('Propial.view.PublicationViewport', {
+        uploadUrl: '${model["uploadUrl"]}'
+      });
+    })
+  </script>
 
 </head>
 <body>
-
+  <#include "admin/header.ftl" />
 </body>
 </html>

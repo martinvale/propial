@@ -13,7 +13,7 @@ Ext.define('Propial.view.form.field.ComboContracts', {
     this.store = Ext.create('Propial.store.Contracts', {
       listeners: {
         load: function (store, records, succesful, opts) {
-          if (records.length > 0) {
+          if (records.length > 1) {
             var allContracts = Ext.create('Propial.model.Contract', {
               id: -1,
               name: 'Todos'
@@ -22,6 +22,7 @@ Ext.define('Propial.view.form.field.ComboContracts', {
             me.setValue(-1);
           } else {
             me.setValue(records[0].get('id'));
+            me.disable();
           }
         }
       }

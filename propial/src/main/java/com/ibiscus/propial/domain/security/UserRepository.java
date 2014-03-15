@@ -1,9 +1,12 @@
 package com.ibiscus.propial.domain.security;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.lang.Validate;
 
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.cmd.Query;
 import com.ibiscus.propial.infraestructure.objectify.OfyService;
@@ -37,22 +40,43 @@ public class UserRepository {
     if (start > 0) {
       query = query.offset(start);
     }
-    List<User> users = query.list();
-    int size = OfyService.ofy().load().type(User.class).count();
+
+    List<User> users = new LinkedList<User>();
+    int size = 0;
+    UserService userService = UserServiceFactory.getUserService();
+    com.google.appengine.api.users.User googleUser = userService
+        .getCurrentUser();
+    if (googleUser != null) {
+      User user = findByEmail(googleUser.getEmail());
+      if (user.getRole().equals(User.ROLE.ADMIN)
+          || user.getRole().equals(User.ROLE.CUSTOMER_ADMIN)) {
+        if (user.getRole().equals(User.ROLE.CUSTOMER_ADMIN)) {
+          query = query.filter("contract", user.getContract());
+        }
+        users = query.list();
+        size = OfyService.ofy().load().type(User.class).count();
+      }
+    }
     return new QueryResults<User>(users, size);
   }
 
-  public User getUserByEmail(final String theEmail) {
+  public User findByEmail(final String theEmail) {
     Validate.notNull(theEmail, "The email cannot be null");
     Query<User> query = OfyService.ofy().load().type(User.class);
     query = query.filter("email", theEmail);
     return query.first().now();
   }
 
-  public User getUserByUsername(final String theUsername) {
-    Validate.notNull(theUsername, "The username cannot be null");
+  /** Finds a user in the repository with the specified username.
+   *
+   * @param username The username of the user to find, cannot be null.
+   * @return The user whose username match, null if do not find any user with
+   *  that username.
+   */
+  public User findByUsername(final String username) {
+    Validate.notNull(username, "The username cannot be null");
     Query<User> query = OfyService.ofy().load().type(User.class);
-    query = query.filter("username", theUsername);
+    query = query.filter("username", username);
     return query.first().now();
   }
 
@@ -65,18 +89,6 @@ public class UserRepository {
   public User findByGoogleId(final String googleId) {
     User user = OfyService.ofy().load().type(User.class)
         .filter("googleId", googleId).first().now();
-    return user;
-  }
-
-  /** Finds a user in the repository with the specified username.
-   *
-   * @param username The username of the user to find, cannot be null.
-   * @return The user whose username match, null if do not find any user with
-   *  that username.
-   */
-  public User findByUsername(final String username) {
-    User user = OfyService.ofy().load().type(User.class)
-        .filter("email", username).first().now();
     return user;
   }
 }
