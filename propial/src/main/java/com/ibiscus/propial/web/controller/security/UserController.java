@@ -29,7 +29,7 @@ public class UserController {
   private ContractRepository contractsRepository;
 
   @RequestMapping(value = "/save", method = RequestMethod.GET)
-  public @ResponseBody User save(Long id, String username, String password,
+  public @ResponseBody User save(Long id, String username,
       String displayName, String email, String role, Long contractId,
       boolean enabled) {
     User user;
@@ -47,7 +47,7 @@ public class UserController {
       user = new User(contract);
     }
     User.ROLE userRole = User.ROLE.valueOf(role);
-    user.update(username, password, displayName, email, userRole);
+    user.update(displayName, userRole);
     if (enabled) {
       user.enable();
     } else {

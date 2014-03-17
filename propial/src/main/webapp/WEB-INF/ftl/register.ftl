@@ -13,15 +13,8 @@
     <title>Propial</title>
 </head>
 <body>
-  <header>
-    <div class="container">
-      <a href="/"><img src="img/logo.png" alt="Propial" class="logo"></a>
-      <div class="actions">
-        <a href="register">Registrarse</a>
-        <a href="login">Identificarse</a>
-      </div>
-    </div>
-  </header>
+  <#include "header.ftl" />
+
   <div class="body">
     <div class="container clearfix">
       <form action="register" method="POST" class="registration">
@@ -30,22 +23,6 @@
           <label for="name">Nombre y Apellido (*)</label>
           <div class="field">
             <input id="name" type="text" name="name" required="required" value="${model["name"]!""}" />
-          </div>
-          <label for="username">Usuario (*)</label>
-          <div class="field">
-            <input id="username" type="text" name="username" required="required" value="${model["username"]!""}" />
-          </div>
-          <label for="email">Email (*)</label>
-          <div class="field">
-            <input id="email" type="email" name="email" required="required" value="${model["email"]!""}"/>
-          </div>
-          <label for="password">Password (*)</label>
-          <div class="field">
-            <input id="password" type="password" name="password" required="required" />
-          </div>
-          <label for="rePassword">Reingrese la password (*)</label>
-          <div class="field">
-            <input id="rePassword" type="password" name="rePassword" required="required" />
           </div>
           <p>Los campos con * son obligatorios</p>
         </fieldset>
@@ -62,7 +39,6 @@
       </form>
     </div>
   </div>
-  <footer>
-    <div class="copy">Copyright © 2014</div>
-  </footer>
+
+  <#include "footer.ftl" />
 </body>

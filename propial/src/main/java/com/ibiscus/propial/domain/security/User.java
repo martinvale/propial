@@ -19,7 +19,7 @@ public class User implements Serializable {
     ADMIN,
     CUSTOMER_ADMIN,
     PUBLISHER,
-    REGISTERED
+    UNREGISTERED
   }
 
   public enum STATUS {
@@ -33,9 +33,7 @@ public class User implements Serializable {
   @Index
   private String googleId;
 
-  @Index
-  private String username;
-  private String password;
+  private String nickname;
 
   @Index
   private String displayName;
@@ -58,61 +56,52 @@ public class User implements Serializable {
     contract = Ref.create(Key.create(Contract.class, theContract.getId()));
   }
 
-  /** This constructor is used whenever a user registers from the public site.
-   *
-   * @param theUsername
-   * @param thePassword
-   * @param theDisplayName
-   * @param theEmail
-   */
-  public User(final String theUsername, final String thePassword,
-      final String theDisplayName, final String theEmail) {
-    Validate.notNull(theUsername, "The username cannot be null");
-    Validate.notNull(thePassword, "The password cannot be null");
-    Validate.notNull(theDisplayName, "The display name cannot be null");
-    Validate.notNull(theEmail, "The email cannot be null");
-
-    username = theUsername;
-    password = thePassword;
-    displayName = theDisplayName;
-    email = theEmail;
-    role = ROLE.REGISTERED;
-    status = STATUS.INACTIVE;
-  }
-
   /** This constructor is used whenever the login comes from Google.
    *
-   * @param theId
-   * @param theUsername
-   * @param thePassword
-   * @param theDisplayName
+   * @param theGoogleId
+   * @param theNickname
    * @param theEmail
-   * @param theRole
    */
-  public User(final String theGoogleId, final String theUsername,
+  public User(final String theGoogleId, final String theNickname,
       final String theEmail) {
     Validate.notNull(theGoogleId, "The Google id cannot be null");
-    Validate.notNull(theUsername, "The username cannot be null");
+    Validate.notNull(theNickname, "The nickname cannot be null");
     Validate.notNull(theEmail, "The email cannot be null");
 
     googleId = theGoogleId;
-    username = theUsername;
+    nickname = theNickname;
     email = theEmail;
+    role = ROLE.UNREGISTERED;
+    status = STATUS.ACTIVE;
   }
 
-  public void update(final String theUsername, final String thePassword,
-      final String theDisplayName, final String theEmail,
-      final ROLE theRole) {
-    Validate.notNull(theUsername, "The username cannot be null");
-    Validate.notNull(thePassword, "The password cannot be null");
-    Validate.notNull(theDisplayName, "The display name cannot be null");
+  /** This constructor is used when the user is registered.
+   *
+   * @param theGoogleId
+   * @param theNickname
+   * @param theEmail
+   * @param theDisplayName
+   */
+  public User(final String theGoogleId, final String theNickname,
+      final String theEmail, String theDisplayName) {
+    Validate.notNull(theGoogleId, "The Google id cannot be null");
+    Validate.notNull(theNickname, "The nickname cannot be null");
     Validate.notNull(theEmail, "The email cannot be null");
+
+    googleId = theGoogleId;
+    nickname = theNickname;
+    email = theEmail;
+    displayName = theDisplayName;
+    role = ROLE.PUBLISHER;
+    status = STATUS.ACTIVE;
+  }
+
+  public void update(final String theDisplayName,
+      final ROLE theRole) {
+    Validate.notNull(theDisplayName, "The display name cannot be null");
     Validate.notNull(theRole, "role");
 
-    username = theUsername;
-    password = thePassword;
     displayName = theDisplayName;
-    email = theEmail;
     role = theRole;
   }
 
@@ -122,6 +111,10 @@ public class User implements Serializable {
 
   public long getId() {
     return id;
+  }
+
+  public String getGoogleId() {
+    return googleId;
   }
 
   public Contract getContract() {
@@ -136,18 +129,8 @@ public class User implements Serializable {
     return displayName;
   }
 
-  /**
-   * @return the username
-   */
-  public String getUsername() {
-    return username;
-  }
-
-  /**
-   * @return the password
-   */
-  public String getPassword() {
-    return password;
+  public String getNickname() {
+    return nickname;
   }
 
   /**

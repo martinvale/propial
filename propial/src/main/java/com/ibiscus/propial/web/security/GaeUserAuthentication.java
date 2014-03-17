@@ -16,10 +16,12 @@ public class GaeUserAuthentication implements Authentication {
 
   private final User user;
   private final Object details;
+  private boolean authenticated;
 
   public GaeUserAuthentication(final User theUser, final Object theDetails) {
     user = theUser;
     details = theDetails;
+    authenticated = true;
   }
 
   public String getName() {
@@ -33,7 +35,7 @@ public class GaeUserAuthentication implements Authentication {
   }
 
   public Object getCredentials() {
-    return null;
+    return new UnsupportedOperationException();
   }
 
   public Object getDetails() {
@@ -45,10 +47,11 @@ public class GaeUserAuthentication implements Authentication {
   }
 
   public boolean isAuthenticated() {
-    return false;
+    return authenticated;
   }
 
-  public void setAuthenticated(boolean arg0) throws IllegalArgumentException {
+  public void setAuthenticated(final boolean isAuthenticated) {
+    authenticated = isAuthenticated;
   }
 
 }

@@ -1,15 +1,9 @@
 package com.ibiscus.propial.web.security;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.authentication.preauth
     .PreAuthenticatedAuthenticationToken;
 
@@ -26,21 +20,17 @@ public class GoogleAccountsAuthenticationProvider implements
         = (com.google.appengine.api.users.User) authentication.getPrincipal();
 
     User user = userRepository.findByEmail(googleUser.getEmail());
-
     if (user == null) {
-        // User not in registry. Needs to register
-        user = new User(googleUser.getUserId(), googleUser.getNickname(),
-            googleUser.getEmail());
+      // User not in registry. Needs to register
+      user = new User(googleUser.getUserId(), googleUser.getNickname(),
+          googleUser.getEmail());
     }
 
     if (!user.isEnabled()) {
-        throw new DisabledException("Account is disabled");
+      throw new DisabledException("Account is disabled");
     }
 
-    List<GrantedAuthority> roles = new ArrayList<GrantedAuthority>();
-    roles.add(new SimpleGrantedAuthority(user.getRole().toString()));
-    return new UsernamePasswordAuthenticationToken(user,
-        authentication.getDetails(), roles);
+    return new GaeUserAuthentication(user, authentication.getDetails());
   }
 
   public final boolean supports(Class<?> authentication) {

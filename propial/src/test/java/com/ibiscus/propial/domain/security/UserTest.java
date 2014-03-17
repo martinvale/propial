@@ -36,13 +36,9 @@ public class UserTest {
   @Test
   public void update() {
     User user = new User(contract);
-    user.update("juanperez", "pass", "Juan Perez", "juan@gmail.com",
-        User.ROLE.CUSTOMER_ADMIN);
+    user.update("Juan Perez", User.ROLE.CUSTOMER_ADMIN);
     assertThat(user.getContract().getId(), is(contract.getId()));
-    assertThat(user.getUsername(), is("juanperez"));
-    assertThat(user.getPassword(), is("pass"));
     assertThat(user.getDisplayName(), is("Juan Perez"));
-    assertThat(user.getEmail(), is("juan@gmail.com"));
     assertThat(user.getRole(), is(User.ROLE.CUSTOMER_ADMIN));
 
     user.updatePicture("http://picture.com");

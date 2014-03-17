@@ -6,27 +6,18 @@ Ext.define('Propial.view.form.UserForm', {
   bodyPadding: 5,
   items: [
     {
+      name: 'email',
+      fieldLabel: 'Email',
+      disabled: true
+    }, {
       name: 'displayName',
       fieldLabel: 'Nombre',
-      allowBlank: false
-    }, {
-      name: 'username',
-      fieldLabel: 'Usuario',
-      allowBlank: false
-    }, {
-      name: 'password',
-      fieldLabel: 'Password',
-      inputType: 'password',
       allowBlank: false
     }, {
       name: 'enabled',
       fieldLabel: 'Habilitado',
       xtype: 'checkbox',
       inputValue: 'true'
-    }, {
-      name: 'email',
-      fieldLabel: 'Email',
-      allowBlank: false
     }, {
       name: 'role',
       fieldLabel: 'Rol',

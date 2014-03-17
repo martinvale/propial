@@ -40,7 +40,7 @@ public class RegistrationService {
 
   private String getUserHash (final User user, final int expiration) throws NoSuchAlgorithmException, UnsupportedEncodingException {
     final StringBuilder stringBuilder = new StringBuilder();
-    stringBuilder.append(user.getUsername());
+    stringBuilder.append(user.getNickname());
     stringBuilder.append(user.getDisplayName());
     stringBuilder.append(user.getEmail());
     Calendar aCalendar = Calendar.getInstance();
@@ -68,11 +68,8 @@ public class RegistrationService {
     Session session = Session.getDefaultInstance(props, null);
     try {
       //Prepare the body of the message
-      String url = siteUrl + "/confirm?email=" + user.getEmail() + "&hash="
-          + getUserHash(user, 3);
       String msgBody = "Bienvenido!<br>";
-      msgBody += "Haga click en el siguiente link para confirmar su cuenta de email:<br>";
-      msgBody += "<a href=\"" + url + "\">" + url + "<\\a><br>";
+      msgBody += "Ya puede comenzar a usar su cuenta.";
 
       Message msg = new MimeMessage(session);
       msg.setFrom(new InternetAddress(NO_REPLY_ADDRESS,
@@ -87,8 +84,6 @@ public class RegistrationService {
     } catch (MessagingException e) {
       throw new RuntimeException("Cannot send mail", e);
     } catch (UnsupportedEncodingException e) {
-      throw new RuntimeException("Cannot send mail", e);
-    } catch (NoSuchAlgorithmException e) {
       throw new RuntimeException("Cannot send mail", e);
     }
     userRepository.save(user);

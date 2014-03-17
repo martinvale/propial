@@ -9,7 +9,9 @@
 
   <security:http use-expressions="true" entry-point-ref="gaeEntryPoint">
     <security:intercept-url pattern="/" access="permitAll" />
-    <security:intercept-url pattern="/admin/**" access="hasAnyRole('ADMIN', 'CUSTOMER_ADMIN')" />
+    <security:intercept-url pattern="/logout" access="permitAll" />
+    <security:intercept-url pattern="/register" access="hasAnyRole('UNREGISTERED')" />
+    <security:intercept-url pattern="/admin/**" access="hasAnyRole('ADMIN', 'CUSTOMER_ADMIN', 'PUBLISHER')" />
     <security:custom-filter position="PRE_AUTH_FILTER" ref="gaeFilter" />
   </security:http>
 
@@ -17,6 +19,15 @@
 
   <bean id="gaeFilter" class="com.ibiscus.propial.web.security.GaeAuthenticationFilter">
     <property name="authenticationManager" ref="authenticationManager"/>
+    <property name="failureHandler">
+      <bean class="org.springframework.security.web.authentication.ExceptionMappingAuthenticationFailureHandler">
+        <property name="exceptionMappings">
+            <map>
+              <entry key="org.springframework.security.authentication.DisabledException" value="/disabled" />
+            </map>
+        </property>
+      </bean>
+    </property>
   </bean>
 
   <security:authentication-manager alias="authenticationManager">

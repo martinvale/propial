@@ -1,5 +1,6 @@
 package com.ibiscus.propial.web.controller.site;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
@@ -8,15 +9,18 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -55,14 +59,15 @@ public class SiteController {
     List<Publication> publications = publicationRepository.find(0,
         PAGE_SIZE, "creation", false, filters);
     model.addAttribute("publications", publications);
-    UserService userService = UserServiceFactory.getUserService();
-    model.addAttribute("loginurl", userService.createLoginURL("/"));
-    model.addAttribute("logouturl", userService.createLogoutURL("/"));
-    com.google.appengine.api.users.User googleUser = userService
-        .getCurrentUser();
-    if (googleUser != null) {
-      User user = userRepository.findByEmail(googleUser.getEmail());
-      model.addAttribute("user", user);
+
+    Authentication authentication = SecurityContextHolder.getContext()
+        .getAuthentication();
+    if (authentication != null
+        && !(authentication instanceof AnonymousAuthenticationToken)) {
+      User user = (User) authentication.getPrincipal();
+      if (!user.getRole().equals(User.ROLE.UNREGISTERED)) {
+        model.addAttribute("user", user);
+      }
     }
     return "home";
   }
@@ -111,11 +116,6 @@ public class SiteController {
     return "detail";
   }
 
-  @RequestMapping(value = "/forgot")
-  public String forgot(@ModelAttribute("model") ModelMap model) {
-    return "forgot";
-  }
-
   @RequestMapping(value = "/register")
   public String register(@ModelAttribute("model") ModelMap model) {
     return "register";
@@ -124,23 +124,13 @@ public class SiteController {
   @RequestMapping(value = "/register", method = RequestMethod.POST)
   public String register(@ModelAttribute("model") ModelMap model,
       HttpServletRequest request,
-      String username, String password, String rePassword, String name,
-      String email) {
-    model.put("username", username);
+      String name) {
     model.put("name", name);
-    model.put("email", email);
     List<String> errors = new LinkedList<String>();
-    if (!password.equals(rePassword)) {
-      errors.add("Los passwords deben coincidir.");
-    }
-    User user = userRepository.findByEmail(email);
-    if (user.isEnabled()) {
-      errors.add("Ya existe un usuario con este email.");
-    }
-    user = userRepository.findByUsername(username);
-    if (user.isEnabled()) {
-      errors.add("Ya existe un usuario con este username.");
-    }
+
+    Authentication authentication = SecurityContextHolder.getContext()
+        .getAuthentication();
+    User user = (User) authentication.getPrincipal();
     if (!errors.isEmpty()) {
       model.put("errors", errors);
       return "register";
@@ -148,34 +138,26 @@ public class SiteController {
     RegistrationService service = new RegistrationService(userRepository,
         getSiteUrl(request));
     try {
-      service.register(new User(username, password, name, email));
+      user.update(name, User.ROLE.PUBLISHER);
+      service.register(user);
     } catch (RuntimeException e) {
       e.printStackTrace();
       errors.add("Cannot send mail, please try again later");
       model.put("errors", errors);
       return "register";
     }
-    return "registered";
+    return "redirect:/admin/";
   }
 
+  @RequestMapping(value = "/logout")
+  public void logout(HttpServletRequest request, HttpServletResponse response)
+      throws IOException {
+    SecurityContextHolder.clearContext();
+    request.getSession().invalidate();
 
-  @RequestMapping(value = "/confirm")
-  public String confirm(@ModelAttribute("model") ModelMap model,
-      HttpServletRequest request,
-      @RequestParam String email, @RequestParam String hash) {
-    RegistrationService service = new RegistrationService(userRepository,
-        getSiteUrl(request));
-    User user = userRepository.findByEmail(email);
-    if (!user.isEnabled()) {
-      if (service.confirm(user, hash)) {
-        return "confirmed";
-      }
-    }
-    List<String> errors = new LinkedList<String>();
-    errors.add("Su cuenta no pudo ser verificada, por favor regístrese "
-        + "nuevamente.");
-    model.put("errors", errors);
-    return "register";
+    UserService userService = UserServiceFactory.getUserService();
+    String logoutUrl = userService.createLogoutURL("/");
+    response.sendRedirect(logoutUrl);
   }
 
   private String getSiteUrl(final HttpServletRequest request) {
