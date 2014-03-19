@@ -19,6 +19,8 @@ import javax.mail.internet.MimeMessage;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.Validate;
 
+import com.ibiscus.propial.domain.security.Contract;
+import com.ibiscus.propial.domain.security.ContractRepository;
 import com.ibiscus.propial.domain.security.User;
 import com.ibiscus.propial.domain.security.UserRepository;
 
@@ -28,13 +30,19 @@ public class RegistrationService {
 
   private final UserRepository userRepository;
 
+  private final ContractRepository contractRepository;
+
   private final String siteUrl;
 
   public RegistrationService(final UserRepository theUserRepository,
+      final ContractRepository theContractRepository,
       final String theSiteUrl) {
     Validate.notNull(theUserRepository, "The user repository cannot be null");
+    Validate.notNull(theContractRepository, "The contract repository cannot be "
+        + "null");
     Validate.notNull(theSiteUrl, "The URL of the site cannot be null");
     userRepository = theUserRepository;
+    contractRepository = theContractRepository;
     siteUrl = theSiteUrl;
   }
 
@@ -63,7 +71,7 @@ public class RegistrationService {
     return code;
   }
 
-  public void register(final User user) {
+  public void register(final User user, final Contract contract) {
     Properties props = new Properties();
     Session session = Session.getDefaultInstance(props, null);
     try {
@@ -86,6 +94,10 @@ public class RegistrationService {
     } catch (UnsupportedEncodingException e) {
       throw new RuntimeException("Cannot send mail", e);
     }
+    long contractId = contractRepository.save(contract);
+    Contract userContract = new Contract(contractId, contract.getType(),
+        contract.getName());
+    user.updateContract(userContract);
     userRepository.save(user);
   }
 

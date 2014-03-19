@@ -1,5 +1,6 @@
 package com.ibiscus.propial.domain.security;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.Validate;
@@ -17,13 +18,17 @@ public class ContractRepository {
   }
 
   public QueryResults<Contract> find(final int start, final int limit) {
+    User user = (User) SecurityContextHolder.getContext().getAuthentication()
+        .getPrincipal();
+    if (!user.getRole().equals(User.ROLE.CUSTOMER_ADMIN)
+        && !user.getRole().equals(User.ROLE.ADMIN)) {
+      return new QueryResults<Contract>(new ArrayList<Contract>(), 0);
+    }
     Query<Contract> query = OfyService.ofy().load().type(Contract.class)
         .limit(limit).order("name");
     if (start > 0) {
       query = query.offset(start);
     }
-    User user = (User) SecurityContextHolder.getContext().getAuthentication()
-        .getPrincipal();
     if (user.getRole().equals(User.ROLE.CUSTOMER_ADMIN)) {
       query = query.filter("id", user.getContract().getId());
     }

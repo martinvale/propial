@@ -6,6 +6,7 @@ Ext.define('Propial.view.form.PublicationForm', {
     'Propial.view.window.LocationSelectorWindow'
   ],
   alias: 'widget.publicationform',
+  autoScroll: true,
   defaultType: 'textfield',
   border: false,
   bodyPadding: 5,
@@ -135,6 +136,7 @@ Ext.define('Propial.view.form.PublicationForm', {
           var form = me.form;
           if (form.isValid()) {
             var publication = form.getValues();
+            delete publication['locationPath'];
             if (me.objectId) {
               publication.id = me.objectId;
             }
@@ -176,26 +178,36 @@ Ext.define('Propial.view.form.PublicationForm', {
     this.addEvents ('onSaved', 'onClosed');
     this.callParent();
   },
-  loadPublication: function (publication) {
+  loadPublication: function (id) {
+    var formPanel = this;
     var form = this.getForm();
     form.reset();
-    form.loadRecord(publication);
 
-    var locations = publication.locations();
-    if (locations) {
-      var location = locations.first();
-      if (location) {
-        var locationField = this.down('locationfield');
-        locationField.setSelected(location);
-      }
+    this.objectId = id;
+    if (id) {
+      var model = Ext.ModelMgr.getModel('Propial.model.Publication');
+      model.load(id, {
+        success: function(publication) {
+          form.loadRecord(publication);
+
+          var locations = publication.locations();
+          if (locations) {
+            var location = locations.first();
+            if (location) {
+              var locationField = formPanel.down('locationfield');
+              locationField.setSelected(location);
+            }
+          }
+
+          var panAmbientes = formPanel.down('#ambientes');
+          publication.ambients().each(function (ambient) {
+            var newField = Ext.create('Propial.view.form.field.Ambient', {
+              data: ambient
+            });
+            panAmbientes.insert(0, newField);
+          });
+        }
+      });    
     }
-
-    var panAmbientes = this.down('#ambientes');
-    publication.ambients().each(function (ambient) {
-      var newField = Ext.create('Propial.view.form.field.Ambient', {
-        data: ambient
-      });
-      panAmbientes.insert(0, newField);
-    });
   }
 });

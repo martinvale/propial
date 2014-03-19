@@ -43,6 +43,16 @@ public class AdminController {
     return "publications";
   }
 
+  @RequestMapping(value = "publish")
+  public String publish(@ModelAttribute("model") ModelMap model) {
+    addContext(model);
+    model.put("publish", "true");
+    BlobstoreService service = BlobstoreServiceFactory.getBlobstoreService();
+    model.put("uploadUrl", service.createUploadUrl(
+        "/services/publications/upload"));
+    return "publications";
+  }
+
   @RequestMapping(value = "locations")
   public ModelAndView locations(@ModelAttribute("model") ModelMap model) {
     addContext(model);

@@ -60,7 +60,7 @@ Ext.define('Propial.view.grid.UsersList', {
         }
       }, {
         xtype: 'button',
-        text: 'Borrar contrato',
+        text: 'Borrar usuario',
         handler: function () {
           var selections = me.getSelectionModel().getSelection();
           if (selections.length > 0) {

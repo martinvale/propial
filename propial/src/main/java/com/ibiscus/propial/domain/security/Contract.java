@@ -16,6 +16,11 @@ public class Contract implements Serializable {
    */
   private static final long serialVersionUID = 1L;
 
+  public enum TYPE {
+    USER,
+    REALSTATE
+  }
+
   @Id
   private Long id;
 
@@ -25,20 +30,24 @@ public class Contract implements Serializable {
   private String telephone;
   private String email;
   private String logo;
+  private TYPE type;
 
   /** Default constructor. */
-  Contract() {
-  }
+  Contract() {}
 
-  public Contract(final long theId, final String theName) {
+  public Contract(final long theId, final TYPE theType, final String theName) {
     Validate.isTrue(theId > 0, "The id must be greater than 0");
+    Validate.notNull(theType, "The type cannot be null");
     Validate.notNull(theName, "The name cannot be null");
     id = theId;
+    type = theType;
     name = theName;
   }
 
-  public Contract(final String theName) {
+  public Contract(final TYPE theType, final String theName) {
+    Validate.notNull(theType, "The type cannot be null");
     Validate.notNull(theName, "The name cannot be null");
+    type = theType;
     name = theName;
   }
 
@@ -52,6 +61,10 @@ public class Contract implements Serializable {
 
   public long getId() {
     return id;
+  }
+
+  public TYPE getType() {
+    return type;
   }
 
   public String getName() {

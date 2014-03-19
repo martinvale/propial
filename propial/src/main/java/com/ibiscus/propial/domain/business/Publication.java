@@ -77,6 +77,12 @@ public class Publication implements Serializable {
 
   Publication() {}
 
+  public Publication(final User theAuthor) {
+    Validate.notNull(theAuthor, "The author cannot be null");
+    creation = new Date();
+    author = Ref.create(Key.create(User.class, theAuthor.getId()));
+  }
+
   public Publication(final Contract theContract, final User theAuthor) {
     Validate.notNull(theContract, "The contract cannot be null");
     Validate.notNull(theAuthor, "The author cannot be null");

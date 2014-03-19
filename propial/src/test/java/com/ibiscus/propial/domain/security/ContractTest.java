@@ -10,9 +10,10 @@ public class ContractTest {
 
   @Test
   public void constructor() {
-    Contract contract = new Contract(10l, "nombre");
+    Contract contract = new Contract(10l, Contract.TYPE.REALSTATE, "nombre");
     assertThat(contract.getId(), is(10l));
     assertThat(contract.getName(), is("nombre"));
+    assertThat(contract.getType(), is(Contract.TYPE.REALSTATE));
     assertNull(contract.getAddress());
     assertNull(contract.getTelephone());
     assertNull(contract.getEmail());
@@ -21,10 +22,11 @@ public class ContractTest {
 
   @Test
   public void update() {
-    Contract contract = new Contract(10l, "nombre");
+    Contract contract = new Contract(10l, Contract.TYPE.REALSTATE, "nombre");
     contract.update("address", "4545", "email@email.com", "logo");
     assertThat(contract.getId(), is(10l));
     assertThat(contract.getName(), is("nombre"));
+    assertThat(contract.getType(), is(Contract.TYPE.REALSTATE));
     assertThat(contract.getAddress(), is("address"));
     assertThat(contract.getTelephone(), is("4545"));
     assertThat(contract.getEmail(), is("email@email.com"));

@@ -13,9 +13,11 @@ Ext.define('Propial.view.form.field.Location', {
     }
     this.items = [
       {
-        xtype: 'displayfield',
+        xtype: 'textfield',
+        name: 'locationPath',
         value: location,
-        frame: true,
+        allowBlank: false,
+        readOnly: true,
         width: 200
       }, {
         xtype: 'hidden',
@@ -47,7 +49,7 @@ Ext.define('Propial.view.form.field.Location', {
     var fieldValues = this.query('hidden');
     fieldValues[0].setValue(value.get('id'));
 
-    fieldValues = this.query('displayfield');
+    fieldValues = this.query('textfield');
     var path = value.get('name');
     var parent = value.get('parent');
     while (parent) {

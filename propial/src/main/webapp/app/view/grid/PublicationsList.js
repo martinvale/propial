@@ -2,14 +2,12 @@ Ext.define('Propial.view.grid.PublicationsList', {
   extend: 'Ext.grid.Panel',
   requires: [
     'Propial.store.Publications',
-    'Propial.view.window.PublicationWindow',
     'Propial.view.window.ResourcesWindow',
     'Propial.view.form.field.ComboContracts'
   ],
   alias: 'widget.publicationslist',
   store: Ext.create('Propial.store.Publications'),
-  title: 'Publicaciones',
-  
+
   initComponent: function() {
     var me = this;
     this.columns = [
@@ -53,14 +51,7 @@ Ext.define('Propial.view.grid.PublicationsList', {
         xtype: 'button',
         text: 'Nuevo aviso',
         handler: function () {
-          var publicationEditionWindow = Ext.create('widget.publicationwindow', {
-            listeners: {
-              onContentUpdated: function (window) {
-                me.getStore().reload();
-              }
-            }
-          });
-          publicationEditionWindow.open();
+          me.fireEvent ('onCreate', me);
         }
       }, {
         xtype: 'button',
@@ -68,14 +59,7 @@ Ext.define('Propial.view.grid.PublicationsList', {
         handler: function () {
           var selections = me.getSelectionModel().getSelection();
           if (selections.length == 1) {
-            var publicationEditionWindow = Ext.create('widget.publicationwindow', {
-              listeners: {
-                onContentUpdated: function (window) {
-                  me.getStore().reload();
-                }
-              }
-            });
-            publicationEditionWindow.open(selections[0].get('id'));
+            me.fireEvent ('onEdit', me, selections[0].get('id'));
           }
         }
       }, {
@@ -159,6 +143,7 @@ Ext.define('Propial.view.grid.PublicationsList', {
       }]
     }];
 
+    this.addEvents ('onCreate', 'onEdit');
     this.callParent();
   }
 });

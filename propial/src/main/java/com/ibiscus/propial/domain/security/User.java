@@ -105,6 +105,12 @@ public class User implements Serializable {
     role = theRole;
   }
 
+  public void updateContract(final Contract theContract) {
+    Validate.notNull(theContract, "The contract cannot be null");
+
+    contract = Ref.create(Key.create(Contract.class, theContract.getId()));
+  }
+
   public void updatePicture(final String thePicture) {
     picture = thePicture;
   }

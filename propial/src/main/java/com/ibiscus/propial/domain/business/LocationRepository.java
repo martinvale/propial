@@ -16,8 +16,9 @@ public class LocationRepository {
   }
 
   public QueryResults<Location> suggest(final String name) {
+    Validate.notNull(name, "The location name cannot be null");
     Query<Location> query = OfyService.ofy().load().type(Location.class);
-    query = query.filter("tokenizedName", name);
+    query = query.filter("tokenizedName", name.toLowerCase());
     List<Location> locations = query.list();
     return new QueryResults<Location>(locations, locations.size());
   }

@@ -13,7 +13,6 @@
     <link rel="stylesheet" href="/css/detail.css">
 
     <link rel="stylesheet" href="/css/jquery-ui/jquery-ui.css">
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
 
     <script src="/script/jquery.js"></script>
     <script src="/script/jquery-ui.js"></script>
@@ -49,15 +48,8 @@
 
 </head>
 <body>
-  <header>
-    <div class="container">
-      <a href="/"><img src="../img/logo.png" alt="Propial" class="logo"></a>
-      <div class="actions">
-        <a href="register">Registrarse</a>
-        <a href="login">Identificarse</a>
-      </div>
-    </div>
-  </header>
+  <#include "header.ftl" />
+
   <div class="body">
     <div class="container clearfix">
       <!-- inicio publication -->
@@ -152,9 +144,9 @@
       </div>
     </div>
   </div>
-  <footer>
-    <div class="copy">Copyright © 2014</div>
-  </footer>
+
+  <#include "footer.ftl" />
+
   <div id="carousel-template" style="display:none">
     <div class="js-carousel">
       <div class="carousel-button carousel-prev js-prev">

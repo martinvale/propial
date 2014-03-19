@@ -30,6 +30,8 @@ import com.ibiscus.propial.domain.business.LocationRepository;
 import com.ibiscus.propial.domain.business.Publication;
 import com.ibiscus.propial.domain.business.PublicationRepository;
 import com.ibiscus.propial.domain.filters.Dimension;
+import com.ibiscus.propial.domain.security.Contract;
+import com.ibiscus.propial.domain.security.ContractRepository;
 import com.ibiscus.propial.domain.security.User;
 import com.ibiscus.propial.domain.security.UserRepository;
 import com.ibiscus.propial.domain.services.FilterService;
@@ -51,6 +53,10 @@ public class SiteController {
   /** Repository of users. */
   @Autowired
   private UserRepository userRepository;
+
+  /** Repository of contracts. */
+  @Autowired
+  private ContractRepository contractRepository;
 
   @RequestMapping(value = "/")
   public String home(@ModelAttribute("model") ModelMap model) {
@@ -136,10 +142,12 @@ public class SiteController {
       return "register";
     }
     RegistrationService service = new RegistrationService(userRepository,
-        getSiteUrl(request));
+        contractRepository, getSiteUrl(request));
     try {
       user.update(name, User.ROLE.PUBLISHER);
-      service.register(user);
+      Contract contract = new Contract(Contract.TYPE.USER,
+          user.getDisplayName());
+      service.register(user, contract);
     } catch (RuntimeException e) {
       e.printStackTrace();
       errors.add("Cannot send mail, please try again later");

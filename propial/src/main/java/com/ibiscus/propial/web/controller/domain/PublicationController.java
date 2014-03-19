@@ -37,7 +37,6 @@ import com.ibiscus.propial.domain.security.ContractRepository;
 import com.ibiscus.propial.domain.security.User;
 import com.ibiscus.propial.domain.security.UserRepository;
 import com.ibiscus.propial.domain.services.FilterService;
-import com.ibiscus.propial.infraestructure.objectify.OfyService;
 import com.ibiscus.propial.web.utils.Packet;
 import com.ibiscus.propial.web.utils.QueryResults;
 

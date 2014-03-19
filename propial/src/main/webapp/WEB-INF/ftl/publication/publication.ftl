@@ -31,10 +31,10 @@
       </#if>
       <div class="description">
         <div>
-          <span class="title">
+          <a href="/detail/${id}" class="title">
             <span class="type">${type}</span>
             <span class="location">${location}</span>
-          </span>
+          </a>
           <span class="price">${price}</span>
         </div>
         <div class="details">

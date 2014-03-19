@@ -14,7 +14,8 @@
       });
 
       Ext.create('Propial.view.PublicationViewport', {
-        uploadUrl: '${model["uploadUrl"]}'
+        uploadUrl: '${model["uploadUrl"]}',
+        publish: ${model["publish"]!"false"}
       });
     })
   </script>

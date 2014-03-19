@@ -5,7 +5,8 @@ Ext.define('Propial.view.form.field.ComboContracts', {
   ],
   id: 'contract-selector',
   alias: 'widget.combocontracts',
-  editable: false, 
+  editable: false,
+  disabled: true,
   valueField: 'id',
   displayField: 'name',
   initComponent: function() {
@@ -20,9 +21,9 @@ Ext.define('Propial.view.form.field.ComboContracts', {
             })
             store.insert(0, allContracts);
             me.setValue(-1);
-          } else {
+            me.enable();
+          } else if (records.length == 1) {
             me.setValue(records[0].get('id'));
-            me.disable();
           }
         }
       }

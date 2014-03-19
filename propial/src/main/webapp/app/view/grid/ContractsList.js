@@ -6,16 +6,14 @@ Ext.define('Propial.view.ContractsList', {
   ],
   alias: 'widget.contractslist',
   store: Ext.create('Propial.store.Contracts'),
-  title: 'Contratos',
-  hideHeaders: true,
-  
+
   initComponent: function() {
     var me = this;
     this.columns = [{
       dataIndex: 'name',
       flex: 1
     }];
-    
+
     this.dockedItems = [{
       dock: 'bottom',
       xtype: 'toolbar',

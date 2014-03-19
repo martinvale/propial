@@ -19,6 +19,16 @@
 
     <title>Propial</title>
 
+<style>
+
+.button.primary {
+  background-color: #16499A;
+  color: #FFFFFF;
+}
+
+</style>
+
+
   <script type="text/javascript">
 
     window.Propial = window.Propial || {};
@@ -59,7 +69,7 @@
         <form action="search" class="js-search">
           <label for="search">En donde desea buscar?</label>
           <div class="field">
-            <input class="js-location-filter" type="text" />
+            <input class="js-location-filter" type="text" required="required" />
             <button><span class="button-content">buscar</span></button>
           </div>
         </form>
