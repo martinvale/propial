@@ -16,10 +16,6 @@ Ext.define('Propial.view.grid.UsersList', {
         text: 'Nombre',
         flex: 1
       }, {
-        dataIndex: 'username',
-        text: 'Usuario',
-        width: 150
-      }, {
         dataIndex: 'email',
         text: 'Email',
         width: 250

@@ -21,11 +21,6 @@
 
 <style>
 
-.button.primary {
-  background-color: #16499A;
-  color: #FFFFFF;
-}
-
 </style>
 
 

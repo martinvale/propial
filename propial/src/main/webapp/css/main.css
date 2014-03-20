@@ -58,7 +58,7 @@ header .actions {
 }
 
 .logged {
-  margin-right: 10px;
+  margin: 0 10px;
 }
 
 .actions a {
@@ -83,6 +83,11 @@ header .actions {
   padding: 4px 12px;
   text-align: center;
   vertical-align: middle;
+}
+
+.button.primary {
+  background-color: #16499A;
+  color: #FFFFFF;
 }
 
 button.link {

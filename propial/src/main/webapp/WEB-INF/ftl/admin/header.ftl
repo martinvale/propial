@@ -5,7 +5,7 @@
     <#if model["user"].role == "ADMIN" || model["user"].role == "CUSTOMER_ADMIN" >
       <a href="users">Usuarios</a>
     </#if>
-      <a href="">Publicaciones</a>
+      <a href="./">Publicaciones</a>
     <#if model["user"].role == "ADMIN">
       <a href="locations">Ubicaciones</a>
     </#if>
