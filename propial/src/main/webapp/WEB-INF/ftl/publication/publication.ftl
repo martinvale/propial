@@ -32,7 +32,7 @@
       <div class="description">
         <div>
           <a href="/detail/${id}" class="title">
-            <span class="type">${type}</span>
+            <span class="type">${type}</span> en 
             <span class="location">${location}</span>
           </a>
           <span class="price">${price}</span>
@@ -47,7 +47,7 @@
       </div>
     </div>
     <div class="actions">
-      <a href="#">compartir</a>
+      <button class="button small js-fb-share"><i class="fa fa-facebook"></i> compartir</button>
     </div>
     <!--div class="comments">
       <div class="comment">This is a test.</div>

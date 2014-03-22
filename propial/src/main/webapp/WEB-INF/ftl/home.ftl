@@ -21,17 +21,15 @@
 
 <style>
 
-.button.primary {
-  background-color: #16499A;
-  color: #FFFFFF;
-}
-
 </style>
 
 
   <script type="text/javascript">
 
     window.Propial = window.Propial || {};
+
+    Propial.util = Propial.util || {};
+    Propial.util.domain = "http://www.propial.com";
 
     Propial.view = Propial.view || {};
 
@@ -40,7 +38,9 @@
       var publications = [
       <#list model["publications"] as publication>
         {
-          id: ${publication.id?c}
+          id: ${publication.id?c},
+          title: "${publication.type} en ${publication.locations[0].name}",
+          description: "${publication.description}"
         }<#if publication_has_next>,</#if>
       </#list>];
 
@@ -62,11 +62,30 @@
 
 </head>
 <body>
+  <div id="fb-root"></div>
+  <script>
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId      : '304951509551215',
+        status     : true,
+        xfbml      : true
+      });
+    };
+
+    (function(d, s, id){
+       var js, fjs = d.getElementsByTagName(s)[0];
+       if (d.getElementById(id)) {return;}
+       js = d.createElement(s); js.id = id;
+       js.src = "//connect.facebook.net/en_US/all.js";
+       fjs.parentNode.insertBefore(js, fjs);
+     }(document, 'script', 'facebook-jssdk'));
+  </script>
+
   <#include "header.ftl" />
   <div class="body">
     <div class="container clearfix">
-      <div class="search js-location-search">
-        <form action="search" class="js-search">
+      <div class="context js-location-search">
+        <form action="search" class="search js-search">
           <label for="search">En donde desea buscar?</label>
           <div class="field">
             <input class="js-location-filter" type="text" required="required" />
