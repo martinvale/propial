@@ -71,6 +71,7 @@ public class User implements Serializable {
     googleId = theGoogleId;
     nickname = theNickname;
     email = theEmail;
+    displayName = theEmail;
     role = ROLE.UNREGISTERED;
     status = STATUS.ACTIVE;
   }

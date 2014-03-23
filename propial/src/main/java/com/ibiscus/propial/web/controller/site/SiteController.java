@@ -86,9 +86,7 @@ public class SiteController {
     if (authentication != null
         && !(authentication instanceof AnonymousAuthenticationToken)) {
       User user = (User) authentication.getPrincipal();
-      if (!user.getRole().equals(User.ROLE.UNREGISTERED)) {
-        model.addAttribute("user", user);
-      }
+      model.addAttribute("user", user);
     }
     return "home";
   }

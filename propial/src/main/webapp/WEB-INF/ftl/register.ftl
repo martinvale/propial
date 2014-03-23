@@ -13,7 +13,11 @@
     <title>Propial</title>
 </head>
 <body>
-  <#include "header.ftl" />
+  <header>
+    <div class="container">
+      <a href="/"><img src="/img/logo.png" alt="Propial" class="logo"></a>
+    </div>
+  </header>
 
   <div class="body">
     <div class="container clearfix">
