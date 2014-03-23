@@ -31,9 +31,9 @@
       </#if>
       <div class="description">
         <div>
-          <a href="/detail/${id}" class="title">
-            <span class="type">${type}</span> en 
-            <span class="location">${location}</span>
+          <#assign title="${type} en ${location}" />
+          <a href="/detail/${id}" class="title js-view-detail" title="${title}">
+            ${title}
           </a>
           <span class="price">${price}</span>
         </div>

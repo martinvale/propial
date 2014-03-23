@@ -151,6 +151,7 @@
 
         <div class="menu">
           <div class="ads">
+            <p>Publicidad</p>
           </div>
           <div class="js-filters">
             <ul class="applied-filters js-applied-filters">

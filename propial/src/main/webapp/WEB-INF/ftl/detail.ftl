@@ -1,4 +1,3 @@
-<#import "publication/publication.ftl" as pub>
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,9 +15,13 @@
 
     <script src="/script/jquery.js"></script>
     <script src="/script/jquery-ui.js"></script>
+    <script src="/script/jquery.cookie.js"></script>
 
     <title>Propial</title>
 
+<style>
+
+</style>
   <script type="text/javascript">
 
     window.Propial = window.Propial || {};
@@ -27,33 +30,69 @@
 
     Propial.widget = Propial.widget || {};
 
+    Propial.util = Propial.util || {};
+    Propial.util.domain = "http://www.propial.com";
+
     jQuery(document).ready(function() {
 
-      var resources = [
-      <#list model["publication"].resources as resource>
-        {
-          id: '${resource.key.keyString}'
-        }<#if resource_has_next>,</#if>
-      </#list>];
+      <#assign publication = model["publication"] />
+      var publication = {
+        id: ${publication.id?c},
+        title: "${publication.type} en ${publication.locations[0].name}",
+        description: "${publication.description}",
+        resources: [
+        <#list model["publication"].resources as resource>
+          {
+            id: '${resource.key.keyString}'
+          }<#if resource_has_next>,</#if>
+        </#list>
+        ]
+      };
+
+      var publicationContainer = jQuery(".js-publication");
+      var publicationWidget = new Propial.view.Publication(publicationContainer,
+          publication);
+      publicationWidget.render();
+      publicationWidget.visited();
 
       var gallery = Propial.widget.Gallery(jQuery(".js-gallery"),
-        ".js-preview", resources);
+        ".js-preview", publication.resources);
       gallery.render();
 
     });
   </script>
 
+    <script src="/script/Publication.js"></script>
     <script src="/script/Carousel.js"></script>
     <script src="/script/Gallery.js"></script>
 
 </head>
 <body>
+  <div id="fb-root"></div>
+  <script>
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId      : '304951509551215',
+        status     : true,
+        xfbml      : true
+      });
+    };
+
+    (function(d, s, id){
+       var js, fjs = d.getElementsByTagName(s)[0];
+       if (d.getElementById(id)) {return;}
+       js = d.createElement(s); js.id = id;
+       js.src = "//connect.facebook.net/en_US/all.js";
+       fjs.parentNode.insertBefore(js, fjs);
+     }(document, 'script', 'facebook-jssdk'));
+  </script>
+
   <#include "header.ftl" />
 
   <div class="body">
     <div class="container clearfix">
       <!-- inicio publication -->
-      <div class="publication">
+      <div class="publication js-publication">
         <#assign publication=model["publication"] />
         <#assign price="consultar" />
         <#if publication.price?? && publication.currencyType??>
@@ -84,7 +123,7 @@
             <div class="details">
               <#assign age="-" />
               <#if publication.age??>
-                <#assign age="${publication.age} años" />
+                <#assign age="${publication.age} a&ntilde;os" />
               </#if>
               <#assign surface="-" />
               <#if publication.surface??>
@@ -102,6 +141,9 @@
                 <dt>Superficie</dt>
                 <dd>: ${surface}</dd>
               </dl>
+            </div>
+            <div class="actions details">
+              <button class="button small js-fb-share"><i class="fa fa-facebook"></i> compartir</button>
             </div>
             <div class="gallery js-gallery">
               <#list publication.resources as resource>
@@ -130,7 +172,7 @@
 
         <!-- inicio description -->
         <div class="description block">
-          <div class="block-header">Descripcion</div>
+          <div class="block-header">Descripci&oacute;n</div>
           <div class="block-content">${publication.description}</div>
         </div>
         <!-- fin description -->
@@ -140,6 +182,7 @@
 
       <div class="menu">
         <div class="ads">
+          <p>Publicidad</p>
         </div>
       </div>
     </div>

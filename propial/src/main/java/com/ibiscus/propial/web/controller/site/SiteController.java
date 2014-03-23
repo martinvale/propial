@@ -3,6 +3,7 @@ package com.ibiscus.propial.web.controller.site;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,13 +61,26 @@ public class SiteController {
   private ContractRepository contractRepository;
 
   @RequestMapping(value = "/")
-  public String home(@ModelAttribute("model") ModelMap model) {
+  public String home(@ModelAttribute("model") ModelMap model,
+      @CookieValue(value = "visits", required = false) String visits) {
     Map<String, Object> filters = new HashMap<String, Object>();
     filters.put("published", Boolean.TRUE);
     List<Publication> publications = publicationRepository.find(0,
         PAGE_SIZE, "creation", false, filters);
     model.addAttribute("publications", publications);
 
+    if (visits != null) {
+      List<Publication> lastVisited = new ArrayList<Publication>();
+      String[] publicationIds = visits.split(",");
+      for (String publicationId : publicationIds) {
+        Publication publication = publicationRepository.get(
+            new Long(publicationId));
+        if (publication != null) {
+          lastVisited.add(publication);
+        }
+      }
+      model.addAttribute("lastVisited", lastVisited);
+    }
     Authentication authentication = SecurityContextHolder.getContext()
         .getAuthentication();
     if (authentication != null

@@ -121,15 +121,20 @@
 
         <div class="menu">
           <div class="ads">
+            <p>Publicidad</p>
           </div>
-          <div class="suggestions">
-            <#list model["publications"] as publication>
-            <!-- inicio item -->
-              <#if publication_index % 2 == 1>
-                <@pub.renderPublication publication />
+
+          <div class="block suggestions">
+            <div class="block-header">&Uacute;ltimos visitados</div>
+            <div class="block-content">
+              <#if model["lastVisited"]??>
+                <#list model["lastVisited"] as publication>
+                  <!-- inicio item -->
+                  <@pub.renderPublication publication />
+                  <!-- fin item -->
+                </#list>
               </#if>
-            <!-- fin item -->
-            </#list>
+            </div>
           </div>
         </div>
       </div>

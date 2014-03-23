@@ -58,7 +58,7 @@ header .actions {
 }
 
 .logged {
-  margin-right: 10px;
+  margin: 0 10px;
 }
 
 .actions a {
@@ -130,10 +130,20 @@ button.link:hover {
   width: 180px;
 }
 
-.menu .ads {
+/** Advertising block */
+.ads {
   background-color: #EFEFEF;
   height: 180px;
   margin-bottom: 5px;
+  position: relative;
+}
+
+.ads p {
+  bottom: 2px;
+  color: #999999;
+  font-size: 10px;
+  margin-left: 5px;
+  position: absolute;
 }
 
 .item {
@@ -143,7 +153,7 @@ button.link:hover {
 .item img {
   left: 0;
   margin: auto;
-  max-width: 358px;
+  max-width: 100%;
   position: absolute;
   right: 0;
 }
@@ -176,7 +186,13 @@ button.link:hover {
 
 .item .title {
   color: #FFFFFF;
+  display: block;
+  float: left;
+  overflow: hidden;
   padding-left: 5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 260px;
 }
 
 .item .price {
@@ -204,8 +220,22 @@ button.link:hover {
   margin-top: 60px;
 }
 
+/** Suggestions block */
 .suggestions .item .photos {
+  margin: 0;
   min-height: 160px;
+}
+
+.suggestions .box {
+  border: none;
+}
+
+.suggestions .item .actions {
+  margin: 0;
+}
+
+.suggestions .item .title {
+  width: 150px;
 }
 
 .suggestions .item .location, .suggestions .item .price {
@@ -222,7 +252,7 @@ button.link:hover {
 .block-header {
   background-color: #4390DF;
   color: #FFFFFF;
-  font-size: 22px;
+  font-size: 20px;
   padding: 5px 10px;
 }
 
