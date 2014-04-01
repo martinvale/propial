@@ -6,9 +6,11 @@ Propial.view.ResultsManager = function (container, templateId) {
     ".item": {
       "publication <- items": {
         "@id": "publication.id",
-        ".type": "publication.type",
-        ".location": function () {
-          return this.locations[0].name;
+        ".js-title": function () {
+          return this.type + " en " + this.locations[0].name;
+        },
+        ".js-title@href": function () {
+          return "/detail/" + this.id;
         },
         ".price": function () {
           if (this.price && this.currencyType) {

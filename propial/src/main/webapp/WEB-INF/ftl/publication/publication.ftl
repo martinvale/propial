@@ -32,7 +32,7 @@
       <div class="description">
         <div>
           <#assign title="${type} en ${location}" />
-          <a href="/detail/${id}" class="title js-view-detail" title="${title}">
+          <a href="/detail/${id}" class="title js-title" title="${title}">
             ${title}
           </a>
           <span class="price">${price}</span>

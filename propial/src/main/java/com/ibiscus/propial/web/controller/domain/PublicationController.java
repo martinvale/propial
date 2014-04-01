@@ -114,7 +114,8 @@ public class PublicationController {
       @RequestParam int limit,
       @RequestParam(required = false) Long contractId,
       @RequestParam(required = false) Long locationId,
-      @RequestParam(required = false) String type) {
+      @RequestParam(required = false) String type,
+      @RequestParam(required = false) Boolean published) {
     Map<String, Object> filters = new HashMap<String, Object>();
     if (contractId != null) {
       Contract contract = contractRepository.get(contractId);
@@ -136,6 +137,9 @@ public class PublicationController {
     }
     if (type != null) {
       filters.put("type", type);
+    }
+    if (published != null) {
+      filters.put("published", published);
     }
     List<Publication> publications = publicationRepository.find(start, limit,
         null, true, filters);

@@ -3,7 +3,7 @@ Propial.view.Publication = function (container, publication) {
   var MAXIMUM_REMEMBERED = 3;
 
   var initEventListeners = function () {
-    container.find(".js-view-detail").click(function () {
+    container.find(".js-title").click(function () {
       location.href = "/detail/" + publication.id;
     });
 

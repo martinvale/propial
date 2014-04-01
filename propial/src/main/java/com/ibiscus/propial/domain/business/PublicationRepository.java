@@ -27,7 +27,11 @@ public class PublicationRepository {
     Query<Publication> query = getQuery(filters);
     query.limit(limit);
     if (order != null) {
-      query = query.order(order);
+      String sortOrder = order;
+      if (!asc) {
+        sortOrder = "-" + order;
+      };
+      query = query.order(sortOrder);
     }
     if (start > 0) {
       query = query.offset(start);

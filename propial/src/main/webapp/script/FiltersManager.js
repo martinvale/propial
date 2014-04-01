@@ -8,6 +8,7 @@ Propial.view.FiltersManager = function (container, filters, templateId,
   var update = function (data) {
     var params = filtersApplied.getAppliedFilters();
     params.locationId = locationId;
+    params.published = true;
     params.start = 0;
     params.limit = 0;
     jQuery.ajax({
