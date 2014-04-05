@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import org.apache.commons.lang.Validate;
 
+import com.google.appengine.api.blobstore.BlobKey;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
@@ -29,7 +30,7 @@ public class Contract implements Serializable {
   private String address;
   private String telephone;
   private String email;
-  private String logo;
+  private BlobKey logo;
   private TYPE type;
 
   /** Default constructor. */
@@ -52,7 +53,7 @@ public class Contract implements Serializable {
   }
 
   public void update(final String theAddress, final String theTelephone,
-      final String theEmail, final String theLogo) {
+      final String theEmail, final BlobKey theLogo) {
     address = theAddress;
     telephone = theTelephone;
     email = theEmail;
@@ -83,7 +84,7 @@ public class Contract implements Serializable {
     return email;
   }
 
-  public String getLogo() {
+  public BlobKey getLogo() {
     return logo;
   }
 }

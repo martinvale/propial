@@ -45,6 +45,12 @@
   max-width: 480px;
 }
 
+/* Bloque de contactto */
+.contact img {
+  margin-top: 4px;
+  max-width: 100px;
+}
+
 .ambients ul {
   list-style: circle;
   margin-left: 20px;

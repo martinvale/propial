@@ -24,6 +24,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.ibiscus.propial.application.business.RegistrationService;
@@ -137,13 +140,25 @@ public class SiteController {
 
   @RequestMapping(value = "/register")
   public String register(@ModelAttribute("model") ModelMap model) {
+    BlobstoreService service = BlobstoreServiceFactory.getBlobstoreService();
+    model.put("uploadUrl", service.createUploadUrl("/register"));
     return "register";
   }
 
+  @SuppressWarnings("deprecation")
   @RequestMapping(value = "/register", method = RequestMethod.POST)
   public String register(@ModelAttribute("model") ModelMap model,
       HttpServletRequest request,
-      String name) {
+      String name, String type) {
+    BlobstoreService blobService = BlobstoreServiceFactory
+        .getBlobstoreService();
+    model.put("uploadUrl", blobService.createUploadUrl("/register"));
+    Map<String, BlobKey> blobs = blobService.getUploadedBlobs(request);
+    BlobKey pictureKey = blobs.get("picture");
+    if (pictureKey != null) {
+      model.put("picture", pictureKey.getKeyString());
+    }
+
     model.put("name", name);
     List<String> errors = new LinkedList<String>();
 
@@ -158,8 +173,11 @@ public class SiteController {
         contractRepository, getSiteUrl(request));
     try {
       user.update(name, User.ROLE.PUBLISHER);
-      Contract contract = new Contract(Contract.TYPE.USER,
+      Contract contract = new Contract(Contract.TYPE.valueOf(type),
           user.getDisplayName());
+      if (pictureKey != null) {
+        contract.update(null, null, null, pictureKey);
+      }
       service.register(user, contract);
     } catch (RuntimeException e) {
       e.printStackTrace();

@@ -145,6 +145,12 @@
             <div class="actions details">
               <button class="button small js-fb-share"><i class="fa fa-facebook"></i> compartir</button>
             </div>
+            <div class="contact details">
+              <#assign contract=publication.contract />
+              <h3>Publicado por</h3>
+              <p>${contract.name}</p>
+              <img src="/resources/${contract.logo.keyString}" />
+            </div>
             <div class="gallery js-gallery">
               <#list publication.resources as resource>
                 <img src="/services/publications/resource/${resource.key.keyString}" class="js-resource-${resource.key.keyString} <#if resource_index == 0>selected</#if>" />
