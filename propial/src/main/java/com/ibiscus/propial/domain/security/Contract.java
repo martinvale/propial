@@ -52,11 +52,15 @@ public class Contract implements Serializable {
     name = theName;
   }
 
-  public void update(final String theAddress, final String theTelephone,
-      final String theEmail, final BlobKey theLogo) {
+  public void update(final String theName, final String theAddress,
+      final String theTelephone, final String theEmail) {
+    name = theName;
     address = theAddress;
     telephone = theTelephone;
     email = theEmail;
+  }
+
+  public void updateLogo(final BlobKey theLogo) {
     logo = theLogo;
   }
 

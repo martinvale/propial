@@ -4,6 +4,7 @@
   <#include "admin/commons.ftl" />
 
   <script type="text/javascript">
+
     Ext.onReady(function() {
       Ext.Loader.setConfig({
         enabled: true,
@@ -21,8 +22,11 @@
           Ext.create('Propial.view.Viewport', {
           });
         }
-      });*/        
-      Ext.create('Propial.view.ContractViewport', {});
+      });*/
+
+      Ext.create('Propial.view.ContractViewport', {
+        uploadUrl: '${model["uploadUrl"]}',
+      });
     })
   </script>
 

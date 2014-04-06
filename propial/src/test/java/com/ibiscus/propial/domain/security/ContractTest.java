@@ -23,7 +23,7 @@ public class ContractTest {
   @Test
   public void update() {
     Contract contract = new Contract(10l, Contract.TYPE.REALSTATE, "nombre");
-    contract.update("address", "4545", "email@email.com", null);
+    contract.update("nombre", "address", "4545", "email@email.com");
     assertThat(contract.getId(), is(10l));
     assertThat(contract.getName(), is("nombre"));
     assertThat(contract.getType(), is(Contract.TYPE.REALSTATE));

@@ -6,6 +6,7 @@ public class Packet<T> {
 
   private T data;
   private boolean success;
+  private String url;
 
   public Packet() {
     success = false;
@@ -17,11 +18,23 @@ public class Packet<T> {
     success = true;
   }
 
+  public Packet(final T theData, final String theUrl) {
+    Validate.notNull(theData, "The data of the packet cannot be null");
+    Validate.notNull(theUrl, "The url cannot be null");
+    data = theData;
+    url = theUrl;
+    success = true;
+  }
+
   public T getData() {
     return data;
   }
 
   public boolean getSuccess() {
     return success;
+  }
+
+  public String getUrl() {
+    return url;
   }
 }

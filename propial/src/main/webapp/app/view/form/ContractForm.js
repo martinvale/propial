@@ -1,26 +1,47 @@
 Ext.define('Propial.view.form.ContractForm', {
   extend: 'Ext.form.Panel',
   alias: 'widget.contractform',
+  requires: [
+    'Propial.view.form.field.Image'
+  ],
   defaultType: 'textfield',
   border: false,
   bodyPadding: 5,
   items: [
     {
+      name: 'id',
+      xtype: 'hidden'
+    }, {
+      name: 'changeImage',
+      xtype: 'hidden',
+      value: 'false'
+    }, {
       name: 'name',
-      fieldLabel: 'Name',
+      fieldLabel: 'Nombre',
       allowBlank: false
     }, {
       name: 'address',
-      fieldLabel: 'Address',
+      fieldLabel: 'Direcci&oacute;n',
       allowBlank: false
     }, {
       name: 'telephone',
-      fieldLabel: 'Telephone',
+      fieldLabel: 'Telefono',
       allowBlank: false
     }, {
       name: 'email',
       fieldLabel: 'Email',
       allowBlank: false
+    }, {
+      name: 'logo',
+      xtype: 'imagefield',
+      imageHeight: 100,
+      fieldLabel: 'Logo',
+      listeners: {
+        change: function() {
+          var form = this.up('form');
+          form.getForm().setValues({changeImage: true});
+        }
+      }
     }
   ],
   initComponent: function() {
@@ -31,21 +52,13 @@ Ext.define('Propial.view.form.ContractForm', {
         handler: function (button, event) {
           var form = me.form;
           if (form.isValid()) {
-            var contract = form.getValues();
-            var methodType = 'PUT';
-            if (me.contractId) {
-              contract.id = me.contractId;
-              methodType = 'POST';
-            }
-            Ext.Ajax.request({
-              headers: { 'Content-Type': 'application/json' },
-              method: methodType,
-              url: '/services/contracts/',
-              params: Ext.encode(contract),
-              success: function(response) {
+            form.submit({
+              url: me.uploadUrl,
+              waitMsg: 'Subiendo la imagen...',
+              success: function(fp, o) {
+                me.uploadUrl = o.result.url;
                 me.fireEvent ('onSaved', me);
-              },
-              failure: function(response){}
+              }
             });
           }
         }
@@ -56,7 +69,22 @@ Ext.define('Propial.view.form.ContractForm', {
         }
       }
     ];
-		this.addEvents ('onSaved', 'onClosed');
+    this.addEvents ('onSaved', 'onClosed');
     this.callParent();
+  },
+  loadObject: function (id) {
+    var formPanel = this;
+    var form = this.getForm();
+    form.reset();
+
+    this.objectId = id;
+    if (id) {
+      var model = Ext.ModelMgr.getModel('Propial.model.Contract');
+      model.load(id, {
+        success: function(contract) {
+          form.loadRecord(contract);
+        }
+      });
+    }
   }
 });

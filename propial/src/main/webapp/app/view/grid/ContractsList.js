@@ -1,8 +1,7 @@
-Ext.define('Propial.view.ContractsList', {
+Ext.define('Propial.view.grid.ContractsList', {
   extend: 'Ext.grid.Panel',
   requires: [
-    'Propial.store.Contracts',
-    'Propial.view.window.ContractWindow'
+    'Propial.store.Contracts'
   ],
   alias: 'widget.contractslist',
   store: Ext.create('Propial.store.Contracts'),
@@ -11,6 +10,7 @@ Ext.define('Propial.view.ContractsList', {
     var me = this;
     this.columns = [{
       dataIndex: 'name',
+      text: 'Nombre',
       flex: 1
     }];
 
@@ -21,14 +21,7 @@ Ext.define('Propial.view.ContractsList', {
         xtype: 'button',
         text: 'Nuevo contrato',
         handler: function () {
-          var contractEditionWindow = Ext.create('widget.contractwindow', {
-            listeners: {
-              onContentUpdated: function (window) {
-                me.getStore().reload();
-              }
-            }
-          });
-          contractEditionWindow.open();
+          me.fireEvent ('onCreate', me);
         }
       }, {
         xtype: 'button',
@@ -36,14 +29,7 @@ Ext.define('Propial.view.ContractsList', {
         handler: function () {
           var selections = me.getSelectionModel().getSelection();
           if (selections.length == 1) {
-            var contractEditionWindow = Ext.create('widget.contractwindow', {
-              listeners: {
-                onContentUpdated: function (window) {
-                  me.getStore().reload();
-                }
-              }
-            });
-            contractEditionWindow.open(selections[0].get('id'));
+            me.fireEvent ('onEdit', me, selections[0].get('id'));
           }
         }
       }, {
@@ -72,6 +58,7 @@ Ext.define('Propial.view.ContractsList', {
       }]
     }];
 
+    this.addEvents ('onCreate', 'onEdit');
     this.callParent();
   }
 });

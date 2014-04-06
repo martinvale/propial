@@ -176,7 +176,7 @@ public class SiteController {
       Contract contract = new Contract(Contract.TYPE.valueOf(type),
           user.getDisplayName());
       if (pictureKey != null) {
-        contract.update(null, null, null, pictureKey);
+        contract.updateLogo(pictureKey);
       }
       service.register(user, contract);
     } catch (RuntimeException e) {

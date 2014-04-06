@@ -25,6 +25,9 @@ public class AdminController {
   @RequestMapping(value = "contracts")
   public String contracts(@ModelAttribute("model") ModelMap model) {
     addContext(model);
+    BlobstoreService blobService = BlobstoreServiceFactory
+        .getBlobstoreService();
+    model.put("uploadUrl", blobService.createUploadUrl("/services/contracts/"));
     return "contracts";
   }
 

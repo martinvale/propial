@@ -1,5 +1,9 @@
 package com.ibiscus.propial.web.controller.security;
 
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.ibiscus.propial.domain.security.Contract;
 import com.ibiscus.propial.domain.security.ContractRepository;
 import com.ibiscus.propial.web.utils.Packet;
@@ -28,10 +35,29 @@ public class ContractController {
     return contract;
   }
 
+  @SuppressWarnings("deprecation")
   @RequestMapping(value = "/", method = RequestMethod.POST)
-  public @ResponseBody Contract update(@RequestBody Contract contract) {
+  public @ResponseBody Packet<Contract> update(Long id, String name, String address,
+      String telephone, String email, Boolean changeImage,
+      HttpServletRequest request) {
+    BlobstoreService blobService = BlobstoreServiceFactory
+        .getBlobstoreService();
+    String uploadUrl = blobService.createUploadUrl("/services/contracts/");
+    Map<String, BlobKey> blobs = blobService.getUploadedBlobs(request);
+    BlobKey pictureKey = blobs.get("logo");
+
+    Contract contract;
+    if (id != null) {
+      contract = contractRepository.get(id);
+    } else {
+      contract = new Contract(Contract.TYPE.REALSTATE, name);
+    }
+    contract.update(name, address, telephone, email);
+    if (changeImage) {
+      contract.updateLogo(pictureKey);
+    }
     contractRepository.save(contract);
-    return contract;
+    return new Packet<Contract>(contract, uploadUrl);
   }
 
   @RequestMapping(value = "/{contractId}", method = RequestMethod.GET)
