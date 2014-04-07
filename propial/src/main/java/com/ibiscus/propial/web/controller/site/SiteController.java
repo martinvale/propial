@@ -149,7 +149,8 @@ public class SiteController {
   @RequestMapping(value = "/register", method = RequestMethod.POST)
   public String register(@ModelAttribute("model") ModelMap model,
       HttpServletRequest request,
-      String name, String type) {
+      String name, String type, String realStateName, String address,
+      String telephone, String email) {
     BlobstoreService blobService = BlobstoreServiceFactory
         .getBlobstoreService();
     model.put("uploadUrl", blobService.createUploadUrl("/register"));
@@ -175,8 +176,11 @@ public class SiteController {
       user.update(name, User.ROLE.PUBLISHER);
       Contract contract = new Contract(Contract.TYPE.valueOf(type),
           user.getDisplayName());
-      if (pictureKey != null) {
-        contract.updateLogo(pictureKey);
+      if (Contract.TYPE.REALSTATE.toString().equals(type)) {
+        contract.update(realStateName, address, telephone, email);
+        if (pictureKey != null) {
+          contract.updateLogo(pictureKey);
+        }
       }
       service.register(user, contract);
     } catch (RuntimeException e) {
