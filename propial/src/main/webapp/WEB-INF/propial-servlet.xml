@@ -23,7 +23,7 @@
   <!-- freemarker config -->
   <bean id="freemarkerConfig" class="com.ibiscus.propial.infraestructure.freemarker.FreeMarkerConfigurer">
     <property name="templateLoaderPath" value="src/main/webapp/WEB-INF/ftl/"/>
-    <property name="debug" value="true" />
+    <property name="debug" value="false" />
   </bean>
 
   <bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
