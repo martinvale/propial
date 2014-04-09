@@ -38,9 +38,9 @@ public class LocationRepository {
     return new QueryResults<Location>(locations, size);
   }
 
-  public long save(final Location Location) {
-    Validate.notNull(Location, "The Location cannot be null");
-    Key<Location> key = OfyService.ofy().save().entity(Location).now();
+  public long save(final Location location) {
+    Validate.notNull(location, "The Location cannot be null");
+    Key<Location> key = OfyService.ofy().save().entity(location).now();
     return key.getId();
   }
 
@@ -50,7 +50,7 @@ public class LocationRepository {
    */
   public void delete(final long id) {
     Validate.isTrue(id > 0, "The id of the location must be greater than 0");
-    Location Location = get(id);
-    OfyService.ofy().delete().entity(Location).now();
+    Location location = get(id);
+    OfyService.ofy().delete().entity(location).now();
   }
 }

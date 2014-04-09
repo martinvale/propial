@@ -3,6 +3,7 @@ package com.ibiscus.propial.infraestructure.objectify;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;
+import com.ibiscus.propial.application.config.Configuration;
 import com.ibiscus.propial.domain.business.Location;
 import com.ibiscus.propial.domain.business.Publication;
 import com.ibiscus.propial.domain.business.Resource;
@@ -18,7 +19,9 @@ public class OfyService {
     factory().register(Publication.class);
     factory().register(Resource.class);
     factory().register(Location.class);
-  }
+
+    factory().register(Configuration.class);
+}
 
   public static Objectify ofy() {
     return ObjectifyService.ofy();

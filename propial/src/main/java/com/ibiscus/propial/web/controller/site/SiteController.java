@@ -172,23 +172,16 @@ public class SiteController {
     }
     RegistrationService service = new RegistrationService(userRepository,
         contractRepository, getSiteUrl(request));
-    try {
-      user.update(name, User.ROLE.PUBLISHER);
-      Contract contract = new Contract(Contract.TYPE.valueOf(type),
-          user.getDisplayName());
-      if (Contract.TYPE.REALSTATE.toString().equals(type)) {
-        contract.update(realStateName, address, telephone, email);
-        if (pictureKey != null) {
-          contract.updateLogo(pictureKey);
-        }
+    user.update(name, User.ROLE.PUBLISHER);
+    Contract contract = new Contract(Contract.TYPE.valueOf(type),
+        user.getDisplayName());
+    if (Contract.TYPE.REALSTATE.toString().equals(type)) {
+      contract.update(realStateName, address, telephone, email);
+      if (pictureKey != null) {
+        contract.updateLogo(pictureKey);
       }
-      service.register(user, contract);
-    } catch (RuntimeException e) {
-      e.printStackTrace();
-      errors.add("Cannot send mail, please try again later");
-      model.put("errors", errors);
-      return "register";
     }
+    service.register(user, contract);
     return "redirect:/admin/";
   }
 

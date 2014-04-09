@@ -7,6 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -26,7 +27,10 @@ import com.ibiscus.propial.domain.security.UserRepository;
 
 public class RegistrationService {
 
-  private final String NO_REPLY_ADDRESS = "no-reply@nidus.com";
+  private static final Logger LOG = Logger.getLogger(
+      RegistrationService.class.getName());
+
+  private final String NO_REPLY_ADDRESS = "martinvalletta@gmail.com";
 
   private final UserRepository userRepository;
 
@@ -72,6 +76,7 @@ public class RegistrationService {
   }
 
   public void register(final User user, final Contract contract) {
+    LOG.info("Registering user: " + user.getEmail());
     Properties props = new Properties();
     Session session = Session.getDefaultInstance(props, null);
     try {
@@ -84,8 +89,9 @@ public class RegistrationService {
           "Nidus"));
       msg.addRecipient(Message.RecipientType.TO,
           new InternetAddress(user.getEmail(), user.getDisplayName()));
-      msg.setSubject("Confirmación de la registración");
+      msg.setSubject("Confirmaci&oacute;n de la registraci&oacute;n");
       msg.setText(msgBody);
+      LOG.info("Sending mail");
       Transport.send(msg);
     } catch (AddressException e) {
       throw new RuntimeException("Cannot send mail", e);
@@ -98,7 +104,9 @@ public class RegistrationService {
     Contract userContract = new Contract(contractId, contract.getType(),
         contract.getName());
     user.updateContract(userContract);
+    LOG.info("Storing user");
     userRepository.save(user);
+    LOG.info("Registration complete");
   }
 
   public boolean confirm(final User user, final String hash) {
