@@ -40,6 +40,7 @@ import com.ibiscus.propial.domain.security.ContractRepository;
 import com.ibiscus.propial.domain.security.User;
 import com.ibiscus.propial.domain.security.UserRepository;
 import com.ibiscus.propial.domain.services.FilterService;
+import com.ibiscus.propial.web.security.GaeUserAuthentication;
 
 @Controller
 public class SiteController {
@@ -182,6 +183,8 @@ public class SiteController {
       }
     }
     service.register(user, contract);
+    SecurityContextHolder.getContext().setAuthentication(
+        new GaeUserAuthentication(user, authentication.getDetails()));
     return "redirect:/admin/";
   }
 
