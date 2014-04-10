@@ -25,6 +25,7 @@ import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.ibiscus.propial.application.business.PublicationDto;
+import com.ibiscus.propial.application.business.PublicationService;
 import com.ibiscus.propial.domain.business.Location;
 import com.ibiscus.propial.domain.business.LocationRepository;
 import com.ibiscus.propial.domain.business.Publication;
@@ -153,7 +154,9 @@ public class PublicationController {
 
   @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
   public @ResponseBody boolean delete(@PathVariable long id) {
-    publicationRepository.delete(id);
+    PublicationService service = new PublicationService(
+        publicationRepository);
+    service.delete(id);
     return true;
   }
 

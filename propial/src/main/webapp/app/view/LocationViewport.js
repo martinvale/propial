@@ -23,7 +23,7 @@ Ext.define('Propial.view.LocationViewport', {
         xtype: 'toolbar',
         items: [{
           xtype: 'button',
-          text: 'Nueva ubicacion',
+          text: 'Nueva ubicaci&oacute;n',
           handler: function () {
             var locationEditionWindow = Ext.create('widget.locationwindow', {
               listeners: {
@@ -36,7 +36,7 @@ Ext.define('Propial.view.LocationViewport', {
           }
         }, {
           xtype: 'button',
-          text: 'Editar ubicacion',
+          text: 'Editar ubicaci&oacute;n',
           handler: function () {
             var selections = me.grid.getSelectionModel().getSelection();
             if (selections.length == 1) {
@@ -53,7 +53,33 @@ Ext.define('Propial.view.LocationViewport', {
           }
         }, {
           xtype: 'button',
-          text: 'Borrar ubicacion',
+          text: 'Importar ubicaci&oacute;n',
+          handler: function () {
+            var importLocationWindow;
+            var importForm = Ext.create('widget.importlocationform', {
+              listeners: {
+                'onSaved': function(form) {
+                  me.grid.getStore().reload();
+                  importLocationWindow.close();
+                },
+                'onClosed': function(form) {
+                  importLocationWindow.close();
+                }
+              }
+            });
+            importForm.loadRecord(me.grid.locationSelected);
+            importLocationWindow = Ext.create('widget.window', {
+              title: 'Importar ubicaciones',
+              height: 300,
+              width: 300,
+              layout: 'fit',
+              items: [importForm]
+            });
+            importLocationWindow.show();
+          }
+        }, {
+          xtype: 'button',
+          text: 'Borrar ubicaci&oacute;n',
           handler: function () {
             var selections = me.grid.getSelectionModel().getSelection();
             if (selections.length > 0) {

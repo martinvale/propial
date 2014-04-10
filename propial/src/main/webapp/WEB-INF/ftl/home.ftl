@@ -121,6 +121,9 @@
 
         <div class="menu">
           <div class="ads">
+            <a href="/admin/publish" target="_blank">
+              <img src="/img/publish.jpg" />
+            </a>
             <p>Publicidad</p>
           </div>
 

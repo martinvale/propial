@@ -2,6 +2,7 @@ Ext.define('Propial.view.grid.LocationsList', {
   extend: 'Ext.grid.Panel',
   requires: [
     'Propial.store.Locations',
+    'Propial.view.form.ImportLocation',
     'Propial.view.window.LocationWindow'
   ],
   alias: 'widget.locationslist',
