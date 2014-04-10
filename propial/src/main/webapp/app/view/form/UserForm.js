@@ -69,7 +69,7 @@ Ext.define('Propial.view.form.UserForm', {
         }
       }
     ];
-		this.addEvents ('onSaved', 'onClosed');
+    this.addEvents ('onSaved', 'onClosed');
     this.callParent();
   }
 });

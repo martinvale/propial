@@ -4,7 +4,7 @@ Ext.define('Propial.view.ContractViewport', {
 
   requires: [
     'Propial.view.grid.ContractsList',
-    'Propial.view.form.ContractsForm',
+    'Propial.view.form.ContractForm',
     'Propial.view.panel.Menu'
   ],
 

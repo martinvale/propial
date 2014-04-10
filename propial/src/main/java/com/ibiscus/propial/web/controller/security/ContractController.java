@@ -54,6 +54,9 @@ public class ContractController {
     }
     contract.update(name, address, telephone, email);
     if (changeImage) {
+      if (contract.getLogo() != null) {
+        blobService.delete(contract.getLogo());
+      }
       contract.updateLogo(pictureKey);
     }
     contractRepository.save(contract);

@@ -1,6 +1,6 @@
   <header>
     <div class="container">
-      <a href="/"><img src="/img/logo.png" alt="Propial" class="logo"></a>
+      <a href="/"><img src="/img/logobeta.png" alt="Propial" class="logo"></a>
       <div class="actions">
         <#assign publishUrl="/admin/publish"/>
         <#if model["user"]?? && model["user"].role == "UNREGISTERED">

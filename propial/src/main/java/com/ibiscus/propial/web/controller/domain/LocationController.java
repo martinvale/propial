@@ -44,6 +44,22 @@ public class LocationController {
     return new Packet<Location>(location);
   }
 
+  @RequestMapping(value = "/import", method = RequestMethod.PUT)
+  public @ResponseBody Packet<Location> create(Long parentId,
+      String locations) {
+    Location parent = null;
+    if (parentId != null) {
+      parent = locationRepository.get(parentId);
+    }
+    String[] locationNames = locations.split("\n");
+    Location location = null;
+    for (String locationName: locationNames) {
+      location = new Location(parent, locationName, 0);
+      locationRepository.save(location);
+    }
+    return new Packet<Location>(location);
+  }
+
   @RequestMapping(value = "/{id}", method = RequestMethod.GET)
   public @ResponseBody Packet<Location> get(@PathVariable long id) {
     Packet<Location> result;
