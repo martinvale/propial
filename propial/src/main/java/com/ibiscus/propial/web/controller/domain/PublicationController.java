@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,12 +39,17 @@ import com.ibiscus.propial.domain.security.ContractRepository;
 import com.ibiscus.propial.domain.security.User;
 import com.ibiscus.propial.domain.security.UserRepository;
 import com.ibiscus.propial.domain.services.FilterService;
+import com.ibiscus.propial.web.security.GaeUserAuthentication;
 import com.ibiscus.propial.web.utils.Packet;
 import com.ibiscus.propial.web.utils.QueryResults;
 
 @Controller
 @RequestMapping(value="/services/publications")
 public class PublicationController {
+
+  /** Logger. */
+  private final static Logger LOG = Logger.getLogger(
+      PublicationController.class.getName());
 
   /** Repository of publications. */
   @Autowired
@@ -66,16 +72,26 @@ public class PublicationController {
       @RequestBody PublicationDto publicationDto) {
     Publication publication;
     if (publicationDto.getId() != null) {
+      LOG.info("Update publication with ID: " + publicationDto.getId());
       publication = publicationRepository.get(publicationDto.getId());
     } else {
-      User user = (User) SecurityContextHolder.getContext().getAuthentication()
-          .getPrincipal();
+      LOG.info("Create new publication");
+      GaeUserAuthentication authentication;
+      authentication = (GaeUserAuthentication) SecurityContextHolder
+          .getContext().getAuthentication();
+      User user = (User) authentication.getPrincipal();
       Contract contract;
+      LOG.info("Current user role: " + user.getRole());
       if (user.getRole().equals(User.ROLE.ADMIN)) {
+        LOG.info("Get contract with id: " + publicationDto.getContractId());
         contract = contractRepository.get(publicationDto.getContractId());
       } else {
-        contract = user.getContract();
+        LOG.info("Get contract from user email: " + user.getEmail() + ", role: "
+            + user.getRole());
+        contract = authentication.getContract();
       }
+      LOG.info("Current context user: " + user.getEmail() + ", contract: "
+          + contract);
       publication = new Publication(contract, user);
     }
     List<Location> locations = new ArrayList<Location>();

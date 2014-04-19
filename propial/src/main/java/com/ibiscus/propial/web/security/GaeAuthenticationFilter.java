@@ -1,6 +1,7 @@
 package com.ibiscus.propial.web.security;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -10,8 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.Validate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationDetailsSource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -32,7 +31,9 @@ public class GaeAuthenticationFilter extends GenericFilterBean {
 
   private static final String REGISTRATION_URL = "/register";
 
-  private final Logger logger = LoggerFactory.getLogger(getClass());
+  /** Logger. */
+  private static final Logger LOG = Logger.getLogger(
+      GaeAuthenticationFilter.class.getName());
 
   private AuthenticationDetailsSource<HttpServletRequest, WebAuthenticationDetails> ads = new WebAuthenticationDetailsSource();
   private AuthenticationManager authenticationManager;
@@ -44,6 +45,7 @@ public class GaeAuthenticationFilter extends GenericFilterBean {
 
     if (authentication != null && !loggedInUserMatchesGaeUser(authentication,
         googleUser)) {
+      LOG.info("Logged user and context user do not match");
       SecurityContextHolder.clearContext();
       authentication = null;
       ((HttpServletRequest) request).getSession().invalidate();
@@ -51,8 +53,8 @@ public class GaeAuthenticationFilter extends GenericFilterBean {
 
     if (authentication == null) {
       if (googleUser != null) {
-        logger.debug("Currently logged on to GAE as user " + googleUser);
-        logger.debug("Authenticating to Spring Security");
+        LOG.info("Currently logged on to GAE as user " + googleUser);
+        LOG.info("Authenticating to Spring Security");
         // User has returned after authenticating via GAE. Need to authenticate
         // through Spring Security.
         PreAuthenticatedAuthenticationToken token = new PreAuthenticatedAuthenticationToken(googleUser, null);
@@ -65,7 +67,7 @@ public class GaeAuthenticationFilter extends GenericFilterBean {
 
           // Send new users to the registration page.
           if (authentication.getAuthorities().contains(new SimpleGrantedAuthority(com.ibiscus.propial.domain.security.User.ROLE.UNREGISTERED.toString()))) {
-            logger.debug("New user authenticated. Redirecting to registration page");
+            LOG.info("New user authenticated. Redirecting to registration page");
             ((HttpServletResponse) response).sendRedirect(REGISTRATION_URL);
             return;
           }

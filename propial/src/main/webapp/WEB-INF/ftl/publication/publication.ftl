@@ -15,14 +15,14 @@
   <#if (publication.ambients?size > 0)>
     <#assign ambients="${publication.ambients?size}" />
   </#if>
-  <@renderItem id="${publication.id}" price="${price}" age="${age}" surface="${surface}"
+  <@renderItem publicationId="${publication.id?c}" price="${price}" age="${age}" surface="${surface}"
       ambients="${ambients}" type="${publication.type}" resources=publication.resources
       location="${publication.locations[0].name}" />
 </#macro>
 
-<#macro renderItem id="" price="consultar" age="-" surface="-" ambients="-"
+<#macro renderItem publicationId="" price="consultar" age="-" surface="-" ambients="-"
     type="" resources=[] location="">
-  <div id="${id}" class="box item">
+  <div id="${publicationId}" class="box item">
     <div class="photos">
       <#if (resources?size > 0)>
         <img src="/services/publications/resource/${resources[0].key.keyString}" />
@@ -32,7 +32,7 @@
       <div class="description">
         <div>
           <#assign title="${type} en ${location}" />
-          <a href="/detail/${id}" class="title js-title" title="${title}">
+          <a href="/detail/${publicationId}" class="title js-title" title="${title}">
             ${title}
           </a>
           <span class="price">${price}</span>

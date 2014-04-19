@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import com.ibiscus.propial.domain.security.Contract;
 import com.ibiscus.propial.domain.security.User;
 
 public class GaeUserAuthentication implements Authentication {
@@ -15,11 +16,13 @@ public class GaeUserAuthentication implements Authentication {
   private static final long serialVersionUID = 1L;
 
   private final User user;
+  private final Contract contract;
   private final Object details;
   private boolean authenticated;
 
   public GaeUserAuthentication(final User theUser, final Object theDetails) {
     user = theUser;
+    contract = theUser.getContract();
     details = theDetails;
     authenticated = true;
   }
@@ -54,4 +57,7 @@ public class GaeUserAuthentication implements Authentication {
     authenticated = isAuthenticated;
   }
 
+  public Contract getContract() {
+    return contract;
+  }
 }
